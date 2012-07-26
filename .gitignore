@@ -1,0 +1,17 @@
+Icon
+Thumbs.db
+.DS_Store
+.monitor
+.project
+node_modules/
+public/tmp/
+output_static/
+output_static/*
+output_static/*/*
+output_static/*/*/*
+output_static/*/*/*/*
+dist/
+dist/*
+dist/*/*
+dist/*/*/*
+dist/*/*/*/*
