@@ -1,1 +1,199 @@
-My GitHub Page
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>SoulSonic | Walk in a Fog</title>
+    <meta name="description" content="An interactive videoclip for &quot;Walk in a Fog&quot; by Soulsonic">
+    <meta property="og:title" content="SoulSonic | Walk in a Fog">
+    <meta property="og:description" content="An interactive videoclip for &quot;Walk in a Fog&quot; by SoulSonic">
+    <meta property="og:image" content="http://www.idflood.com/walk_in_a_fog.jpg">
+    <script src="scripts/libs/jquery-1.7.2.js"></script>
+    <script src="scripts/libs/jquery.transit.js"></script>
+    <script src="scripts/libs/html5Preloader.js"></script>
+    <script src="scripts/libs/require/require.js"></script>
+    <script src="scripts/require-config.js"></script>
+    <script>
+      var skip_preload = false;
+      window.highQuality = false;
+      window.userColor = 0x3366ff;
+      
+      var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+      var has_webgl = ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )();
+      
+      require.config({baseUrl : 'scripts'});
+      
+      var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+      var sprite_height = 16;
+      var preloader_frame = 0;
+      var is_loaded = false;
+      var loader = html5Preloader();
+      
+      var loadComplete = function() {
+        $("#preloader").stop().delay(120).transition({top: '290px', opacity: 0.0}, 150);
+        window.setTimeout(function(){
+          $("#start").delay(700).css("display", "block").transition({top: '296px', opacity: 1.0}, 200);
+        }, 250);
+      };
+      
+      var initApp = function() {
+        $("body").css("background", "black");
+        $("#loader_wrapper").fadeOut(500, function() {
+          require(['boot']);
+        });
+        //$("#loader_wrapper").hide();
+        
+      };
+      
+      var defineQuality = function() {
+        $("#loader_wrapper").append('<div id="quality"><p>Please select a quality level:<hr/><a href="#" class="low">Low quality</a> / <a href="#" class="high">High quality</a></p></div>');
+        
+        $("#quality").css("opacity", 0).delay(10).transition({opacity: 1}, 1000);
+        
+        $("#quality .high").click(function(e){
+          e.preventDefault();
+          window.highQuality = true;
+          _gaq.push(["_trackEvent", "Animation", "quality", "high"]);
+          initApp();
+        });
+        $("#quality .low").click(function(e){
+          e.preventDefault();
+          _gaq.push(["_trackEvent", "Animation", "quality", "low"]);
+          initApp();
+        });
+      };
+      
+      var chooseColor = function() {
+        $("header h1").transition({left: '30px', opacity: 0.0}, 300);
+        $("header h2").delay(200).transition({left: '165px', opacity: 0.0}, 300);
+        $("#start").transition({top: '286px', opacity: 0.0}, 200);
+        $("header").delay(440).fadeOut(300);
+        
+        $("#loader_wrapper").append('<div id="colors"><p>Pick your favorite color:<a href="#" class="blue">blue</a><a href="#" class="green">green</a><a href="#" class="pink">pink</a><a href="#" class="orange">orange</a></p></div>');
+        
+        $("#colors").css("opacity", 0).delay(10).transition({opacity: 1}, 1000);
+        $("#colors a").click(function(e){
+          e.preventDefault();
+          var cls = $(this).attr("class");
+          var color = 0x3366ff;
+          if (cls == "orange") color = 0xff9833;
+          if (cls == "green") color = 0xa6ff33;
+          if (cls == "pink") color = 0xff33d1;
+          _gaq.push(["_trackEvent", "Animation", "color", cls]);
+          window.userColor = color;
+          $("#colors").fadeOut(500, function() {
+            defineQuality();
+          });
+        });
+      };
+      
+      var animate_preloader = function() {
+        // we want ~30fps
+        frame = parseInt(preloader_frame * 0.5);
+        $("#preloader .line").css("background-position-y", "-" + frame * sprite_height + "px");
+        preloader_frame += 1;
+        if (preloader_frame > 160) {
+          preloader_frame = 0;
+        }
+        
+        requestAnimationFrame(animate_preloader);
+      };
+      
+      if (skip_preload == true) {
+        $(document).ready(function() {
+          initApp();
+        });
+      }
+      else {
+        $(document).ready(function() {
+          //$("body").addClass("inited");
+          var txt = '<p>"Walk in a Fog" by Soulsonic has been created using experimental technologies. This means that it require a recent computer with the latest version of the chrome web browser.</p><p>If you can\'t run the interactive video clip you can watch the <a href="">non-interactive music video</a> which was recorded from screen captures of the website.</p>';
+          
+          $("#credits").hide();
+          $("#credits .close").click(function(e){
+            e.preventDefault();
+            $("#credits").stop().fadeOut(400);
+          });
+          $("footer .credits").click(function(e){
+            e.preventDefault();
+            $("#credits").stop().fadeIn(400);
+          });
+          
+          if (is_chrome == false) {
+            $("#loader_wrapper").append('<div id="message">We are sorry, but it appears that your browser is not supported. Please <a href="http://www.google.com/chrome/">download Google Chrome</a> and try launching this again. If you are unable to install a new browser, you can try downloading the <a href="http://www.google.com/chromeframe/">Google Chrome frame plugin</a> instead.<hr/>' + txt + '</div>');
+            $("header, h1, h2, #loader_wrapper, footer").css("opacity", 1.0);
+            $("body").addClass("error");
+          } else if (has_webgl == false) {
+            $("#loader_wrapper").append('<div id="message">Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>.<br />Find out how to get it <a href="http://get.webgl.org/">here</a>.<hr/>' + txt + '</div>');
+            $("header, h1, h2, #loader_wrapper, footer").css("opacity", 1.0);
+            $("body").addClass("error");
+          } else {
+            // good to go :)
+            $("#loader_wrapper").delay(300).transition({opacity: 1.0}, 500);
+            $("header").delay(900).transition({opacity: 1.0}, 500);
+            $("header h1").css('left', '10px').delay(1150).transition({left: '20px', opacity: 1.0}, 300);
+            $("header h2").css('left', '135px').delay(1250).transition({left: '145px', opacity: 1.0}, 300);
+            $("footer").delay(1400).transition({opacity: 1.0}, 1000);
+            
+            // add the preloader
+            $("header").append('<div id="preloader"><div class="line"></div></div><a id="start">Start<span class="arrow"></span></a>');
+            $("#start").hide();
+            $("#preloader").delay(1220).transition({top: '300px', opacity: 1.0}, 200);
+            
+            $("#start").click(function(e){
+              e.preventDefault();
+              //initApp();
+              chooseColor();
+            });
+            
+            // add files to preloader
+            loader.on("finish", loadComplete);
+            loader.addFiles("audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection2.png");
+            
+            if (requestAnimationFrame) {
+              requestAnimationFrame(animate_preloader);
+            }
+          }
+        });
+      }
+      
+    </script>
+    <link href="stylesheets/screen.css" media="all" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div id="loader_wrapper">
+      <header>
+        <h1>SoulSonic</h1>
+        <h2>Walk in a Fog</h2>
+      </header>
+      <div id="credits">
+        <h3>Music by SoulSonic</h3>
+        <p>Evaldas Azbukauskas, also known as Giriu Dvasios</p>
+        <h3>Code, design and interactive music video production</h3>
+        <p>David Mignot (idFlood)</p>
+        <h3>Special thanks to</h3>
+        <p>Pierre Dumont, Alexandre Favre, Fabien Leibzig, Orane Schick, Mr.&nbsp;Doob, coldtear records</p>
+        <h3>Built using some nice javascript libraries</h3>
+        <p>Three.js, jQuery, require.js, html5Preloader.js, jquery.transit, namespace.coffee and underscore.js</p><h3>a <a href="http://www.stimul.ch">stimul.ch</a> project</h3>
+        <a href="#" class="close">close</a>
+      </div>
+      <footer><a href="http://www.chromeexperiments.com/" class="exp">This is a Chrome Experiment</a>
+        <div class="right">
+          <p><a href="http://www.coldtear.com" title="cold tear records, Underground eletronic music label" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'go to coldtear records']);">cold tear records</a> ♪ An experiment created by <a href="http://www.stimul.ch" title="stimul.ch" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'go to stimul.ch']);">stimul.ch</a> ♫ 2012</p>
+          <p><a href="#" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'download album']);">Download the album</a> ♭ <a href="#" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'watch the video']);">Watch the non-interactive video</a> ♪ <a href="#" class="credits" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'open credits']);">Credits</a> ♬ Share: <a href="https://plus.google.com/share?url=www.walkinafog.com" class="share google" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on google+']);">Share on google+</a> <a href="http://www.facebook.com/sharer.php?u=http://www.walkinafog.com" class="share facebook" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on facebook']);">Share on facebook</a> <a href="http://twitter.com/share?text=Check out SoulSonic's new interactive music experience, “Walk in a Fog” &amp;url=http://www.walkinafog.com" class="share twitter" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on twitter']);">Share on twitter</a></p>
+        </div>
+      </footer>
+      <script>
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-33646741-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+    </div>
+  </body>
+</html>
