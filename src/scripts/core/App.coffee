@@ -7,7 +7,7 @@ define [
   'cs!core/objects/Tree',
   'cs!core/objects/Cars',
   'cs!core/objects/Planes',
-  'cs!core/shapes/Biped',
+  'cs!core/objects/Biped',
   'cs!core/shaders/Glitch',
   'cs!core/utils/AudioManager',
   'cs!core/utils/Rc4Random',

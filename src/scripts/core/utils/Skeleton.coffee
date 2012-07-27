@@ -1,7 +1,6 @@
 define [
   'Underscore',
   'libs/namespace',
-  'cs!core/shapes/Cylinder2',
 ], (_) ->
   
   namespace "Next.utils",
@@ -18,19 +17,14 @@ define [
         
         @object = new THREE.Mesh( @cube, @materialSimple )
         @object.doubleSided = true
-        #@object.position.x = @a.x
-        #@object.position.y = @a.y
-        #@object.position.z = @a.z
-        #@object.visible = false
         @object.position = @a
         @add(@object)
         
         @mid = @count - 2
-        #spacing = @b.clone().sub(@a).divideScalar(@count)
         spacing = @b.clone().subSelf(@a).divideScalar(@count - 1)
         @spacing = spacing
         @spacing_length = spacing.length()
-        #console.log @spacing_length
+        
         ob = new THREE.Object3D()
         ob.position = @a
         @objects.push(ob)
@@ -50,17 +44,9 @@ define [
           ob.position = obj1.position
           @objects.push(ob)
         
-        #ob = new THREE.Object3D()
-        #ob.position = @b
-        #@objects.push(ob)
-        
         for ob in @objects
           @add(ob)
         @object2 = new THREE.Mesh( @cube, @materialSimple )
-        #@object2.position.x = @b.x
-        #@object2.position.y = @b.y
-        #@object2.position.z = @b.z
-        #@object2.visible = false
         @object2.position = @b
         @object2.doubleSided = true
         @add(@object2)
@@ -69,13 +55,11 @@ define [
       addMiddlePart: (pos) =>
         obj = new THREE.Mesh( @cube, @materialSimple )
         obj.position = pos
-        #obj.visible = false
         @add(obj)
         @mids.push(obj)
         return obj
       
       update: () =>
-        #@objects[0].lookAt(@objects[1].position)
         ln = @objects.length
         for i in [ln - 1..1]
           @objects[i - 1].lookAt(@objects[i].position)
@@ -85,9 +69,7 @@ define [
           dir = @b.clone().subSelf(@a)
           r = 1 - currentdiff.length() / @maxdiff
           @b.addSelf(dir.multiplyScalar(r*0.65))
-          #console.log @maxdiff
-          #@b.subSelf(dir)
-        #return
+
         spacing = @b.clone().subSelf(@a).divideScalar(@count - 1)
         diff_spacing = spacing.clone().subSelf(@spacing)
         # want to move the total difference in the @direction
@@ -102,10 +84,7 @@ define [
           if p > 0.5 then p =  ((p - 0.5) * -1) + 0.5
           # now goes from 0.25 to 0.5
           #p = p * 2.2
-          #console.log p + " / " + ip
-          #console.log num
           @mids[num - 1].position = @a.clone().addSelf(spacing.clone().multiplyScalar(num)).addSelf(diff.clone().multiplyScalar(p))
-          #@mids[num - 1].position = @a.clone().addSelf(spacing.clone().multiplyScalar(num))
 
     Skeleton2: class Skeleton2 extends Skeleton
       constructor: (@materialSimple, @materialWire, @a, @b, @count = 3, @radius = 2, @direction = new THREE.Vector3(1, 0, 0)) ->
