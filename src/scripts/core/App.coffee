@@ -198,10 +198,16 @@ define [
         @cameras.push(@cameraSide2)
         
         @cameraIntro2 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraIntro2.position.set(89, 5, -240)
+        @cameraIntro2.position.set(89, 5, -250)
         @cameraIntro2.lookAt(new THREE.Vector3(0,10,-280))
         @scene.add(@cameraIntro2)
         @cameras.push(@cameraIntro2)
+
+        @cameraIntro3 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
+        @cameraIntro3.position.set(70, 2, -280)
+        @cameraIntro3.lookAt(new THREE.Vector3(0,15,-270))
+        @scene.add(@cameraIntro3)
+        @cameras.push(@cameraIntro3)
 
         @cameraCity1 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
         @cameraCity1.position.set(160, 220, -5070 + 2000)
@@ -256,7 +262,7 @@ define [
 
         if @audio && @audio
           #realTime = @audio.context.currentTime
-          realTime = @audio.now + 117
+          realTime = @audio.now
         else
           realTime = 0
 
@@ -296,10 +302,12 @@ define [
           #if realTime > 9.0
           #  @cameraSide1.position.x = 200
           #  #@cameraSide1.lookAt(@thing.position)
-          if realTime > 25.0 && realTime < 33.1
-            #@cameraIntro2.position.z -= 0.15
+          if realTime > 25.0
             @currentCamera = @cameraIntro2
-          if realTime > 33.0
+          if realTime > 28.0
+            @currentCamera = @cameraIntro3
+            @cameraIntro3.position.z = 200.0 - realTime * 12.0 - 150.0
+          if realTime > 32.0
             @cameraSide1.position.x = 150
             @cameraSide1.position.y = 10 - 2
             @cameraSide1.lookAt(@thing.position)
@@ -309,18 +317,24 @@ define [
           
           if realTime > 41.0 then @currentCamera = @cameraSide2
           if realTime > 45.0
+            #L
             @currentCamera = @cameraSide1
             @cameraSide1.position.y = 1
             @cameraSide1.position.x = 65
-            @cameraSide1.lookAt(new THREE.Vector3(@thing.position.x, @thing.position.y + 30, @thing.position.z))
-
+            @cameraSide1.lookAt(new THREE.Vector3(@thing.position.x, @thing.position.y + 30, @thing.position.z + 10))
+          if realTime > 49.0
+            @currentCamera = @cameraIntro3
+            @cameraIntro3.position.z = 200.0 - realTime * 15.0 - 140.0
           if realTime > 53.0
             @currentCamera = @cameraIntro2
-            @cameraIntro2.position.z = -760
+            @cameraIntro2.position.z = -730
             @cameraIntro2.position.y = 1
 
           if realTime > 57.0
+            # F
             @currentCamera = @cameraSide2
+            @cameraSide2.position.z = 200.0 - realTime * 12.0 - 290.0
+            @cameraIntro3.position.x = 130.0
 
           if realTime > 64.0 then @currentCamera = @camera
           if realTime > 96.0 then @currentCamera = @cameraCityTop1
