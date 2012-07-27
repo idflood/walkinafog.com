@@ -227,6 +227,9 @@ a.close:hover {
   -o-transition-duration: 0.12s;
   -ms-transition-duration: 0.12s;
   transition-duration: 0.12s;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: alpha(opacity=0);
 }
 #colors a:hover {
   -webkit-border-radius: 0px;
@@ -362,7 +365,7 @@ header h2 {
 #message,
 #credits {
   background: #000;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.94);
   padding: 20px 30px;
   color: #ccc;
   position: absolute;
@@ -474,8 +477,12 @@ a.twitter {
   position: absolute;
   z-index: 800;
   top: 50%;
+  left: 50%;
+  width: 53px;
+  height: 33px;
+  margin-left: -26px;
+  font-size: 0;
+  text-indent: -9999px;
   display: block;
-  width: 100%;
-  text-align: center;
-  text-transform: uppercase;
+  background: url("../assets_website/restart.png") no-repeat 0 0;
 }
