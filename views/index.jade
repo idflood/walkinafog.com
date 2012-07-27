@@ -13,7 +13,7 @@ head
   meta(property='og:image', content='http://www.walkinafog.com/assets_website/walk_in_a_fog.jpg')
   script(src='scripts/libs/jquery-1.7.2.js')
   script(src='scripts/libs/jquery.transit.js')
-  script(src='scripts/libs/html5Preloader.js')
+  script(src='scripts/libs/preloadjs-0.1.0.min.js')
   script(src='scripts/libs/require/require.js')
   script(src='scripts/libs/modernizr.js')
   script(src='scripts/require-config.js')
@@ -31,7 +31,7 @@ head
     var sprite_height = 16;
     var preloader_frame = 0;
     var is_loaded = false;
-    var loader = html5Preloader();
+    var loader = new PreloadJS();
 
     var loadComplete = function() {
       $("#preloader").stop().delay(120).transition({top: '290px', opacity: 0.0}, 150);
@@ -156,8 +156,8 @@ head
           });
           
           // add files to preloader
-          loader.on("finish", loadComplete);
-          loader.addFiles("audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection4.png");
+          loader.onComplete = loadComplete;
+          loader.loadManifest(["audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection4.png"]);
 
           if (requestAnimationFrame) {
             requestAnimationFrame(animate_preloader);
