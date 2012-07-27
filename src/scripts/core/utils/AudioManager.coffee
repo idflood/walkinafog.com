@@ -68,11 +68,11 @@ define [
         @source.connect(@analyser)
         @analyser.connect(@delay)
 
-        volume = false
+        volume = true
         if volume
           gain2 = @context.createGainNode()
           @delay.connect(gain2)
-          gain2.gain.value = 0.05
+          gain2.gain.value = 0.00
           gain2.connect(@context.destination)
         else
           @delay.connect(@context.destination)

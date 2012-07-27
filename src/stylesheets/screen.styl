@@ -79,6 +79,7 @@ a.close
     margin: 8px
     transition-property: "all"
     transition-duration: 0.12s
+    opacity: 0
     &:hover
       border-radius: 0px
       -webkit-transform: rotateX(0deg) rotateY(0deg)
@@ -182,7 +183,7 @@ header
 
 #message, #credits
   background: #000
-  background: rgba(0,0,0,0.8)
+  background: rgba(0,0,0,0.94)
   padding: 20px 30px
   color: #ccc
   position: absolute
@@ -275,7 +276,11 @@ a.twitter
   position: absolute
   z-index: 800
   top: 50%
+  left: 50%
+  width: 53px
+  height: 33px
+  margin-left: -26px
+  font-size: 0
+  text-indent: -9999px
   display: block
-  width: 100%
-  text-align: center
-  text-transform: uppercase
+  background: url("../assets_website/restart.png") no-repeat 0 0

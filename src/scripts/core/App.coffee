@@ -261,12 +261,10 @@ define [
         if @playing == false then return
 
         if @audio && @audio
-          #realTime = @audio.context.currentTime
           realTime = @audio.now
         else
           realTime = 0
 
-        #console.log time
         if !@audio then return
         
         @audio.update()
@@ -293,15 +291,12 @@ define [
         if realTime > 80.0
           @planes1.update(@audio.high > 0.37 && Math.random() > 0.82)
 
-        camera1Speed = 0.3
         switchCameras = true
         @cameraSide1.position.x += (90 - @cameraSide1.position.x) * 0.0015
-
+        @cameraSide1.position.z = 200.0 - realTime * 18.0 + 20
+        @cameraSide2.position.z = 200.0 - realTime * 18.0 + 10
         cameraTop_speedY = 0
         if switchCameras
-          #if realTime > 9.0
-          #  @cameraSide1.position.x = 200
-          #  #@cameraSide1.lookAt(@thing.position)
           if realTime > 25.0
             @currentCamera = @cameraIntro2
           if realTime > 28.0
@@ -311,20 +306,17 @@ define [
             @cameraSide1.position.x = 150
             @cameraSide1.position.y = 10 - 2
             @cameraSide1.lookAt(@thing.position)
-            camera1Speed = 0.22
             @currentCamera = @cameraSide1
-            
           
           if realTime > 41.0 then @currentCamera = @cameraSide2
           if realTime > 45.0
-            #L
             @currentCamera = @cameraSide1
             @cameraSide1.position.y = 1
             @cameraSide1.position.x = 65
             @cameraSide1.lookAt(new THREE.Vector3(@thing.position.x, @thing.position.y + 30, @thing.position.z + 10))
           if realTime > 49.0
             @currentCamera = @cameraIntro3
-            @cameraIntro3.position.z = 200.0 - realTime * 15.0 - 140.0
+            @cameraIntro3.position.z = 200.0 - realTime * 15.0 - 130.0
           if realTime > 53.0
             @currentCamera = @cameraIntro2
             @cameraIntro2.position.z = -730
@@ -390,9 +382,6 @@ define [
         @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
 
         @cameraIntro2.lookAt(@thing.position)
-
-        @cameraSide1.position.z -= camera1Speed
-        @cameraSide2.position.z -= camera1Speed
         @cameraCityTop1.position.z -= 0.1
         
         @camera.position.y = 4 + Math.sin(time * 0.5) * 0.6
@@ -401,7 +390,6 @@ define [
         @camera.rotation.y += (rx - @camera.rotation.y) * 0.2
         @camera.rotation.x += (ry - @camera.rotation.x) * 0.2
 
-        #if @cameraCity2.position.y < 120 then @cameraCity2.position.y = 250
         @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
 
         cars_offset_z = 50

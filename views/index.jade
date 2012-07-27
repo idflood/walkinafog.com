@@ -76,6 +76,11 @@ head
       $("#loader_wrapper").append('<div id="colors"><p>Pick your favorite color:<a href="#" class="blue">blue</a><a href="#" class="green">green</a><a href="#" class="pink">pink</a><a href="#" class="orange">orange</a></p></div>');
 
       $("#colors").css("opacity", 0).delay(10).transition({opacity: 1}, 1000);
+      $("#colors .blue").delay(800).transition({opacity: 1}, 400);
+      $("#colors .green").delay(900 - 20).transition({opacity: 1}, 400);
+      $("#colors .pink").delay(1000 - 40).transition({opacity: 1}, 400);
+      $("#colors .orange").delay(1100 - 60).transition({opacity: 1}, 400);
+
       $("#colors a").click(function(e){
         e.preventDefault();
         var cls = $(this).attr("class");
