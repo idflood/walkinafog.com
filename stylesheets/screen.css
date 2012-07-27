@@ -227,6 +227,9 @@ a.close:hover {
   -o-transition-duration: 0.12s;
   -ms-transition-duration: 0.12s;
   transition-duration: 0.12s;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: alpha(opacity=0);
 }
 #colors a:hover {
   -webkit-border-radius: 0px;
@@ -362,13 +365,16 @@ header h2 {
 #message,
 #credits {
   background: #000;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.94);
   padding: 20px 30px;
   color: #ccc;
-  position: relative;
+  position: absolute;
   margin: auto;
   margin-top: -270px;
   width: 330px;
+  left: 50%;
+  margin-left: -190px;
+  top: 450px;
   line-height: 1.6em;
   -webkit-border-radius: 6px;
   border-radius: 6px;
@@ -389,7 +395,7 @@ h3 {
 #credits {
   z-index: 999;
   width: 400px;
-  margin-top: -460px;
+  margin-left: -225px;
 }
 #credits p {
   padding-bottom: 10px;
@@ -403,6 +409,7 @@ footer {
   color: #aaa;
   position: absolute;
   bottom: 0px;
+  left: 0px;
   opacity: 0;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   filter: alpha(opacity=0);
@@ -411,15 +418,16 @@ footer p {
   margin: 0 40px;
   padding-bottom: 10px;
 }
-footer .exp {
+footer a.exp {
   text-decoration: none !important;
   display: block;
   font-size: 0;
   text-indent: -9999px;
+  color: transparent;
   width: 107px;
   height: 55px;
   float: left;
-  margin-top: -11px;
+  margin-top: 14px;
   margin-left: 40px;
   background: url("../assets_website/ce.png") no-repeat 0 0;
 }
@@ -427,6 +435,8 @@ a.share {
   display: inline-block;
   font-size: 0;
   text-indent: -9999px;
+  text-decoration: none !important;
+  color: transparent !important;
   width: 20px;
   height: 20px;
   margin: 0 5px;
@@ -444,6 +454,9 @@ a.share {
   -o-transition-duration: 0.2s;
   -ms-transition-duration: 0.2s;
   transition-duration: 0.2s;
+}
+.lt-ie9 a.share {
+  margin-top: -20px;
 }
 a.share:hover {
   opacity: 1;
@@ -464,8 +477,12 @@ a.twitter {
   position: absolute;
   z-index: 800;
   top: 50%;
+  left: 50%;
+  width: 53px;
+  height: 33px;
+  margin-left: -26px;
+  font-size: 0;
+  text-indent: -9999px;
   display: block;
-  width: 100%;
-  text-align: center;
-  text-transform: uppercase;
+  background: url("../assets_website/restart.png") no-repeat 0 0;
 }
