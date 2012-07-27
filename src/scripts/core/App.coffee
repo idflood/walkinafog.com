@@ -256,7 +256,7 @@ define [
 
         if @audio && @audio
           #realTime = @audio.context.currentTime
-          realTime = @audio.now
+          realTime = @audio.now + 117
         else
           realTime = 0
 
@@ -331,9 +331,11 @@ define [
           if realTime > 120.0 && realTime <= 133.0
             walkerOffsetZ = -200.0
             @currentCamera = @cameraCity2
+            @cameraCity2.position.y += (120 - @cameraCity2.position.y) * 0.002
             #@cameraCity2.lookAt(@thing.position)
             # position camera top for next frame
             @cameraCityTop1.position.z = -2180
+
 
           if realTime > 133.0
             @currentCamera = @cameraCityTop1
@@ -385,8 +387,6 @@ define [
         @camera.rotation.y += (rx - @camera.rotation.y) * 0.2
         @camera.rotation.x += (ry - @camera.rotation.x) * 0.2
 
-        if realTime > 121.0
-          @cameraCity2.position.y += (120 - @cameraCity2.position.y) * 0.002
         #if @cameraCity2.position.y < 120 then @cameraCity2.position.y = 250
         @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
 
@@ -402,4 +402,3 @@ define [
         if @mainShader
           @mainShader.uniforms[ 'time' ].value = time / 10
           @mainShader.uniforms[ 'resolution' ].value = new THREE.Vector3(window.innerWidth, window.innerHeight, 0)
-        #@cameraContainer.rotation.y = time * 0.02
