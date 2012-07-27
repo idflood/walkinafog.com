@@ -25,6 +25,7 @@ define [
 
         @createShaders()
         @buildingsGeom = new THREE.Geometry()
+        @reflectionsGeom = new THREE.Geometry()
 
         @cubeRoof = new THREE.CubeGeometry( 1, 1, 1, 1, 1, 1, @materials )
         # all roof cube faces use the same material
@@ -45,6 +46,9 @@ define [
 
         @buildings = new THREE.Mesh(@buildingsGeom, @material)
         @add(@buildings)
+
+        @reflections = new THREE.Mesh(@reflectionsGeom, @reflectionMaterial)
+        @add(@reflections)
 
       updateWindow: (num, num2, triggerLight) =>
         if @windowsOn[num][num2] == -1.0 then return
@@ -75,9 +79,7 @@ define [
         
         for num in [0..@numWindows - 1]
           for num2 in [0..@numWindows - 1]
-            @updateWindow(num, num2, triggerLight)   
-
-        
+            @updateWindow(num, num2, triggerLight)
 
       createBuildingLine: (dx) =>
         dz = -2000
@@ -89,7 +91,10 @@ define [
           dz += building.cubeDepth / 2
           building.mesh.position.z = dz
           dz += parseInt(building.cubeDepth / 2 + 10 + @random.getRandom() * 20)
+          building.ref.position.x = building.mesh.position.x
+          building.ref.position.z = building.mesh.position.z
           THREE.GeometryUtils.merge(@buildingsGeom, building.mesh)
+          THREE.GeometryUtils.merge(@reflectionsGeom, building.ref)
 
       createShaders: () =>
         @wallcolor = '#050505'
@@ -97,12 +102,13 @@ define [
         @createRoofTexture()
         
         @reflectionMaterial = new THREE.MeshBasicMaterial
-          map: THREE.ImageUtils.loadTexture("textures/building_road_reflection2.png"),
+          map: THREE.ImageUtils.loadTexture("textures/building_road_reflection4.png"),
           fog: true,
-          #transparent: true, 
-          #blending: THREE.AdditiveBlending,
-          #depthWrite: false,
-          #color: 0x000000
+          transparent: true, 
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          #alphaTest: 0.2,
+          color: 0x000000
           #opacity: 0.6,
           #overdraw: true
         @materialCube = new THREE.MeshPhongMaterial( { map: @texture, emissive: 0x777777, fog: true, wireframe: false } )

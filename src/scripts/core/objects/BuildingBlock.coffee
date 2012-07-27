@@ -53,12 +53,12 @@ define [
             THREE.GeometryUtils.merge(@combined, obj)
 
         # add the pseudo reflection
-        ref = new THREE.Mesh(@plane, @material)
+        @ref = new THREE.Mesh(@plane, @materials[2])
         rndref = @random.getRandom() * 0.5
-        multref = 1.3
-        ref.scale.set(@cubeWidth * multref + rndref, 1, @cubeDepth * multref + rndref)
-        ref.position.y = @random.getRandom() + 0.1
-        THREE.GeometryUtils.merge(@combined, ref)
+        multref = 1.3 + 0.2
+        @ref.scale.set(@cubeWidth * multref + rndref, 1, @cubeDepth * multref + rndref)
+        @ref.position.y = @random.getRandom() + 0.1
+        #THREE.GeometryUtils.merge(@combined, ref)
 
         @mesh = new THREE.Mesh( @combined, @material )
       

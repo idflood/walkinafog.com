@@ -225,7 +225,7 @@ define [
         @cameras.push(@cameraCityTop1)
 
         @currentCamera = @cameraSide1
-        #@currentCamera = @camera
+        #@currentCamera = @cameraCityTop1
 
       onResize: () =>
         super
