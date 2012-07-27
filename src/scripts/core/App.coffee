@@ -61,7 +61,6 @@ define [
         if Next.settings.postprocessing == true
           @renderModel = new THREE.RenderPass(@scene, @currentCamera)
           @effectBloom = new THREE.BloomPass(1.3)
-          #@effectFilm = new THREE.FilmPass(0.21, 0.035, 648, false)
           @effectFilm = new THREE.FilmPass(0.51, 0.135, 648, false)
           @effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] )
           @effectVignette.uniforms['darkness'].value = 1.6
@@ -74,7 +73,7 @@ define [
           textureDirt = THREE.ImageUtils.loadTexture("textures/lens_dirt.jpg")
           textureGlitch = THREE.ImageUtils.loadTexture("textures/glitch3.jpg")
           @mainShader = new THREE.ShaderPass( Next.shaders.GlitchShader )
-          #console.log @mainShader
+
           @mainShader.material.uniforms.tLensDirt.texture = textureDirt
           @mainShader.material.uniforms.tGlitch.texture = textureGlitch
           @composer.addPass( @mainShader )
@@ -85,8 +84,6 @@ define [
           @effectVignette.renderToScreen = true
 
       createWorld: () =>
-        #@scene.fog = new THREE.Fog( 0x000000, 0.005 )
-        #@scene.fog = new THREE.Fog( 0x101213, 0.005 )
         @scene.fog = new THREE.FogExp2( 0x101213, 0.0035 )
 
         @buildings = new Next.objects.Buildings()
@@ -102,12 +99,10 @@ define [
         materialTrail1 = new THREE.MeshBasicMaterial( { color: 0xff3333, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
         materialTrail2 = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
 
-        #materialPlane = new THREE.MeshBasicMaterial( { color: 0x3366ff, fog: false,  blending: THREE.AdditiveBlending, transparent: true} )
         materialPlane = new THREE.MeshBasicMaterial( { color: window.userColor, fog: false,  blending: THREE.AdditiveBlending, transparent: true} )
 
         @planes1 = new Next.objects.Planes(materialPlane, plane)
         @planes1.position.z = -10400
-        #@planes1.position.x = 1000
         @scene.add(@planes1)
 
 
@@ -176,6 +171,7 @@ define [
         ground = new THREE.Mesh( @plane, @materialPlane )
         @scene.add(ground)
 
+        # Create a walker
         materialSimple = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true } )
         materialWire = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true, wireframe: true } )
         @thing = new Next.shapes.Biped(this, materialSimple, materialWire)
@@ -185,6 +181,7 @@ define [
         @thing.position.y = 0
         @thing.position.z = 240
 
+        # And the cameras
         @cameraSide1 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
         @cameraSide1.position.set(500, 2, 200)
         @cameraSide1.lookAt(new THREE.Vector3(0,50,200))
@@ -222,16 +219,12 @@ define [
         @cameras.push(@cameraCity2)
 
         @cameraCityTop1 = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 1, 20000 )
-        dz = -5370
-        dz = -4180
-        #dz = -7100
-        @cameraCityTop1.position.set(0, 250, dz + 2000)
-        @cameraCityTop1.lookAt(new THREE.Vector3(0,0,dz - 20 + 2000))
+        @cameraCityTop1.position.set(0, 250, -2180)
+        @cameraCityTop1.lookAt(new THREE.Vector3(0,0,-2200))
         @scene.add(@cameraCityTop1)
         @cameras.push(@cameraCityTop1)
 
         @currentCamera = @cameraSide1
-        #@currentCamera = @cameraCityTop1
 
       onResize: () =>
         super
@@ -242,8 +235,7 @@ define [
       
       onSoundLoaded: () =>
         @playing = true
-        $("#container canvas").delay(20).fadeIn(5000)
-        #console.log "sound start"
+        $("#container canvas").delay(20).fadeIn(3000)
 
       handleVisibilityChange: () =>
         if @finished == true then return
@@ -323,7 +315,6 @@ define [
             @cameraIntro2.position.y = 1
 
           if realTime > 57.0
-            # F
             @currentCamera = @cameraSide2
             @cameraSide2.position.z = 200.0 - realTime * 12.0 - 290.0
             @cameraIntro3.position.x = 130.0
@@ -358,8 +349,6 @@ define [
             @currentCamera = @camera
             @mainShader.uniforms.offset_color.value.x = 0.02
             @mainShader.uniforms.glitch_intensity.value = 0.3
-          #if realTime > 165.0
-          #  # near end
 
         # This is the end
         if realTime > 169.0 && @outro == false
