@@ -365,10 +365,13 @@ header h2 {
   background: rgba(0,0,0,0.8);
   padding: 20px 30px;
   color: #ccc;
-  position: relative;
+  position: absolute;
   margin: auto;
   margin-top: -270px;
   width: 330px;
+  left: 50%;
+  margin-left: -190px;
+  top: 450px;
   line-height: 1.6em;
   -webkit-border-radius: 6px;
   border-radius: 6px;
@@ -389,7 +392,7 @@ h3 {
 #credits {
   z-index: 999;
   width: 400px;
-  margin-top: -460px;
+  margin-left: -225px;
 }
 #credits p {
   padding-bottom: 10px;
@@ -403,6 +406,7 @@ footer {
   color: #aaa;
   position: absolute;
   bottom: 0px;
+  left: 0px;
   opacity: 0;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   filter: alpha(opacity=0);
@@ -444,6 +448,9 @@ a.share {
   -o-transition-duration: 0.2s;
   -ms-transition-duration: 0.2s;
   transition-duration: 0.2s;
+}
+.lt-ie9 a.share {
+  margin-top: -20px;
 }
 a.share:hover {
   opacity: 1;

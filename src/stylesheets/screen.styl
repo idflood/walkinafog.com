@@ -103,6 +103,7 @@ a.close
   margin-top: -231px - 32px - 50px
   background: #000 url("../assets_website/bg6.jpg") no-repeat 50% -48px
 
+
 header
   position: relative
   width: 372px
@@ -132,6 +133,7 @@ header
 
 .error header
   margin-top: -100px
+
 
 #preloader
   position: absolute
@@ -183,10 +185,14 @@ header
   background: rgba(0,0,0,0.8)
   padding: 20px 30px
   color: #ccc
-  position: relative
+  position: absolute
   margin: auto
   margin-top: -270px
   width: 330px
+  left: 50%
+  margin-left: -190px
+  top: 450px
+
   line-height: 1.6em
   border-radius: 6px
   font-size: 11px
@@ -205,8 +211,7 @@ h3
 #credits
   z-index: 999
   width: 400px
-  margin-top: -460px
-
+  margin-left: -225px
   p
     padding-bottom: 10px
 
@@ -219,6 +224,7 @@ footer
   color: #aaa
   position: absolute
   bottom: 0px
+  left: 0px
   opacity: 0
 
   p
@@ -245,9 +251,13 @@ a.share
   margin: 0 5px
   line-height: 26px
 
+  .lt-ie9 &
+    margin-top: -20px
+
   opacity: 0.35
   transition-property("all")
   transition-duration(0.2s)
+
   &:hover
     opacity: 1
 a.google
