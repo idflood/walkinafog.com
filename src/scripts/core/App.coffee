@@ -264,6 +264,8 @@ define [
         if !@audio then return
         
         @audio.update()
+        walkerOffsetZ = 0.0
+        cameraOffsetZ = 0.0
 
         if realTime > 16.0
           @cars1.update()
@@ -314,25 +316,20 @@ define [
 
           if realTime > 53.0
             @currentCamera = @cameraIntro2
-            @cameraIntro2.position.z = -300
+            @cameraIntro2.position.z = -760
             @cameraIntro2.position.y = 1
 
           if realTime > 57.0
             @currentCamera = @cameraSide2
 
           if realTime > 64.0 then @currentCamera = @camera
-
-
-
           if realTime > 96.0 then @currentCamera = @cameraCityTop1
           if realTime > 112.0 && realTime < 120.0
-            if @thing.position.z > -2980
-              @thing.position.z = -2980
+            walkerOffsetZ = -1210.0
             @currentCamera = @cameraCity1
             @cameraCity1.lookAt(@thing.position)
           if realTime > 120.0 && realTime <= 133.0
-            if @thing.position.z < -2980
-              @thing.position.z = -2100
+            walkerOffsetZ = -200.0
             @currentCamera = @cameraCity2
             #@cameraCity2.lookAt(@thing.position)
             # position camera top for next frame
@@ -346,10 +343,9 @@ define [
 
           # little hack for last step to avoid camera in the middle of car line
           if realTime > 142.0 && realTime < 143.0
-            @camera.position.z = -3000
+            cameraOffsetZ = -700.0
           if realTime > 144.0
-            if @thing.position.z < -2180
-              @thing.position.z = -2150
+            walkerOffsetZ = 1000.0
 
             @currentCamera = @camera
             @mainShader.uniforms.offset_color.value.x = 0.02
@@ -368,15 +364,14 @@ define [
 
         @renderModel.camera = @currentCamera
         
-        @thing.update()
-
         if @currentCamera == @camera && realTime < 169.0
           $("#container canvas").addClass("interactive")
         else
           $("#container canvas").removeClass("interactive")
 
-        @camera.position.z -= 0.3
-        @thing.position.z -= 0.3
+        @camera.position.z = 200.0 - realTime * 18.0 + cameraOffsetZ
+        @thing.update()
+        @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
 
         @cameraIntro2.lookAt(@thing.position)
 
