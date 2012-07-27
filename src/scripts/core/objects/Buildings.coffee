@@ -107,9 +107,8 @@ define [
           transparent: true, 
           blending: THREE.AdditiveBlending,
           depthWrite: false,
-          #alphaTest: 0.2,
           color: 0x000000
-          #opacity: 0.6,
+          opacity: 0.7,
           #overdraw: true
         @materialCube = new THREE.MeshPhongMaterial( { map: @texture, emissive: 0x777777, fog: true, wireframe: false } )
         @materialCubeRoof = new THREE.MeshPhongMaterial( { map: @roofTexture, fog: true, wireframe: false } )
