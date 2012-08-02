@@ -35,7 +35,8 @@ define [
         THREE.GeometryUtils.merge(this, trunk2)
 
       buildLeaves: () =>
-        leavesCount = parseInt(80 + Math.random() * 40)
+        #leavesCount = parseInt(50 + Math.random() * 20)
+        leavesCount = 60
         leafSizeMin = 1
         halfRadius = @leavesRadius / 2
       	# lots of planes

@@ -36,14 +36,15 @@ define [
         @plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
         @plane.materials = @materials
         @plane.faces[0].materialIndex = 2
-        
+        @buildingCount = 0
         # create some cubes
         for num in [0..10]
-          @createBuildingLine(num * 220 + 135)
+          @createBuildingLine(num * 220 + 135, num)
         
         for num in [0..10]
-          @createBuildingLine(num * -220 - 290)
+          @createBuildingLine(num * -220 - 290, num)
 
+        #console.log "Created " + @buildingCount + " buildings!"
         @buildings = new THREE.Mesh(@buildingsGeom, @material)
         @add(@buildings)
 
@@ -81,20 +82,22 @@ define [
           for num2 in [0..@numWindows - 1]
             @updateWindow(num, num2, triggerLight)
 
-      createBuildingLine: (dx) =>
+      createBuildingLine: (dx, i) =>
         dz = -2000
         for num in [0..40]
-          building = new Next.objects.BuildingBlock( @materials, @material, @cubeRoof, @plane, @randomBuildings )
-          building.mesh.position.x = parseInt(0 - building.cubeWidth / 2 - dx + @random.getRandom() * 30)
-          if dx == 0 && @random.getRandom() < 0.4
-            building.mesh.position.x *= @random.getRandom() * 50
-          dz += building.cubeDepth / 2
-          building.mesh.position.z = dz
-          dz += parseInt(building.cubeDepth / 2 + 10 + @random.getRandom() * 20)
-          building.ref.position.x = building.mesh.position.x
-          building.ref.position.z = building.mesh.position.z
-          THREE.GeometryUtils.merge(@buildingsGeom, building.mesh)
-          THREE.GeometryUtils.merge(@reflectionsGeom, building.ref)
+          if i < 3 || (num < 3 || num > 37)
+            building = new Next.objects.BuildingBlock( @materials, @material, @cubeRoof, @plane, @randomBuildings )
+            building.mesh.position.x = parseInt(0 - building.cubeWidth / 2 - dx + @random.getRandom() * 30)
+            if dx == 0 && @random.getRandom() < 0.4
+              building.mesh.position.x *= @random.getRandom() * 50
+            dz += building.cubeDepth / 2
+            building.mesh.position.z = dz
+            dz += parseInt(building.cubeDepth / 2 + 10 + @random.getRandom() * 20)
+            building.ref.position.x = building.mesh.position.x
+            building.ref.position.z = building.mesh.position.z
+            THREE.GeometryUtils.merge(@buildingsGeom, building.mesh)
+            THREE.GeometryUtils.merge(@reflectionsGeom, building.ref)
+            @buildingCount++
 
       createShaders: () =>
         @wallcolor = '#050505'
