@@ -1,6 +1,7 @@
 define [
   'Underscore',
   'libs/namespace',
+  'Three',
 ], (_) ->
   
   namespace "Next.utils",
