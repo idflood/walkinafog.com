@@ -43,9 +43,13 @@ define [
         @container = $("#container")[0]
         
         # Create a webgl renderer
-        @renderer = new THREE.WebGLRenderer( { clearColor: Next.settings.backgroundColor, clearAlpha: 1, antialias: false } )
+        @renderer = new THREE.WebGLRenderer( { clearColor: Next.settings.backgroundColor, clearAlpha: 1, alpha: true, antialias: true } )
         @renderer.setSize( window.innerWidth, window.innerHeight )
         @renderer.autoClear = false
+
+        @renderer.gammaInput = true
+        @renderer.gammaOutput = true
+        @renderer.physicallyBasedShading = true
         
         # Add the renderer to the dom
         @container.appendChild( @renderer.domElement )
@@ -56,8 +60,11 @@ define [
           @effectFilm = new THREE.FilmPass(0.21, 0.035, 648, false)
           @effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] )
           @effectVignette.uniforms['darkness'].value = 1.6
-                    
-          @composer = new THREE.EffectComposer( @renderer )
+          
+          renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false }
+          @renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, renderTargetParameters )
+          
+          @composer = new THREE.EffectComposer( @renderer, @renderTarget )
           @composer.addPass( @renderModel )
           @composer.addPass( @effectBloom )
           @composer.addPass( @effectFilm )
@@ -88,7 +95,7 @@ define [
       animate: () =>
         delta = @clock.getDelta()
         time = @clock.getElapsedTime() * 10
-        
+
         @updateWorld(time, delta)
         @render(time, delta)
 
@@ -101,6 +108,7 @@ define [
           @composer.render(delta)
         else
           @renderer.render(@scene, @currentCamera)
+
       
       onResize: () =>
         @camera.aspect = window.innerWidth / window.innerHeight

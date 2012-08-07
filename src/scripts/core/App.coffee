@@ -64,8 +64,11 @@ define [
           @effectFilm = new THREE.FilmPass(0.51, 0.135, 648, false)
           @effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] )
           @effectVignette.uniforms['darkness'].value = 1.6
-                    
-          @composer = new THREE.EffectComposer( @renderer )
+          
+          renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false }
+          @renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, renderTargetParameters )
+
+          @composer = new THREE.EffectComposer( @renderer, @renderTarget )
           @composer.addPass( @renderModel )
           @composer.addPass( @effectBloom )
           @composer.addPass( @effectFilm )
@@ -83,9 +86,51 @@ define [
           # make the last pass render to screen so that we can see something
           @effectVignette.renderToScreen = true
 
+      updateLensFlare: (object) =>
+        @lensFlare.position.y = @sunLight.position.y
+        vecX = -object.positionScreen.x * 2
+        vecY = -object.positionScreen.y * 2
+        for f in [0..object.lensFlares.length-1]
+          flare = object.lensFlares[f]
+          flare.x = object.positionScreen.x + vecX * flare.distance
+          flare.y = object.positionScreen.y + vecY * flare.distance
+          flare.rotation = 0
+        object.lensFlares[ 2 ].y += 0.025
+        object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + 45 * Math.PI / 180
+
+      createLensFlare: () =>
+        textureFlare0 = THREE.ImageUtils.loadTexture("textures/flare0.png")
+        textureFlare2 = THREE.ImageUtils.loadTexture( "textures/flare2.png" )
+        textureFlare3 = THREE.ImageUtils.loadTexture( "textures/flare3.png" )
+        flareColor = new THREE.Color( 0xffffff )
+        
+        @lensFlare = new THREE.LensFlare( textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor )
+        @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
+        @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
+        @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
+        @lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending )
+        @lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending )
+        @lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending )
+        @lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending )
+        
+        @lensFlare.position = @sunLight.position
+        @lensFlare.customUpdateCallback = @updateLensFlare
+        @scene.add( @lensFlare )
+
       createWorld: () =>
         @scene.fog = new THREE.FogExp2( 0x101213, 0.0035 )
 
+        @sunLight = new THREE.DirectionalLight( 0xfbf5d2, 10.15 )
+        @sunLight.position.set( 0, -10, -7220 )
+        @scene.add( @sunLight )
+
+        sphere = new THREE.SphereGeometry(200, 20, 20)
+        sunMaterial = new THREE.MeshBasicMaterial({color: 0xfbf5d2, fog: false})
+        @sun = new THREE.Mesh(sphere, sunMaterial)
+        @sun.position.set(0, -10, -8000)
+        @scene.add(@sun)
+        @createLensFlare()
+        
         @buildings = new Next.objects.Buildings()
         @buildings.position.z = -8000 + 2000
         @scene.add(@buildings)
@@ -167,6 +212,7 @@ define [
 
         # Create a ground
         @materialPlane = new THREE.MeshLambertMaterial( { color: 0x050505, fog: true } )
+        #@materialPlane = new THREE.MeshLambertMaterial( { color: 0x111111, fog: true } )
         @plane = new THREE.PlaneGeometry( 30000, 30000, 10, 10 )
         ground = new THREE.Mesh( @plane, @materialPlane )
         @scene.add(ground)
@@ -260,6 +306,10 @@ define [
         if !@audio then return
         
         @audio.update()
+
+        @sun.position.y += 0.5
+        @sunLight.position.y = @sun.position.y + 50
+
         walkerOffsetZ = 0.0
         cameraOffsetZ = 0.0
 
