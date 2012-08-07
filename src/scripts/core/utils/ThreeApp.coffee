@@ -2,6 +2,7 @@ define [
   'Underscore',
   'libs/namespace',
   'cs!core/utils/AutoReload',
+  'cs!core/utils/CameraManager',
   'Three',
   'EffectComposer',
   'RenderPass',
@@ -50,7 +51,7 @@ define [
         @container.appendChild( @renderer.domElement )
         
         if Next.settings.postprocessing == true
-          @renderModel = new THREE.RenderPass(@scene, @currentCamera)
+          @renderModel = new THREE.RenderPass(@scene, @cameras.currentCamera)
           @effectBloom = new THREE.BloomPass(1.3)
           @effectFilm = new THREE.FilmPass(0.51, 0.135, 648, false)
           @effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] )
@@ -81,16 +82,9 @@ define [
         @directionalLight = new THREE.DirectionalLight( 0xffffff, 1.15 )
         @directionalLight.position.set( 500, 1000, 0 )
         @scene.add( @directionalLight )
-
-        ambientLight = new THREE.AmbientLight(0x555555)
-        #@scene.add(ambientLight)
       
       createCamera: () =>
-        @camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraContainer = new THREE.Object3D()
-        @cameraContainer.add(@camera)
-        @scene.add( @cameraContainer )
-        @currentCamera = @camera
+        @cameras = new Next.utils.CameraManager(@scene)
       
       # Needs to be overriden
       createWorld: () => return false
@@ -111,12 +105,13 @@ define [
         if @composer
           @composer.render(delta)
         else
-          @renderer.render(@scene, @currentCamera)
+          @renderer.render(@scene, @cameras.currentCamera)
 
-      
       onResize: () =>
-        @camera.aspect = window.innerWidth / window.innerHeight
-        @camera.updateProjectionMatrix()
+        ratio = window.innerWidth / window.innerHeight
+        for camera in @cameras.items
+          camera.aspect = ratio
+          camera.updateProjectionMatrix()
         
         @renderer.setSize( window.innerWidth, window.innerHeight )
         if @composer

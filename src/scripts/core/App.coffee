@@ -33,9 +33,6 @@ define [
         $("#container canvas").fadeOut(0)
         @audio = new Next.utils.AudioManager("audio/walk_in_a_fog.mp3", @onSoundLoaded)
         
-        @camera.position.set(0, 2, 200)
-        @camera.lookAt(new THREE.Vector3(0,1480,0 - 3800))
-        
         $("body").mousemove (e) =>
           maxW = document.width
           maxH = document.height
@@ -186,58 +183,6 @@ define [
         @scene.add(@thing)
         @thing.position.y = 0
         @thing.position.z = 240
-
-        # And the cameras
-        @cameraSide1 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraSide1.position.set(500, 2, 200)
-        @cameraSide1.lookAt(new THREE.Vector3(0,50,200))
-        @scene.add(@cameraSide1)
-        @cameras.push(@cameraSide1)
-
-        @cameraSide2 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraSide2.position.set(100, 2, 200)
-        @cameraSide2.lookAt(new THREE.Vector3(0,30,150))
-        @scene.add(@cameraSide2)
-        @cameras.push(@cameraSide2)
-        
-        @cameraIntro2 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraIntro2.position.set(89, 5, -250)
-        @cameraIntro2.lookAt(new THREE.Vector3(0,10,-280))
-        @scene.add(@cameraIntro2)
-        @cameras.push(@cameraIntro2)
-
-        @cameraIntro3 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraIntro3.position.set(70, 2, -280)
-        @cameraIntro3.lookAt(new THREE.Vector3(0,15,-270))
-        @scene.add(@cameraIntro3)
-        @cameras.push(@cameraIntro3)
-
-        @cameraCity1 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraCity1.position.set(160, 220, -5070 + 2000)
-        @cameraCity1.lookAt(new THREE.Vector3(0,0,-4980 + 2000))
-        @scene.add(@cameraCity1)
-        @cameras.push(@cameraCity1)
-
-        @cameraCity2 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraCity2.position.set(160, 320, -4500 + 2000)
-        @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
-        @scene.add(@cameraCity2)
-        @cameras.push(@cameraCity2)
-
-        @cameraCityTop1 = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraCityTop1.position.set(0, 250, -2180)
-        @cameraCityTop1.lookAt(new THREE.Vector3(0,0,-2200))
-        @scene.add(@cameraCityTop1)
-        @cameras.push(@cameraCityTop1)
-
-        @currentCamera = @cameraSide1
-
-      onResize: () =>
-        super
-        ratio = window.innerWidth / window.innerHeight
-        for camera in @cameras
-          camera.aspect = ratio
-          camera.updateProjectionMatrix()
       
       onSoundLoaded: () =>
         @playing = true
@@ -257,22 +202,16 @@ define [
         @time = time
         if @is_paused == true then return
         if @playing == false then return
-
-        if @audio && @audio
-          realTime = @audio.now
-        else
-          realTime = 0
-
         if !@audio then return
-        
+
+        realTime = @audio.now
         @audio.update()
 
         @sun.position.y += 0.5
         @sunLight.position.y = @sun.position.y + 50
 
         walkerOffsetZ = 0.0
-        cameraOffsetZ = 0.0
-
+        
         if realTime > 16.0
           @cars1.update()
           @cars2.update()
@@ -280,7 +219,6 @@ define [
           @cars4.update()
           @cars5.update()
           if @audio.bass > 0.32 && Math.random() > 0.89
-            #console.log @audio.bass
             @cars1.createMesh()
           if @audio.high > 0.37 && Math.random() > 0.86
             @cars2.createMesh()
@@ -293,72 +231,19 @@ define [
         if realTime > 80.0
           @planes1.update(@audio.high > 0.37 && Math.random() > 0.82)
 
-        switchCameras = true
-        @cameraSide1.position.x += (90 - @cameraSide1.position.x) * 0.0015
-        @cameraSide1.position.z = 200.0 - realTime * 18.0 + 20
-        @cameraSide2.position.z = 200.0 - realTime * 18.0 + 10
-        cameraTop_speedY = 0
-        if switchCameras
-          if realTime > 25.0
-            @currentCamera = @cameraIntro2
-          if realTime > 28.0
-            @currentCamera = @cameraIntro3
-            @cameraIntro3.position.z = 200.0 - realTime * 12.0 - 150.0
-          if realTime > 32.0
-            @cameraSide1.position.x = 150
-            @cameraSide1.position.y = 10 - 2
-            @cameraSide1.lookAt(@thing.position)
-            @currentCamera = @cameraSide1
-          
-          if realTime > 41.0 then @currentCamera = @cameraSide2
-          if realTime > 45.0
-            @currentCamera = @cameraSide1
-            @cameraSide1.position.y = 1
-            @cameraSide1.position.x = 65
-            @cameraSide1.lookAt(new THREE.Vector3(@thing.position.x, @thing.position.y + 30, @thing.position.z + 10))
-          if realTime > 49.0
-            @currentCamera = @cameraIntro3
-            @cameraIntro3.position.z = 200.0 - realTime * 15.0 - 130.0
-          if realTime > 53.0
-            @currentCamera = @cameraIntro2
-            @cameraIntro2.position.z = -730
-            @cameraIntro2.position.y = 1
+        if realTime > 112.0 && realTime < 120.0
+          walkerOffsetZ = -1210.0
+        if realTime > 144.0
+          walkerOffsetZ = 1000.0
+          @mainShader.uniforms.offset_color.value.x = 0.02
+          @mainShader.uniforms.glitch_intensity.value = 0.3
 
-          if realTime > 57.0
-            @currentCamera = @cameraSide2
-            @cameraSide2.position.z = 200.0 - realTime * 12.0 - 290.0
-            @cameraIntro3.position.x = 130.0
+        @thing.update()
+        @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
 
-          if realTime > 64.0 then @currentCamera = @camera
-          if realTime > 96.0 then @currentCamera = @cameraCityTop1
-          if realTime > 112.0 && realTime < 120.0
-            walkerOffsetZ = -1210.0
-            @currentCamera = @cameraCity1
-            @cameraCity1.lookAt(@thing.position)
-          if realTime > 120.0 && realTime <= 133.0
-            walkerOffsetZ = -200.0
-            @currentCamera = @cameraCity2
-            @cameraCity2.position.y += (120 - @cameraCity2.position.y) * 0.002
-            #@cameraCity2.lookAt(@thing.position)
-            # position camera top for next frame
-            @cameraCityTop1.position.z = -2180
-
-
-          if realTime > 133.0
-            @currentCamera = @cameraCityTop1
-            cameraTop_speedY += 0.5 + cameraTop_speedY
-            @cameraCityTop1.position.y += cameraTop_speedY
-            @cameraCityTop1.position.z -= 0.6
-
-          # little hack for last step to avoid camera in the middle of car line
-          if realTime > 142.0 && realTime < 143.0
-            cameraOffsetZ = -700.0
-          if realTime > 144.0
-            walkerOffsetZ = 1000.0
-
-            @currentCamera = @camera
-            @mainShader.uniforms.offset_color.value.x = 0.02
-            @mainShader.uniforms.glitch_intensity.value = 0.3
+        # update cameras
+        @cameras.update(realTime, @thing, @mouse)
+        @renderModel.camera = @cameras.currentCamera
 
         # This is the end
         if realTime > 169.0 && @outro == false
@@ -369,34 +254,12 @@ define [
             $("body").append('<a href="/" id="replay">Replay</a>')
             $("#replay").hide().fadeIn(300)
 
-        @renderModel.camera = @currentCamera
-        
-        if @currentCamera == @camera && realTime < 169.0
-          $("#container canvas").addClass("interactive")
-        else
-          $("#container canvas").removeClass("interactive")
-
-        @camera.position.z = 200.0 - realTime * 18.0 + cameraOffsetZ
-        @thing.update()
-        @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
-
-        @cameraIntro2.lookAt(@thing.position)
-        @cameraCityTop1.position.z -= 0.1
-        
-        @camera.position.y = 4 + Math.sin(time * 0.5) * 0.6
-        rx = @mouse.x * -0.8
-        ry = @mouse.y * -0.4 + 0.4
-        @camera.rotation.y += (rx - @camera.rotation.y) * 0.2
-        @camera.rotation.x += (ry - @camera.rotation.x) * 0.2
-
-        @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
-
         cars_offset_z = 50
-        if @currentCamera == @cameraCity1 || @currentCamera == @cameraCity2
+        if @cameras.currentCamera == @cameras.cameraCity1 || @cameras.currentCamera == @cameras.cameraCity2
           cars_offset_z = -300
 
-        @cars1.position.z = @currentCamera.position.z - cars_offset_z
-        @cars2.position.z = @currentCamera.position.z - cars_offset_z
+        @cars1.position.z = @cameras.currentCamera.position.z - cars_offset_z
+        @cars2.position.z = @cameras.currentCamera.position.z - cars_offset_z
         
         @buildings.update(@audio.bass > 0.32 && Math.random() > 0.82)
 
