@@ -46,46 +46,6 @@ define [
 
         document.addEventListener("webkitvisibilitychange", @handleVisibilityChange, false)
 
-      createRenderer: () =>
-        # Create html container
-        $("body").append("<div id='container'></div>")
-        @container = $("#container")[0]
-        
-        # Create a webgl renderer
-        @renderer = new THREE.WebGLRenderer( { clearColor: Next.settings.backgroundColor, clearAlpha: 1, antialias: false } )
-        @renderer.setSize( window.innerWidth, window.innerHeight )
-        @renderer.autoClear = false
-        # Add the renderer to the dom
-        @container.appendChild( @renderer.domElement )
-        
-        if Next.settings.postprocessing == true
-          @renderModel = new THREE.RenderPass(@scene, @currentCamera)
-          @effectBloom = new THREE.BloomPass(1.3)
-          @effectFilm = new THREE.FilmPass(0.51, 0.135, 648, false)
-          @effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] )
-          @effectVignette.uniforms['darkness'].value = 1.6
-          
-          renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false }
-          @renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, renderTargetParameters )
-
-          @composer = new THREE.EffectComposer( @renderer, @renderTarget )
-          @composer.addPass( @renderModel )
-          @composer.addPass( @effectBloom )
-          @composer.addPass( @effectFilm )
-
-          textureDirt = THREE.ImageUtils.loadTexture("textures/lens_dirt.jpg")
-          textureGlitch = THREE.ImageUtils.loadTexture("textures/glitch3.jpg")
-          @mainShader = new THREE.ShaderPass( Next.shaders.GlitchShader )
-
-          @mainShader.material.uniforms.tLensDirt.texture = textureDirt
-          @mainShader.material.uniforms.tGlitch.texture = textureGlitch
-          @composer.addPass( @mainShader )
-
-          @composer.addPass( @effectVignette )
-          
-          # make the last pass render to screen so that we can see something
-          @effectVignette.renderToScreen = true
-
       updateLensFlare: (object) =>
         @lensFlare.position.y = @sunLight.position.y
         vecX = -object.positionScreen.x * 2
