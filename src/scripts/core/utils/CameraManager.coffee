@@ -43,14 +43,14 @@ define [
         @items.push(@cameraIntro3)
 
         @cameraCity1 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraCity1.position.set(160, 220, -5070 + 2000)
+        @cameraCity1.position.set(160 - 50, 220, -5070 + 2000 + 260)
         @cameraCity1.lookAt(new THREE.Vector3(0,0,-4980 + 2000))
         @scene.add(@cameraCity1)
         @items.push(@cameraCity1)
-
+        oz = 140
         @cameraCity2 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
-        @cameraCity2.position.set(160, 320, -4500 + 2000)
-        @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
+        @cameraCity2.position.set(160, 320, -4500 + 2000 + oz)
+        @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000 + oz))
         @scene.add(@cameraCity2)
         @items.push(@cameraCity2)
 
@@ -114,16 +114,19 @@ define [
           @cameraCityTop1.position.z = -2180
 
         if realTime > 133.0
-          @currentCamera = @cameraCityTop1
-          cameraTop_speedY += 0.5 + cameraTop_speedY
-          @cameraCityTop1.position.y += cameraTop_speedY
-          @cameraCityTop1.position.z -= 0.6
+          @currentCamera = @camera
+          cameraOffsetZ = -700.0
+        #if realTime > 133.0
+        #  @currentCamera = @cameraCityTop1
+        #  cameraTop_speedY += 0.5 + cameraTop_speedY
+        #  @cameraCityTop1.position.y += cameraTop_speedY
+        #  @cameraCityTop1.position.z -= 0.6
 
         # little hack for last step to avoid camera in the middle of car line
-        if realTime > 142.0 && realTime < 143.0
-          cameraOffsetZ = -700.0
-        if realTime > 144.0
-          @currentCamera = @camera
+        #if realTime > 142.0 && realTime < 143.0
+        #  cameraOffsetZ = -700.0
+        #if realTime > 144.0
+        #  @currentCamera = @camera
 
         if @currentCamera == @camera && realTime < 169.0
           $("#container canvas").addClass("interactive")

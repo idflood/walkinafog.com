@@ -11,7 +11,7 @@ define [
         @fftSize = 512
         @filters = {}
         @playing = true
-        @now = 0.0
+        @now = 0.0 + 140
         @timeDelay = 0.0
 
         @context = new webkitAudioContext()

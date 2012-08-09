@@ -52,6 +52,7 @@ define [
           flare.x = object.positionScreen.x + vecX * flare.distance
           flare.y = object.positionScreen.y + vecY * flare.distance
           flare.rotation = 0
+          flare.scale = 0.5
         object.lensFlares[ 2 ].y += 0.025
         object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + 45 * Math.PI / 180
 
@@ -77,14 +78,15 @@ define [
       createWorld: () =>
         @scene.fog = new THREE.FogExp2( 0x101213, 0.0035 )
 
-        @sunLight = new THREE.DirectionalLight( 0xfbf5d2, 10.15 )
-        @sunLight.position.set( 0, -10, -7220 )
+        @sunLight = new THREE.DirectionalLight( 0xfbf5d2, 0 )
+        @sunLight.position.set( 0, -150, -7220 )
         @scene.add( @sunLight )
+        console.log @sunLight
 
         sphere = new THREE.SphereGeometry(200, 20, 20)
         sunMaterial = new THREE.MeshBasicMaterial({color: 0xfbf5d2, fog: false})
         @sun = new THREE.Mesh(sphere, sunMaterial)
-        @sun.position.set(0, -10, -8000)
+        @sun.position.set(0, -150, -8000)
         @scene.add(@sun)
         @createLensFlare()
         
@@ -134,9 +136,10 @@ define [
         @cars5 = new Next.objects.Cars(materialTrail2, cube2)
         @cars5.scale.x = 0.6
         @cars5.position.x = -300
+        @cars5.position.y = 100
         @cars5.position.z = -7170 + 2000
         @cars5.rotation.y = Math.PI * -0.5
-        @scene.add(@cars5)
+        #@scene.add(@cars5)
 
         treeGeometries = []
         # create 10 different tree geometries
@@ -206,10 +209,7 @@ define [
 
         realTime = @audio.now
         @audio.update()
-
-        @sun.position.y += 0.5
-        @sunLight.position.y = @sun.position.y + 50
-
+        
         walkerOffsetZ = 0.0
         
         if realTime > 16.0
@@ -238,6 +238,11 @@ define [
           @mainShader.uniforms.offset_color.value.x = 0.02
           @mainShader.uniforms.glitch_intensity.value = 0.3
 
+        if realTime > 144.0
+          @sun.position.y += delta * 15
+          @sunLight.position.y = @sun.position.y + 100
+          @sunLight.intensity = (realTime - 144) / 10
+
         @thing.update()
         @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
 
@@ -248,6 +253,7 @@ define [
         # This is the end
         if realTime > 169.0 && @outro == false
           @outro = true
+          $("body").css("background-color", "#fff")
           _gaq.push(["_trackEvent", "Animation", "completed"])
           $("#container canvas").fadeOut 5000, () =>
             @finished = true
