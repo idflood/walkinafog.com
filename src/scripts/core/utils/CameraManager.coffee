@@ -4,7 +4,7 @@ define [
   'Three',
 ], (_) ->
   #"use strict"
-  
+
   namespace "Next.utils",
     CameraManager: class CameraManager
       constructor: (@scene) ->
@@ -29,7 +29,7 @@ define [
         @cameraSide2.lookAt(new THREE.Vector3(0,30,150))
         @scene.add(@cameraSide2)
         @items.push(@cameraSide2)
-        
+
         @cameraIntro2 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
         @cameraIntro2.position.set(89, 5, -250)
         @cameraIntro2.lookAt(new THREE.Vector3(0,10,-280))
@@ -80,7 +80,7 @@ define [
           @cameraSide1.position.y = 10 - 2
           @cameraSide1.lookAt(@target.position)
           @currentCamera = @cameraSide1
-        
+
         if realTime > 41.0 then @currentCamera = @cameraSide2
         if realTime > 45.0
           @currentCamera = @cameraSide1
@@ -137,12 +137,10 @@ define [
         @cameraIntro2.lookAt(@target.position)
         @cameraCityTop1.position.z -= 0.1
         @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
-
+        #if realTime > 134 && realTime < 135
+        #  console.log @camera.position.z
         @camera.position.y = 4 + Math.sin(realTime * 0.5) * 0.6
         rx = mouse.x * -0.8
         ry = mouse.y * -0.4 + 0.4
         @camera.rotation.y += (rx - @camera.rotation.y) * 0.2
         @camera.rotation.x += (ry - @camera.rotation.x) * 0.2
-
-
-        

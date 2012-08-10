@@ -80,14 +80,14 @@ define [
         @scene.fog = new THREE.FogExp2( 0x101213, 0.0035 )
 
         @sunLight = new THREE.DirectionalLight( 0xfbf5d2, 0 )
-        @sunLight.position.set( 0, -150, -7220 )
+        @sunLight.position.set( 0, -200, -7220 )
         @scene.add( @sunLight )
         console.log @sunLight
 
         sphere = new THREE.SphereGeometry(200, 20, 20)
         sunMaterial = new THREE.MeshBasicMaterial({color: 0xfbf5d2, fog: false})
         @sun = new THREE.Mesh(sphere, sunMaterial)
-        @sun.position.set(0, -150, -8000)
+        @sun.position.set(0, -200, -8000)
         @scene.add(@sun)
         @createLensFlare()
 
@@ -190,6 +190,12 @@ define [
 
         # Create a bird
         @bird = new Next.objects.Bird()
+        @bird.position.z = -3000
+        birdscale = 0.04
+        @bird.scale.set(birdscale, birdscale, birdscale)
+        @bird.position.y = 12
+        # Hide bird
+        @bird.position.x = 300
         @scene.add(@bird)
 
       onSoundLoaded: () =>
@@ -251,7 +257,10 @@ define [
         @thing.update()
         @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
 
-        @bird.update(delta)
+        if realTime > 133
+          @bird.update(delta)
+          @bird.position.x = 3
+          @bird.position.z = -3260 + (realTime - 133) * 30
 
         # update cameras
         @cameras.update(realTime, @thing, @mouse)

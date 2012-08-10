@@ -3,7 +3,7 @@ define [
   'libs/namespace',
 ], (_) ->
   #"use strict"
-  
+
   namespace "Next.utils",
     AudioManager: class AudioManager
       # Inspired by https://github.com/unconed/ThreeAudio.js
@@ -11,7 +11,7 @@ define [
         @fftSize = 512
         @filters = {}
         @playing = true
-        @now = 0.0 + 140
+        @now = 0.0 + 130
         @timeDelay = 0.0
 
         @context = new webkitAudioContext()
@@ -115,8 +115,8 @@ define [
         @bass = bins[1]
         @mid = bins[2]
         @high = bins[3]
-        
-        
+
+
         @now = @context.currentTime - @timeDelay
 
       load: (url) =>
