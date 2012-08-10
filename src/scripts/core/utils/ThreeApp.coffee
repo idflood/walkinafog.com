@@ -14,7 +14,7 @@ define [
   'ShaderExtras',
 ], (_) ->
   #### App
-  
+
   namespace "Next",
     ThreeApp: class ThreeApp
       constructor: () ->
@@ -22,41 +22,42 @@ define [
         @preInit()
         @onResize()
         @animate()
-      
+
       preInit: () =>
         # Setup autoreload on source change
         new Next.AutoReload()
-        
+
         # Setup some other variables
         @clock = new THREE.Clock()
         @scene = new THREE.Scene()
-        
+
         @createCamera()
         @createLights()
         @createWorld()
         @createRenderer()
-        
+
         $(window).bind "resize", (e) => @onResize()
-      
+
       createRenderer: () =>
         # Create html container
         $("body").append("<div id='container'></div>")
         @container = $("#container")[0]
-        
+
         # Create a webgl renderer
         @renderer = new THREE.WebGLRenderer( { clearColor: Next.settings.backgroundColor, clearAlpha: 1, antialias: false } )
         @renderer.setSize( window.innerWidth, window.innerHeight )
         @renderer.autoClear = false
+        console.log @renderer
         # Add the renderer to the dom
         @container.appendChild( @renderer.domElement )
-        
+
         if Next.settings.postprocessing == true
           @renderModel = new THREE.RenderPass(@scene, @cameras.currentCamera)
           @effectBloom = new THREE.BloomPass(1.3)
           @effectFilm = new THREE.FilmPass(0.51, 0.135, 648, false)
           @effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] )
           @effectVignette.uniforms['darkness'].value = 1.6
-          
+
           renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false }
           @renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, renderTargetParameters )
 
@@ -74,22 +75,22 @@ define [
           @composer.addPass( @mainShader )
 
           @composer.addPass( @effectVignette )
-          
+
           # make the last pass render to screen so that we can see something
           @effectVignette.renderToScreen = true
-      
+
       createLights: () =>
         @directionalLight = new THREE.DirectionalLight( 0xffffff, 1.15 )
         @directionalLight.position.set( 500, 1000, 0 )
         @scene.add( @directionalLight )
-      
+
       createCamera: () =>
         @cameras = new Next.utils.CameraManager(@scene)
-      
+
       # Needs to be overriden
       createWorld: () => return false
       updateWorld: () => return false
-      
+
       animate: () =>
         delta = @clock.getDelta()
         time = @clock.getElapsedTime() * 10
@@ -98,10 +99,10 @@ define [
         @render(time, delta)
 
         if @finished == false then requestAnimationFrame( @animate )
-      
+
       render: (time, delta) =>
         @renderer.clear()
-        
+
         if @composer
           @composer.render(delta)
         else
@@ -112,8 +113,8 @@ define [
         for camera in @cameras.items
           camera.aspect = ratio
           camera.updateProjectionMatrix()
-        
+
         @renderer.setSize( window.innerWidth, window.innerHeight )
         if @composer
           @composer.reset()
-      
+

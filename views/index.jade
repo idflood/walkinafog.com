@@ -19,7 +19,7 @@ head
   script(src='scripts/require-config.js')
   script
     var skip_preload = false;
-    window.highQuality = false;
+    window.highQuality = true;
     window.userColor = 0x3366ff;
 
     var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
@@ -46,7 +46,7 @@ head
         require(['boot']);
       });
       //$("#loader_wrapper").hide();
-      
+
     };
 
     var defineQuality = function() {
@@ -107,7 +107,7 @@ head
 
       requestAnimationFrame(animate_preloader);
     };
-    
+
     if (skip_preload == true) {
       $(document).ready(function() {
         initApp();
@@ -154,7 +154,7 @@ head
             //initApp();
             chooseColor();
           });
-          
+
           // add files to preloader
           loader.onComplete = loadComplete;
           loader.loadManifest(["audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection4.png"]);
@@ -165,14 +165,14 @@ head
         }
       });
     }
-    
+
   link(href='stylesheets/screen.css', media='all', rel='stylesheet', type='text/css')
 body
   #loader_wrapper
     header
       h1 SoulSonic
       h2 Walk in a Fog
-    
+
     #credits
       h3 Music by SoulSonic
       p Evaldas Azbukauskas, also known as Giriu Dvasios

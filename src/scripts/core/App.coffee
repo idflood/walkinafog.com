@@ -212,6 +212,13 @@ define [
           @audio.play()
           @is_paused = false
 
+      componentToHex: (c) =>
+        hex = c.toString(16)
+        return hex.length == 1 ? "0" + hex : hex
+
+      rgbToHex: (r, g, b) =>
+        return "#" + @componentToHex(r) + @componentToHex(g) + @componentToHex(b)
+
       updateWorld: (time, delta) =>
         @time = time
         if @is_paused == true then return
@@ -253,6 +260,10 @@ define [
           @sun.position.y += delta * 15
           @sunLight.position.y = @sun.position.y + 100
           @sunLight.intensity = (realTime - 144) / 10
+          col = new THREE.Color()
+          colspeed = 0.0015
+          col.setRGB(.06667 + (realTime - 144) * colspeed, 0.08235 + (realTime - 144) * colspeed * 0.1, 0.090196 + (realTime - 144) * colspeed * 0.3)
+          @renderer.setClearColor(col)
 
         @thing.update()
         @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
