@@ -8,6 +8,7 @@ define [
   'cs!core/objects/Cars',
   'cs!core/objects/Planes',
   'cs!core/objects/Biped',
+  'cs!core/objects/Bird',
   'cs!core/shaders/Glitch',
   'cs!core/utils/AudioManager',
   'cs!core/utils/Rc4Random',
@@ -17,7 +18,7 @@ define [
     settings:
       postprocessing: true
       backgroundColor: 0x111517
-    
+
     App: class App extends Next.ThreeApp
       constructor: () ->
         @mouse =
@@ -32,7 +33,7 @@ define [
 
         $("#container canvas").fadeOut(0)
         @audio = new Next.utils.AudioManager("audio/walk_in_a_fog.mp3", @onSoundLoaded)
-        
+
         $("body").mousemove (e) =>
           maxW = document.width
           maxH = document.height
@@ -61,7 +62,7 @@ define [
         textureFlare2 = THREE.ImageUtils.loadTexture( "textures/flare2.png" )
         textureFlare3 = THREE.ImageUtils.loadTexture( "textures/flare3.png" )
         flareColor = new THREE.Color( 0xffffff )
-        
+
         @lensFlare = new THREE.LensFlare( textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor )
         @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
         @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
@@ -70,7 +71,7 @@ define [
         @lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending )
         @lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending )
         @lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending )
-        
+
         @lensFlare.position = @sunLight.position
         @lensFlare.customUpdateCallback = @updateLensFlare
         @scene.add( @lensFlare )
@@ -89,7 +90,7 @@ define [
         @sun.position.set(0, -150, -8000)
         @scene.add(@sun)
         @createLensFlare()
-        
+
         @buildings = new Next.objects.Buildings()
         @buildings.position.z = -8000 + 2000
         @scene.add(@buildings)
@@ -99,7 +100,7 @@ define [
         materialTree2 = new THREE.MeshBasicMaterial( { color: 0x555555, fog: true, doubleSided: true, wireframe: true } )
         plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
 
-        
+
         materialTrail1 = new THREE.MeshBasicMaterial( { color: 0xff3333, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
         materialTrail2 = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
 
@@ -186,7 +187,7 @@ define [
         @scene.add(@thing)
         @thing.position.y = 0
         @thing.position.z = 240
-      
+
       onSoundLoaded: () =>
         @playing = true
         $("#container canvas").delay(20).fadeIn(3000)
@@ -209,9 +210,9 @@ define [
 
         realTime = @audio.now
         @audio.update()
-        
+
         walkerOffsetZ = 0.0
-        
+
         if realTime > 16.0
           @cars1.update()
           @cars2.update()
@@ -266,7 +267,7 @@ define [
 
         @cars1.position.z = @cameras.currentCamera.position.z - cars_offset_z
         @cars2.position.z = @cameras.currentCamera.position.z - cars_offset_z
-        
+
         @buildings.update(@audio.bass > 0.32 && Math.random() > 0.82)
 
         if @mainShader
