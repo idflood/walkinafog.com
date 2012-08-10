@@ -188,6 +188,10 @@ define [
         @thing.position.y = 0
         @thing.position.z = 240
 
+        # Create a bird
+        @bird = new Next.objects.Bird()
+        @scene.add(@bird)
+
       onSoundLoaded: () =>
         @playing = true
         $("#container canvas").delay(20).fadeIn(3000)
@@ -246,6 +250,8 @@ define [
 
         @thing.update()
         @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
+
+        @bird.update(delta)
 
         # update cameras
         @cameras.update(realTime, @thing, @mouse)
