@@ -10,7 +10,7 @@ define [
   namespace "Next.objects",
 
     Buildings: class Buildings extends THREE.Object3D
-      
+
       constructor: () ->
         super
 
@@ -31,7 +31,7 @@ define [
         # all roof cube faces use the same material
         for face, i in @cubeRoof.faces
           face.materialIndex = 1
-        
+
         # plane for some kind of "road reflection"
         @plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
         @plane.materials = @materials
@@ -40,7 +40,7 @@ define [
         # create some cubes
         for num in [0..10]
           @createBuildingLine(num * 220 + 135, num)
-        
+
         for num in [0..10]
           @createBuildingLine(num * -220 - 290, num)
 
@@ -48,8 +48,8 @@ define [
         @buildings = new THREE.Mesh(@buildingsGeom, @material)
         @add(@buildings)
 
-        @reflections = new THREE.Mesh(@reflectionsGeom, @reflectionMaterial)
-        @add(@reflections)
+        #@reflections = new THREE.Mesh(@reflectionsGeom, @reflectionMaterial)
+        #@add(@reflections)
 
       updateWindow: (num, num2, triggerLight) =>
         if @windowsOn[num][num2] == -1.0 then return
@@ -77,7 +77,7 @@ define [
 
         @contextCopy.drawImage(@canvas, 0, 0)
         @texture.needsUpdate = true
-        
+
         for num in [0..@numWindows - 1]
           for num2 in [0..@numWindows - 1]
             @updateWindow(num, num2, triggerLight)
@@ -96,18 +96,18 @@ define [
             building.ref.position.x = building.mesh.position.x
             building.ref.position.z = building.mesh.position.z
             THREE.GeometryUtils.merge(@buildingsGeom, building.mesh)
-            THREE.GeometryUtils.merge(@reflectionsGeom, building.ref)
+            #THREE.GeometryUtils.merge(@reflectionsGeom, building.ref)
             @buildingCount++
 
       createShaders: () =>
         @wallcolor = '#050505'
         @createTexture()
         @createRoofTexture()
-        
+
         @reflectionMaterial = new THREE.MeshBasicMaterial
           map: THREE.ImageUtils.loadTexture("textures/building_road_reflection4.png"),
           fog: true,
-          transparent: true, 
+          transparent: true,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
           color: 0x000000
@@ -116,7 +116,7 @@ define [
         @materialCube = new THREE.MeshPhongMaterial( { map: @texture, emissive: 0x777777, fog: true, wireframe: false } )
         @materialCubeRoof = new THREE.MeshPhongMaterial( { map: @roofTexture, fog: true, wireframe: false } )
         @materialWire = new THREE.MeshBasicMaterial( { color: 0xeeeeee, fog: true, doubleSided: true, wireframe: true } )
-        
+
         @materials = []
         @materials.push(@materialCube)
         @materials.push(@materialCubeRoof)
@@ -133,14 +133,14 @@ define [
       rndGray: (ofr = 0, ampR = 1.0) =>
         r = ('0' + Math.floor(Math.random() * (256 - ofr) * ampR + ofr).toString(16)).substr(-2)
         return '#' + r + r + r
-      
+
       createRoofTexture: () =>
         @textureSize = 32
         canvas = document.createElement("canvas")
         context = canvas.getContext("2d")
         canvas.width = @textureSize
         canvas.height = @textureSize
-        
+
         context.fillStyle = @wallcolor
         context.fillRect(0,0,@textureSize,@textureSize)
         @roofTexture = new THREE.Texture(canvas)
@@ -196,7 +196,7 @@ define [
               @windowsOn[num][num2] = 1.0
               # some windows always on
               if Math.random() < 0.05 then @windowsOn[num][num2] = -1.0
-              
+
               dx = @spacing + num * (@windowSize + @spacing)
               dy = num2 * (@windowSize + @spacing)
               dw = @windowSize - @spacing

@@ -4,14 +4,13 @@ define [
   'Three',
 ], (_) ->
   #"use strict"
-  
+
   namespace "Next.objects",
     Cars: class Cars extends THREE.Object3D
       constructor: (@mat, @plane, @reverse = false) ->
         super
         @maxLines = 40
         @rndSpacing = 20
-        #console.log @
 
       createMesh: () =>
         if @children.length >= @maxLines then return

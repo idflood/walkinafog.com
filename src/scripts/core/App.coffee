@@ -82,7 +82,6 @@ define [
         @sunLight = new THREE.DirectionalLight( 0xfbf5d2, 0 )
         @sunLight.position.set( 0, -200, -7220 )
         @scene.add( @sunLight )
-        console.log @sunLight
 
         sphere = new THREE.SphereGeometry(200, 20, 20)
         sunMaterial = new THREE.MeshBasicMaterial({color: 0xfbf5d2, fog: false})
@@ -100,7 +99,6 @@ define [
         materialTree2 = new THREE.MeshBasicMaterial( { color: 0x555555, fog: true, doubleSided: true, wireframe: true } )
         plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
 
-
         materialTrail1 = new THREE.MeshBasicMaterial( { color: 0xff3333, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
         materialTrail2 = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
 
@@ -109,7 +107,6 @@ define [
         @planes1 = new Next.objects.Planes(materialPlane, plane)
         @planes1.position.z = -10400
         @scene.add(@planes1)
-
 
         cube2 = new THREE.CubeGeometry( 1, 1, 1 )
         @cars1 = new Next.objects.Cars(materialTrail1, cube2)
