@@ -53,8 +53,12 @@ define [
           flare.x = object.positionScreen.x + vecX * flare.distance
           flare.y = object.positionScreen.y + vecY * flare.distance
           flare.rotation = 0
-          flare.scale = 0.5
+          if f == 0
+            flare.scale = 0.15
+          else
+            flare.scale = 0.7
         object.lensFlares[ 2 ].y += 0.025
+        object.lensFlares[ 1 ].rotation = object.positionScreen.x * 0.4 - 15 * Math.PI / 180
         object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + 45 * Math.PI / 180
 
       createLensFlare: () =>
@@ -63,9 +67,9 @@ define [
         textureFlare3 = THREE.ImageUtils.loadTexture( "textures/flare3.png" )
         flareColor = new THREE.Color( 0xffffff )
 
-        @lensFlare = new THREE.LensFlare( textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor )
+        @lensFlare = new THREE.LensFlare( textureFlare0, 512, 0.0, THREE.AdditiveBlending, flareColor )
         @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
-        @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
+        @lensFlare.add( textureFlare2, 1024, 0.0, THREE.AdditiveBlending )
         @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
         @lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending )
         @lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending )
@@ -195,6 +199,17 @@ define [
         @bird.position.x = 300
         @scene.add(@bird)
 
+        @textureRise = THREE.ImageUtils.loadTexture("textures/sunrise.png")
+        @materialSky = new THREE.MeshBasicMaterial( { map: @textureRise, fog: false, transparent: true, opacity: 0 } )
+        #@materialSky.needsUpdate = true
+        skyPlane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
+        @sky = new THREE.Mesh(skyPlane, @materialSky)
+        @sky.position.z = -10900
+        @sky.position.y = 5000
+        @sky.rotation.x = Math.PI * 0.5
+        @sky.scale.set(10000,1,10000)
+        @scene.add(@sky)
+
       onSoundLoaded: () =>
         @playing = true
         $("#container canvas").delay(20).fadeIn(3000)
@@ -253,14 +268,17 @@ define [
           @mainShader.uniforms.offset_color.value.x = 0.02
           @mainShader.uniforms.glitch_intensity.value = 0.3
 
+        if realTime > 137
+          @materialSky.opacity = (realTime - 144) * 0.01
         if realTime > 144.0
-          @sun.position.y += delta * 15
+          @sun.position.y += delta * 10
           @sunLight.position.y = @sun.position.y + 100
           @sunLight.intensity = (realTime - 144) / 10
           col = new THREE.Color()
-          colspeed = 0.0015
+          colspeed = 0.001
           col.setRGB(.06667 + (realTime - 144) * colspeed, 0.08235 + (realTime - 144) * colspeed * 0.1, 0.090196 + (realTime - 144) * colspeed * 0.3)
           @renderer.setClearColor(col)
+          @scene.fog.color = col
 
         @thing.update()
         @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
@@ -273,9 +291,9 @@ define [
         # update cameras
         @cameras.update(realTime, @thing, @mouse)
         @renderModel.camera = @cameras.currentCamera
-
+        #@sky.position.z = @cameras.camera.position.z - 200
         # This is the end
-        if realTime > 169.0 && @outro == false
+        if realTime > 162.0 && @outro == false
           @outro = true
           $("body").css("background-color", "#fff")
           _gaq.push(["_trackEvent", "Animation", "completed"])
@@ -283,6 +301,9 @@ define [
             @finished = true
             $("body").append('<a href="/" id="replay">Replay</a>')
             $("#replay").hide().fadeIn(300)
+
+            $("footer .right").addClass("finished")
+            $("body").append($("footer .right"))
 
         cars_offset_z = 50
         if @cameras.currentCamera == @cameras.cameraCity1 || @cameras.currentCamera == @cameras.cameraCity2
