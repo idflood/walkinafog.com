@@ -4,7 +4,7 @@ define [
   'Three',
 ], (_) ->
   #"use strict"
-  
+
   namespace "Next.objects",
     # this is more vertical lines than planes, but why not...
     Planes: class Planes extends THREE.Object3D
@@ -41,7 +41,7 @@ define [
         mesh.rotation.x = Math.PI * 0.5
         #mesh.rotation.y = Math.random() * 1.5 - 0.75
         mesh.rotation.y = mesh.position.x * -0.00015
-        
+
 
         if @reverse == true
           mesh.position.x *= -1

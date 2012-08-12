@@ -9,7 +9,7 @@ define [
   namespace "Next.objects",
 
     Tree: class Tree extends THREE.Geometry
-      
+
       constructor: (@plane, @material2) ->
         super
 
@@ -26,7 +26,7 @@ define [
         trunk.rotation.z = Math.PI * 0.5
         trunk.position.y = @trunkHeight / 2
         THREE.GeometryUtils.merge(this, trunk)
-        
+
         trunk2 = new THREE.Mesh( @plane, @material2 )
         trunk2.scale.set(@trunkHeight, 1, @trunkWidth)
         trunk2.rotation.z = Math.PI * 0.5

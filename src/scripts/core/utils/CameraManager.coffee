@@ -81,7 +81,9 @@ define [
           @cameraSide1.lookAt(@target.position)
           @currentCamera = @cameraSide1
 
-        if realTime > 41.0 then @currentCamera = @cameraSide2
+        if realTime > 41.0
+          @currentCamera = @cameraSide2
+          # todo...
         if realTime > 45.0
           @currentCamera = @cameraSide1
           @cameraSide1.position.y = 1

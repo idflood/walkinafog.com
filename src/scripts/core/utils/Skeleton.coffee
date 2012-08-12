@@ -3,33 +3,33 @@ define [
   'libs/namespace',
   'Three',
 ], (_) ->
-  
+
   namespace "Next.utils",
-    
+
     Skeleton: class Skeleton extends THREE.Object3D
       constructor: (@materialSimple, @materialWire, @a, @b, @count = 3, @radius = 1, @direction = new THREE.Vector3(1, 0, 0)) ->
         super
-        
+
         @objects = []
         @mids = []
         cube_width = 2
         @cube = new THREE.CubeGeometry( cube_width, cube_width, cube_width )
         @maxdiff = @b.clone().subSelf(@a).length()
-        
+
         @object = new THREE.Mesh( @cube, @materialSimple )
         @object.doubleSided = true
         @object.position = @a
         @add(@object)
-        
+
         @mid = @count - 2
         spacing = @b.clone().subSelf(@a).divideScalar(@count - 1)
         @spacing = spacing
         @spacing_length = spacing.length()
-        
+
         ob = new THREE.Object3D()
         ob.position = @a
         @objects.push(ob)
-        
+
         ip = 1 / (@count - 1)
         for num in [@mid..1]
           p = num * ip
@@ -44,22 +44,22 @@ define [
           ob = new THREE.Object3D()
           ob.position = obj1.position
           @objects.push(ob)
-        
+
         for ob in @objects
           @add(ob)
         @object2 = new THREE.Mesh( @cube, @materialSimple )
         @object2.position = @b
         @object2.doubleSided = true
         @add(@object2)
-        
-      
+
+
       addMiddlePart: (pos) =>
         obj = new THREE.Mesh( @cube, @materialSimple )
         obj.position = pos
         @add(obj)
         @mids.push(obj)
         return obj
-      
+
       update: () =>
         ln = @objects.length
         for i in [ln - 1..1]
@@ -76,7 +76,7 @@ define [
         # want to move the total difference in the @direction
         #diff = @direction.clone().multiplyScalar(diff_spacing.length())
         diff = @direction.clone().multiplyScalar(diff_spacing.length())
-        
+
         ip = 1 / (@count - 1)
         for num in [@mid..1]
           # p = magnitude of d
@@ -97,7 +97,7 @@ define [
         for ob, i in @objects
           max = 6
           dy2 = dy / (max + 1)
-          
+
           for num in [max..1]
             c2 = new Next.shapes.Cylinder3((40 + Math.random() * 10) * @radius, 5, 7)
             ob2 = new THREE.Mesh( c2, @materialWire )

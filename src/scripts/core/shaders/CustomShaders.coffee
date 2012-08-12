@@ -7,7 +7,7 @@ define [
   'Three',
 ], (plain_vert, plain_frag, blur_vert, blurH_frag, blurV_frag) ->
   #### CustomShaders
-  
+
   namespace "Next.shaders",
     BlurVignetteH:
       uniforms:

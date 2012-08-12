@@ -2,7 +2,7 @@ define [
   'libs/namespace',
 ], () ->
   #"use strict"
-  
+
   namespace "Next.utils",
     Rc4Random: class Rc4Random
       # Rc4Random function taken from http://www.webdeveloper.com/forum/showthread.php?t=140572
@@ -10,7 +10,7 @@ define [
         @keySchedule = []
         @keySchedule_i = 0
         @keySchedule_j = 0
-        
+
         for i in [0..256 - 1]
           @keySchedule[i] = i
         j = 0
@@ -19,16 +19,16 @@ define [
           t = @keySchedule[i]
           @keySchedule[i] = @keySchedule[j]
           @keySchedule[j] = t
-      
+
       getRandomByte: () =>
         @keySchedule_i = (@keySchedule_i + 1) % 256
         @keySchedule_j = (@keySchedule_j + @keySchedule[@keySchedule_i]) % 256
-        
+
         t = @keySchedule[@keySchedule_i]
         @keySchedule[@keySchedule_i] = @keySchedule[@keySchedule_j]
         @keySchedule[@keySchedule_j] = t
         return @keySchedule[(@keySchedule[@keySchedule_i] + @keySchedule[@keySchedule_j]) % 256]
-      
+
       getRandom: () =>
         number =  0
         multiplier = 1

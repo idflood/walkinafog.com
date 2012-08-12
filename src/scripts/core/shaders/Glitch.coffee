@@ -4,9 +4,9 @@ define [
   'Three',
 ], (basic_vert, glitch_frag) ->
   #### GlitchShader
-  
+
   #window.textureDirt = THREE.ImageUtils.loadTexture("lens_dirt.jpg")
-  
+
   namespace "Next.shaders",
     GlitchShader:
       uniforms:

@@ -474,12 +474,17 @@ a.twitter {
   margin-right: 0;
 }
 .finished {
+  border-top: 1px solid #eaeaea;
   position: absolute;
   z-index: 990;
-  color: #333;
+  color: #777;
+  margin-left: -240px;
   text-align: center;
-  width: 100%;
+  padding-top: 10px;
+  left: 50%;
   top: 70%;
+  width: 480px;
+  font-size: 10px;
 }
 .finished a,
 .finished a:link,

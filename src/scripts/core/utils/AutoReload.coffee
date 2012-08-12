@@ -2,7 +2,7 @@ define [
   'socket.io'
 ], () ->
   #### AutoReload
-  
+
   namespace "Next",
     AutoReload: class AutoReload
       constructor: () ->
@@ -12,6 +12,6 @@ define [
           socket.on 'reload', () ->
             console.log "reload!"
             window.location.reload(true)
-      
+
       getURLParameter: (name) ->
         decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[0,null])[1])

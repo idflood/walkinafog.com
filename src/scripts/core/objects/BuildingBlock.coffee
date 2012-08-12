@@ -4,7 +4,7 @@ define [
   'Three',
 ], (_) ->
   #### BuildingBlock
-  
+
   namespace "Next.objects",
 
     BuildingBlock: class BuildingBlock
@@ -31,7 +31,7 @@ define [
         obj.scale.set(@cubeWidth * 1.01, 2 + @random.getRandom() * 10, @cubeDepth * 1.01)
         obj.position.y = @cubeHeight
         THREE.GeometryUtils.merge(@combined, obj)
-        
+
         if @random.getRandom() > 0.7
           for num in [0..parseInt(@random.getRandom() * 2)]
             cubeHeight2 = parseInt(50 + @random.getRandom() * 200)
@@ -61,7 +61,7 @@ define [
         #THREE.GeometryUtils.merge(@combined, ref)
 
         @mesh = new THREE.Mesh( @combined, @material )
-      
+
       setFacesIndices: (ob) =>
         ob.faces[0].materialIndex = 0
         ob.faces[1].materialIndex = 0
