@@ -149,7 +149,7 @@ define [
         # Create a bird
         @bird = new Next.objects.Bird()
         @bird.position.z = -3000
-        birdscale = 0.04
+        birdscale = 0.02
         @bird.scale.set(birdscale, birdscale, birdscale)
         @bird.position.y = 12
         # Hide bird
@@ -257,7 +257,7 @@ define [
           @outro = true
           $("body").css("background-color", "#fff")
           _gaq.push(["_trackEvent", "Animation", "completed"])
-          $("#container canvas").fadeOut 5000, () =>
+          $("#container canvas").fadeOut 7000, () =>
             @finished = true
             $("body").append('<a href="/" id="replay">Replay</a>')
             $("#replay").hide().fadeIn(300)

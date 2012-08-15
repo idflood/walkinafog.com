@@ -47,7 +47,6 @@ define [
         @renderer = new THREE.WebGLRenderer( { clearColor: Next.settings.backgroundColor, clearAlpha: 1, antialias: false } )
         @renderer.setSize( window.innerWidth, window.innerHeight )
         @renderer.autoClear = false
-        console.log @renderer
         # Add the renderer to the dom
         @container.appendChild( @renderer.domElement )
 

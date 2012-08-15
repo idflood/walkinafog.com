@@ -136,7 +136,7 @@ define [
 
         @camera.position.z = 200.0 - realTime * 18.0 + cameraOffsetZ
         @cameraIntro2.lookAt(@target.position)
-        @cameraCityTop1.position.z -= 0.1
+        @cameraCityTop1.position.z = -600 - realTime * 7.0
         @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
 
         @camera.position.y = 4 + Math.sin(realTime * 0.5) * 0.6
