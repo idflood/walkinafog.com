@@ -12,6 +12,7 @@ define [
   'cs!core/shaders/Glitch',
   'cs!core/utils/AudioManager',
   'cs!core/utils/Rc4Random',
+  'cs!core/utils/LensFlareContainer',
 ], (_) ->
   #### App
   namespace "Next",
@@ -44,42 +45,6 @@ define [
 
         document.addEventListener("webkitvisibilitychange", @handleVisibilityChange, false)
 
-      updateLensFlare: (object) =>
-        @lensFlare.position.y = @sunLight.position.y
-        vecX = -object.positionScreen.x * 2
-        vecY = -object.positionScreen.y * 2
-        for f in [0..object.lensFlares.length-1]
-          flare = object.lensFlares[f]
-          flare.x = object.positionScreen.x + vecX * flare.distance
-          flare.y = object.positionScreen.y + vecY * flare.distance
-          flare.rotation = 0
-          if f == 0
-            flare.scale = 0.15
-          else
-            flare.scale = 0.7
-        object.lensFlares[ 2 ].y += 0.025
-        object.lensFlares[ 1 ].rotation = object.positionScreen.x * 0.4 - 15 * Math.PI / 180
-        object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + 45 * Math.PI / 180
-
-      createLensFlare: () =>
-        textureFlare0 = THREE.ImageUtils.loadTexture("textures/flare0.png")
-        textureFlare2 = THREE.ImageUtils.loadTexture( "textures/flare2.png" )
-        textureFlare3 = THREE.ImageUtils.loadTexture( "textures/flare3.png" )
-        flareColor = new THREE.Color( 0xffffff )
-
-        @lensFlare = new THREE.LensFlare( textureFlare0, 512, 0.0, THREE.AdditiveBlending, flareColor )
-        @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
-        @lensFlare.add( textureFlare2, 1024, 0.0, THREE.AdditiveBlending )
-        @lensFlare.add( textureFlare2, 512, 0.0, THREE.AdditiveBlending )
-        @lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending )
-        @lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending )
-        @lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending )
-        @lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending )
-
-        @lensFlare.position = @sunLight.position
-        @lensFlare.customUpdateCallback = @updateLensFlare
-        @scene.add( @lensFlare )
-
       createWorld: () =>
         @scene.fog = new THREE.FogExp2( 0x101213, 0.0035 )
 
@@ -92,7 +57,7 @@ define [
         @sun = new THREE.Mesh(sphere, sunMaterial)
         @sun.position.set(0, -200, -8000)
         @scene.add(@sun)
-        @createLensFlare()
+        @lensFlare = new Next.utils.LensFlareContainer(@scene, @sunLight)
 
         @buildings = new Next.objects.Buildings()
         @buildings.position.z = -8000 + 2000
@@ -135,14 +100,6 @@ define [
         @cars4.rotation.y = Math.PI * -0.5
         @scene.add(@cars4)
 
-        @cars5 = new Next.objects.Cars(materialTrail2, cube2)
-        @cars5.scale.x = 0.6
-        @cars5.position.x = -300
-        @cars5.position.y = 100
-        @cars5.position.z = -7170 + 2000
-        @cars5.rotation.y = Math.PI * -0.5
-        #@scene.add(@cars5)
-
         treeGeometries = []
         # create 10 different tree geometries
         for num in [0..10]
@@ -174,7 +131,6 @@ define [
 
         # Create a ground
         @materialPlane = new THREE.MeshLambertMaterial( { color: 0x050505, fog: true } )
-        #@materialPlane = new THREE.MeshLambertMaterial( { color: 0x111111, fog: true } )
         @plane = new THREE.PlaneGeometry( 30000, 30000, 10, 10 )
         ground = new THREE.Mesh( @plane, @materialPlane )
         @scene.add(ground)
@@ -200,9 +156,9 @@ define [
         @bird.position.x = 300
         @scene.add(@bird)
 
+        # Create sunrise sky texture
         @textureRise = THREE.ImageUtils.loadTexture("textures/sunrise.png")
         @materialSky = new THREE.MeshBasicMaterial( { map: @textureRise, fog: false, transparent: true, opacity: 0 } )
-        #@materialSky.needsUpdate = true
         skyPlane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
         @sky = new THREE.Mesh(skyPlane, @materialSky)
         @sky.position.z = -10900
@@ -292,7 +248,7 @@ define [
         # update cameras
         @cameras.update(realTime, @thing, @mouse)
         @renderModel.camera = @cameras.currentCamera
-        #@sky.position.z = @cameras.camera.position.z - 200
+
         # This is the end
         if realTime > 162.0 && @outro == false
           @outro = true
