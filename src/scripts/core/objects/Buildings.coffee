@@ -86,6 +86,9 @@ define [
 
       createBuildingLine: (dx, i) =>
         dz = -2000
+        if dx > 0 then dz = -1640
+        #if dx > 0 then dz = -1820
+        #if dx > 0 then dz = -2400
         for num in [0..40]
           if i < 3 || (num < 3 || num > 37)
             building = new Next.objects.BuildingBlock( @materials, @material, @cubeRoof, @plane, @randomBuildings, @createReflections )

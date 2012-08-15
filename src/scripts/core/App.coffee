@@ -89,14 +89,14 @@ define [
         @cars3 = new Next.objects.Cars(materialTrail1, cube2)
         @cars3.scale.x = 0.6
         @cars3.position.x = 300
-        @cars3.position.z = -4170 + 2000
+        @cars3.position.z = -4170 + 2000 + 50
         @cars3.rotation.y = Math.PI * 0.5
         @scene.add(@cars3)
 
         @cars4 = new Next.objects.Cars(materialTrail2, cube2)
         @cars4.scale.x = 0.6
         @cars4.position.x = -300
-        @cars4.position.z = -4320 + 2000
+        @cars4.position.z = -4320 + 2000 + 40 + 10
         @cars4.rotation.y = Math.PI * -0.5
         @scene.add(@cars4)
 
@@ -228,7 +228,7 @@ define [
         # Update sky & sun near the end
         if realTime > 137
           @materialSky.opacity = (realTime - 137) * 0.01
-        if realTime > 144.0 - 4.0
+        if realTime > 140.0
           @sun.position.y += delta * 10
           @sunLight.position.y = @sun.position.y + 100
           @sunLight.intensity = (realTime - 140) / 10

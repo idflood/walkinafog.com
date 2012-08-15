@@ -26,7 +26,7 @@ define [
 
         @cameraSide2 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
         @cameraSide2.position.set(100, 2, 200)
-        @cameraSide2.lookAt(new THREE.Vector3(0,30,150))
+        @cameraSide2.lookAt(new THREE.Vector3(0,30,150 + 35))
         @scene.add(@cameraSide2)
         @items.push(@cameraSide2)
 
@@ -38,7 +38,7 @@ define [
 
         @cameraIntro3 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
         @cameraIntro3.position.set(70, 2, -280)
-        @cameraIntro3.lookAt(new THREE.Vector3(0,15,-230))
+        @cameraIntro3.lookAt(new THREE.Vector3(0,15,-270))
         @scene.add(@cameraIntro3)
         @items.push(@cameraIntro3)
 

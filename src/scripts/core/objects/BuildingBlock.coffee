@@ -59,7 +59,7 @@ define [
           multref = 1.3
           @ref.scale.set(@cubeWidth * multref + rndref, 1, @cubeDepth * multref + rndref)
           @ref.position.y = @random.getRandom() + 0.1
-          #THREE.GeometryUtils.merge(@combined, ref)
+          THREE.GeometryUtils.merge(@combined, ref)
 
         @mesh = new THREE.Mesh( @combined, @material )
 
