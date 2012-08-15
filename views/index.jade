@@ -19,7 +19,7 @@ head
   script(src='scripts/require-config.js')
   script
     var skip_preload = false;
-    window.highQuality = true;
+    window.highQuality = false;
     window.userColor = 0x3366ff;
 
     var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
@@ -32,12 +32,41 @@ head
     var preloader_frame = 0;
     var is_loaded = false;
     var loader = new PreloadJS();
+    var first_loader = new PreloadJS();
 
     var loadComplete = function() {
       $("#preloader").stop().delay(120).transition({top: '290px', opacity: 0.0}, 150);
       window.setTimeout(function(){
         $("#start").delay(700).css("display", "block").transition({top: '296px', opacity: 1.0}, 200);
       }, 250);
+    };
+
+    var firstLoadComplete = function() {
+      // good to go :)
+      $("#loader_wrapper").delay(300).transition({opacity: 1.0}, 500);
+      $("header").delay(900).transition({opacity: 1.0}, 500);
+      $("header h1").css('left', '10px').delay(1150).transition({left: '20px', opacity: 1.0}, 300);
+      $("header h2").css('left', '135px').delay(1250).transition({left: '145px', opacity: 1.0}, 300);
+      $("footer").delay(1400).transition({opacity: 1.0}, 1000);
+
+      // add the preloader
+      $("header").append('<div id="preloader"><div class="line"></div></div><a id="start">Start<span class="arrow"></span></a>');
+      $("#start").hide();
+      $("#preloader").delay(1220).transition({top: '300px', opacity: 1.0}, 200);
+
+      $("#start").click(function(e){
+        e.preventDefault();
+        //initApp();
+        chooseColor();
+      });
+
+      // add files to preloader
+      loader.onComplete = loadComplete;
+      loader.loadManifest(["audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection4.png", "textures/sunrise.png"]);
+
+      if (requestAnimationFrame) {
+        requestAnimationFrame(animate_preloader);
+      }
     };
 
     var initApp = function() {
@@ -137,31 +166,10 @@ head
           $("header, h1, h2, #loader_wrapper, footer").css("opacity", 1.0);
           $("body").addClass("error");
         } else {
-          // good to go :)
-          $("#loader_wrapper").delay(300).transition({opacity: 1.0}, 500);
-          $("header").delay(900).transition({opacity: 1.0}, 500);
-          $("header h1").css('left', '10px').delay(1150).transition({left: '20px', opacity: 1.0}, 300);
-          $("header h2").css('left', '135px').delay(1250).transition({left: '145px', opacity: 1.0}, 300);
-          $("footer").delay(1400).transition({opacity: 1.0}, 1000);
+          first_loader.onComplete = firstLoadComplete;
+          first_loader.loadManifest(["assets_website/bg6.jpg", "assets_website/separator.png", "assets_website/soulsonic.png", "assets_website/walk.png", "assets_website/loading.png", "assets_website/preloader_line.png", "assets_website/start.png", "assets_website/start_arrow.png", "assets_website/ce.png", "assets_website/google.png", "assets_website/facebook.png", "assets_website/twitter.png", "assets_website/google2.png", "assets_website/facebook2.png", "assets_website/twitter2.png", "assets_website/restart_black.png"]);
 
-          // add the preloader
-          $("header").append('<div id="preloader"><div class="line"></div></div><a id="start">Start<span class="arrow"></span></a>');
-          $("#start").hide();
-          $("#preloader").delay(1220).transition({top: '300px', opacity: 1.0}, 200);
 
-          $("#start").click(function(e){
-            e.preventDefault();
-            //initApp();
-            chooseColor();
-          });
-
-          // add files to preloader
-          loader.onComplete = loadComplete;
-          loader.loadManifest(["audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection4.png"]);
-
-          if (requestAnimationFrame) {
-            requestAnimationFrame(animate_preloader);
-          }
         }
       });
     }
