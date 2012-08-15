@@ -197,8 +197,6 @@ define [
         realTime = @audio.now
         @audio.update()
 
-        walkerOffsetZ = 0.0
-
         if realTime > 16.0
           @cars1.update()
           @cars2.update()
@@ -215,16 +213,21 @@ define [
             @cars4.createMesh()
             @cars5.createMesh()
 
+        # Update city lights
         if realTime > 80.0
           @planes1.update(@audio.high > 0.37 && Math.random() > 0.82)
 
+        # Offset walker position
+        walkerOffsetZ = 0.0
         if realTime > 112.0 && realTime < 120.0
           walkerOffsetZ = -1210.0
         if realTime > 144.0
           walkerOffsetZ = 1000.0
+          # Also more glitch near the end
           @mainShader.uniforms.offset_color.value.x = 0.02
           @mainShader.uniforms.glitch_intensity.value = 0.3
 
+        # Update sky & sun near the end
         if realTime > 137
           @materialSky.opacity = (realTime - 137) * 0.01
         if realTime > 144.0 - 4.0
@@ -237,15 +240,17 @@ define [
           @renderer.setClearColor(col)
           @scene.fog.color = col
 
-        @thing.update()
-        @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
-
+        # Update the bird
         if realTime > 133
           @bird.update(delta)
           @bird.position.x = 3
           @bird.position.z = -3260 + (realTime - 133) * 30
 
-        # update cameras
+        # Update the walker
+        @thing.update()
+        @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
+
+        # Update cameras
         @cameras.update(realTime, @thing, @mouse)
         @renderModel.camera = @cameras.currentCamera
 
@@ -262,13 +267,14 @@ define [
             $("footer .right").addClass("finished")
             $("body").append($("footer .right"))
 
+        # Update the 2 main cars lines
         cars_offset_z = 50
         if @cameras.currentCamera == @cameras.cameraCity1 || @cameras.currentCamera == @cameras.cameraCity2
           cars_offset_z = -300
-
         @cars1.position.z = @cameras.currentCamera.position.z - cars_offset_z
         @cars2.position.z = @cameras.currentCamera.position.z - cars_offset_z
 
+        # Update buildings texture (high quality settings)
         @buildings.update(@audio.bass > 0.32 && Math.random() > 0.82)
 
         if @mainShader
