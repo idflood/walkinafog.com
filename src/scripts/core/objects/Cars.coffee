@@ -43,8 +43,8 @@ define [
         obj.position.y = -400
         @availableMeshes.push(obj)
 
-      update: () =>
-        speed = 40
+      update: (delta) =>
+        speed = delta * 2500
         #childs = @children.slice(0, @children.length)
         #console.log childs.length
         for k, obj of @children

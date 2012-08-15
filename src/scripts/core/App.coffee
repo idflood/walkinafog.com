@@ -198,10 +198,10 @@ define [
         @audio.update()
 
         if realTime > 16.0
-          @cars1.update()
-          @cars2.update()
-          @cars3.update()
-          @cars4.update()
+          @cars1.update(delta)
+          @cars2.update(delta)
+          @cars3.update(delta)
+          @cars4.update(delta)
           if @audio.bass > 0.32 && Math.random() > 0.89
             @cars1.createMesh()
           if @audio.high > 0.37 && Math.random() > 0.86
