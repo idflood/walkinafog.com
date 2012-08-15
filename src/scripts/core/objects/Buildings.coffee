@@ -18,6 +18,8 @@ define [
         @spacing = 1
         @windowsOn = []
 
+        @createReflections = false
+
         # create main random generators
         @random = new Next.utils.Rc4Random("Lorem ipusm dolor sit amet.")
         @randomBuildings = new Next.utils.Rc4Random("rBPvyBA1MUhvJVT4kNH6sLsAz6dRfwL6")
@@ -25,17 +27,19 @@ define [
 
         @createShaders()
         @buildingsGeom = new THREE.Geometry()
-        @reflectionsGeom = new THREE.Geometry()
+        if @createReflections == true
+          @reflectionsGeom = new THREE.Geometry()
 
         @cubeRoof = new THREE.CubeGeometry( 1, 1, 1, 1, 1, 1, @materials )
         # all roof cube faces use the same material
         for face, i in @cubeRoof.faces
           face.materialIndex = 1
 
-        # plane for some kind of "road reflection"
-        @plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
-        @plane.materials = @materials
-        @plane.faces[0].materialIndex = 2
+        if @createReflections == true
+          # plane for some kind of "road reflection"
+          @plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
+          @plane.materials = @materials
+          @plane.faces[0].materialIndex = 2
         @buildingCount = 0
         # create some cubes
         for num in [0..10]
@@ -44,12 +48,12 @@ define [
         for num in [0..10]
           @createBuildingLine(num * -220 - 290, num)
 
-        #console.log "Created " + @buildingCount + " buildings!"
         @buildings = new THREE.Mesh(@buildingsGeom, @material)
         @add(@buildings)
 
-        #@reflections = new THREE.Mesh(@reflectionsGeom, @reflectionMaterial)
-        #@add(@reflections)
+        if @createReflections == true
+          @reflections = new THREE.Mesh(@reflectionsGeom, @reflectionMaterial)
+          @add(@reflections)
 
       updateWindow: (num, num2, triggerLight) =>
         if @windowsOn[num][num2] == -1.0 then return
@@ -86,17 +90,19 @@ define [
         dz = -2000
         for num in [0..40]
           if i < 3 || (num < 3 || num > 37)
-            building = new Next.objects.BuildingBlock( @materials, @material, @cubeRoof, @plane, @randomBuildings )
+            building = new Next.objects.BuildingBlock( @materials, @material, @cubeRoof, @plane, @randomBuildings, @createReflections )
             building.mesh.position.x = parseInt(0 - building.cubeWidth / 2 - dx + @random.getRandom() * 30)
             if dx == 0 && @random.getRandom() < 0.4
               building.mesh.position.x *= @random.getRandom() * 50
             dz += building.cubeDepth / 2
             building.mesh.position.z = dz
             dz += parseInt(building.cubeDepth / 2 + 10 + @random.getRandom() * 20)
-            building.ref.position.x = building.mesh.position.x
-            building.ref.position.z = building.mesh.position.z
+
             THREE.GeometryUtils.merge(@buildingsGeom, building.mesh)
-            #THREE.GeometryUtils.merge(@reflectionsGeom, building.ref)
+            if @createReflections == true
+              building.ref.position.x = building.mesh.position.x
+              building.ref.position.z = building.mesh.position.z
+              THREE.GeometryUtils.merge(@reflectionsGeom, building.ref)
             @buildingCount++
 
       createShaders: () =>
