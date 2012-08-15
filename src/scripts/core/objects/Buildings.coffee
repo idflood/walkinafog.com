@@ -8,9 +8,7 @@ define [
   #### Buildings
 
   namespace "Next.objects",
-
     Buildings: class Buildings extends THREE.Object3D
-
       constructor: () ->
         super
 

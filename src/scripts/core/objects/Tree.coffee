@@ -7,12 +7,9 @@ define [
   #### Tree
 
   namespace "Next.objects",
-
     Tree: class Tree extends THREE.Geometry
-
       constructor: (@plane, @material2) ->
         super
-
         @trunkHeight = (27 + Math.random() * 10) / 1.5
         @trunkWidth = (3 + Math.random() * 2) / 1.5
         @leavesRadius = (30 + Math.random() * 10) / 1.5
@@ -35,14 +32,13 @@ define [
         THREE.GeometryUtils.merge(this, trunk2)
 
       buildLeaves: () =>
-        #leavesCount = parseInt(50 + Math.random() * 20)
-        leavesCount = 60
+        leavesCount = 50
         leafSizeMin = 1
         halfRadius = @leavesRadius / 2
       	# lots of planes
         for num in [0..leavesCount]
           leaf = new THREE.Mesh( @plane, @material2 )
-          leaf.scale.set(leafSizeMin + Math.random() * 5, 1, leafSizeMin + Math.random() * 5)
+          leaf.scale.set(leafSizeMin + Math.random() * 7, 1, leafSizeMin + Math.random() * 7)
           leaf.rotation.set(Math.random() * 10, Math.random() * 10, Math.random() * 10)
           leaf.position.set(-halfRadius + Math.random() * @leavesRadius, @trunkHeight - 5 + Math.random() * @leavesRadius, -halfRadius + Math.random() * @leavesRadius )
           THREE.GeometryUtils.merge(this, leaf)

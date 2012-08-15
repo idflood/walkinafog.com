@@ -101,12 +101,12 @@ define [
         @scene.add(@cars4)
 
         treeGeometries = []
-        # create 10 different tree geometries
+        # Create 10 different tree geometries
         for num in [0..10]
           treeGeometries.push(new Next.objects.Tree(plane, materialTree, materialTree2))
 
+        # Create trees
         treeScale = 0.5
-
         randomTrees = new Next.utils.Rc4Random("42z6drBPvsdfayBAJVT4kNHR")
         @trees = new THREE.Geometry()
         for num in [0..40]

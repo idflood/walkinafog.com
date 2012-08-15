@@ -5,7 +5,6 @@ define [
 ], (_) ->
 
   namespace "Next.utils",
-
     Skeleton: class Skeleton extends THREE.Object3D
       constructor: (@materialSimple, @materialWire, @a, @b, @count = 3, @radius = 1, @direction = new THREE.Vector3(1, 0, 0)) ->
         super

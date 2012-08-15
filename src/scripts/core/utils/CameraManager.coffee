@@ -65,7 +65,6 @@ define [
       update: (realTime, @target, mouse) =>
         cameraOffsetZ = 0.0
 
-        #@cameraSide1.position.x += (90 - @cameraSide1.position.x) * 0.0015
         @cameraSide1.position.x = 500 - realTime * 14.0
         @cameraSide1.position.z = 200.0 - realTime * 18.0 + 20
         @cameraSide2.position.z = 200.0 - realTime * 18.0 + 10
@@ -139,8 +138,7 @@ define [
         @cameraIntro2.lookAt(@target.position)
         @cameraCityTop1.position.z -= 0.1
         @cameraCity2.lookAt(new THREE.Vector3(0,0,-4100 + 2000))
-        #if realTime > 134 && realTime < 135
-        #  console.log @camera.position.z
+
         @camera.position.y = 4 + Math.sin(realTime * 0.5) * 0.6
         rx = mouse.x * -0.8
         ry = mouse.y * -0.4 + 0.4
