@@ -48,9 +48,10 @@ define [
         #childs = @children.slice(0, @children.length)
         #console.log childs.length
         for k, obj of @children
-          if @reverse == true
-            obj.position.z += speed
-            if obj.position.z > 300 then @dispose(obj)
-          else
-            obj.position.z -= speed
-            if obj.position.z < -1000 then @dispose(obj)
+          if obj.position.y > 0
+            if @reverse == true
+              obj.position.z += speed
+              if obj.position.z > 300 then @dispose(obj)
+            else
+              obj.position.z -= speed
+              if obj.position.z < -1000 then @dispose(obj)
