@@ -18,13 +18,13 @@ define [
         @width = 4 + Math.random() * 5
 
 
-        @left_leg = new Next.utils.Skeleton(@material, @materialWire, new THREE.Vector3(0,@legs_height,-@width),new THREE.Vector3(0,0,-@width - 0.2), 3, 1)
+        @left_leg = new Next.utils.Skeleton2(@material, @materialWire, new THREE.Vector3(0,@legs_height,-@width),new THREE.Vector3(0,0,-@width - 0.2), 3, 1)
         @add(@left_leg)
 
-        @right_leg = new Next.utils.Skeleton(@material, @materialWire, new THREE.Vector3(0,@legs_height,@width),new THREE.Vector3(0,0,@width + 0.2), 3, 1)
+        @right_leg = new Next.utils.Skeleton2(@material, @materialWire, new THREE.Vector3(0,@legs_height,@width),new THREE.Vector3(0,0,@width + 0.2), 3, 1)
         @add(@right_leg)
 
-        @torso = new Next.utils.Skeleton(@material, @materialWire, new THREE.Vector3(0,@legs_height,0), new THREE.Vector3(0,@legs_height + @torso_height,0), 5, 3, new THREE.Vector3(-1, 0, 0))
+        @torso = new Next.utils.Skeleton2(@material, @materialWire, new THREE.Vector3(0,@legs_height,0), new THREE.Vector3(0,@legs_height + @torso_height,0), 5, 3, new THREE.Vector3(-1, 0, 0))
         @add(@torso)
 
         @head = new THREE.Object3D()

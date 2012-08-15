@@ -7,7 +7,7 @@ define [
 
   namespace "Next.objects",
     Bird: class Bird extends THREE.Object3D
-      constructor: (@speed = 0.9) ->
+      constructor: (@speed = 1.2) ->
         super
         @time = 0
         @createGeometry()

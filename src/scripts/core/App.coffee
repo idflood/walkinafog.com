@@ -180,7 +180,8 @@ define [
         @scene.add(ground)
 
         # Create a walker
-        materialSimple = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true } )
+        #materialSimple = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true } )
+        materialSimple = new THREE.MeshLambertMaterial( { color: 0xffffff, fog: true } )
         materialWire = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true, wireframe: true } )
         @thing = new Next.shapes.Biped(this, materialSimple, materialWire)
         walker_scale = 0.3
@@ -269,14 +270,14 @@ define [
           @mainShader.uniforms.glitch_intensity.value = 0.3
 
         if realTime > 137
-          @materialSky.opacity = (realTime - 144) * 0.01
-        if realTime > 144.0
+          @materialSky.opacity = (realTime - 137) * 0.01
+        if realTime > 144.0 - 4.0
           @sun.position.y += delta * 10
           @sunLight.position.y = @sun.position.y + 100
-          @sunLight.intensity = (realTime - 144) / 10
+          @sunLight.intensity = (realTime - 140) / 10
           col = new THREE.Color()
           colspeed = 0.001
-          col.setRGB(.06667 + (realTime - 144) * colspeed, 0.08235 + (realTime - 144) * colspeed * 0.1, 0.090196 + (realTime - 144) * colspeed * 0.3)
+          col.setRGB(.06667 + (realTime - 140) * colspeed, 0.08235 + (realTime - 144) * colspeed * 0.1, 0.090196 + (realTime - 144) * colspeed * 0.3)
           @renderer.setClearColor(col)
           @scene.fog.color = col
 

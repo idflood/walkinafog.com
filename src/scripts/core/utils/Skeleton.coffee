@@ -93,16 +93,16 @@ define [
         dy = @spacing_length
         #@material2 = new THREE.MeshBasicMaterial( { color: 0x00aaff } )
         #@cube2 = new THREE.CubeGeometry( 0.6, 0.6, 0.6 )
-        return
+        #return
         for ob, i in @objects
-          max = 6
+          max = 5
           dy2 = dy / (max + 1)
 
           for num in [max..1]
-            c2 = new Next.shapes.Cylinder3((40 + Math.random() * 10) * @radius, 5, 7)
-            ob2 = new THREE.Mesh( c2, @materialWire )
+            #c2 = new Next.shapes.Cylinder3((40 + Math.random() * 10) * @radius, 5, 7)
+            ob2 = new THREE.Mesh( @cube, @materialSimple )
             ob2.doubleSided = true
-            ds = 0.5
+            ds = 0.2
             ob2.scale = new THREE.Vector3(ds, ds, ds)
             ob2.position.z = num * dy2
             ob2.rotation.x = Math.PI * 0.5

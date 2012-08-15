@@ -38,7 +38,7 @@ define [
 
         @cameraIntro3 = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 )
         @cameraIntro3.position.set(70, 2, -280)
-        @cameraIntro3.lookAt(new THREE.Vector3(0,15,-270))
+        @cameraIntro3.lookAt(new THREE.Vector3(0,15,-230))
         @scene.add(@cameraIntro3)
         @items.push(@cameraIntro3)
 
@@ -83,7 +83,6 @@ define [
 
         if realTime > 41.0
           @currentCamera = @cameraSide2
-          # todo...
         if realTime > 45.0
           @currentCamera = @cameraSide1
           @cameraSide1.position.y = 1
