@@ -202,7 +202,6 @@ define [
           @cars2.update()
           @cars3.update()
           @cars4.update()
-          @cars5.update()
           if @audio.bass > 0.32 && Math.random() > 0.89
             @cars1.createMesh()
           if @audio.high > 0.37 && Math.random() > 0.86
@@ -211,7 +210,6 @@ define [
             @cars3.createMesh()
           if @audio.mid > 0.33 && Math.random() > 0.52
             @cars4.createMesh()
-            @cars5.createMesh()
 
         # Update city lights
         if realTime > 80.0
