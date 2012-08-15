@@ -110,15 +110,16 @@ define [
         @createTexture()
         @createRoofTexture()
 
-        @reflectionMaterial = new THREE.MeshBasicMaterial
-          map: THREE.ImageUtils.loadTexture("textures/building_road_reflection4.png"),
-          fog: true,
-          transparent: true,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          color: 0x000000
-          opacity: 0.7,
-          #overdraw: true
+        if @createReflections == true
+          @reflectionMaterial = new THREE.MeshBasicMaterial
+            map: THREE.ImageUtils.loadTexture("textures/building_road_reflection4.png"),
+            fog: true,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            color: 0x000000
+            opacity: 0.7,
+            #overdraw: true
         @materialCube = new THREE.MeshPhongMaterial( { map: @texture, emissive: 0x777777, fog: true, wireframe: false } )
         @materialCubeRoof = new THREE.MeshPhongMaterial( { map: @roofTexture, fog: true, wireframe: false } )
         @materialWire = new THREE.MeshBasicMaterial( { color: 0xeeeeee, fog: true, doubleSided: true, wireframe: true } )
@@ -130,7 +131,6 @@ define [
 
         @material = new THREE.MeshFaceMaterial()
 
-      # http://www.redips.net/javascript/random-color-generator/
       rndColor: (ofr = 0, ofg = 0, ofb = 0, ampR = 1.0, ampG = 1.0, ampB = 1.0) =>
         r = ('0' + Math.floor(Math.random() * (256 - ofr) * ampR + ofr).toString(16)).substr(-2)
         g = ('0' + Math.floor(Math.random() * (256 - ofg) * ampG + ofg).toString(16)).substr(-2)
@@ -160,7 +160,6 @@ define [
           context.fillStyle = @rndGray(5, 0.4)
         context.fillRect(dx, dy, dw, dh)
         context.fillStyle = @rndGray(5, 0.2)
-        #context.fillStyle = "#ff0000"
         for num in [0..parseInt(Math.random() * 5)]
           dw2 = dw - parseInt(Math.random() * dw)
           dh2 = parseInt(dh / 2 - (Math.random() * (dh / 2)))
@@ -170,7 +169,6 @@ define [
 
       createTexture: () =>
         @textureSize = 512
-        # http://stackoverflow.com/questions/4405336/how-to-copy-contents-of-one-canvas-to-another-canvas-locally
         # build the original canvas
         canvas = document.createElement("canvas")
         context = canvas.getContext("2d")
@@ -189,12 +187,8 @@ define [
         context.fillStyle = @wallcolor
         context.fillRect(0,0,@textureSize,@textureSize)
 
-        #windowColor = '#111111'
         for num in [0..@numWindows - 1]
           @windowsOn[num] = []
-          #context.fillStyle = windowColor
-          #context.fillRect(@spacing + num * (windowWidth + @spacing),0, windowWidth, @textureSize)
-
           # add some bright rooms vertically
           for num2 in [0..@numWindows - 1]
             @windowsOn[num][num2] = -1.0
