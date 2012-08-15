@@ -245,7 +245,7 @@ define [
           @bird.position.z = -3260 + (realTime - 133) * 30
 
         # Update the walker
-        @thing.update()
+        @thing.update(time)
         @thing.position.z = 240.0 - realTime * 18.0 + walkerOffsetZ
 
         # Update cameras

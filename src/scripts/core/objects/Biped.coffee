@@ -10,13 +10,11 @@ define [
       constructor: (@app, @material, @materialWire) ->
         super
 
-        @time_offset = Math.random() * 2000
         @legs_height = Math.random() * 15 + 30
         @torso_height = Math.random() * 7 + 22
         @arms_height = Math.random() * 10 + 22
         @step_height = Math.random() * 4 + 5
         @width = 4 + Math.random() * 5
-
 
         @left_leg = new Next.utils.Skeleton2(@material, @materialWire, new THREE.Vector3(0,@legs_height,-@width),new THREE.Vector3(0,0,-@width - 0.2), 3, 1)
         @add(@left_leg)
@@ -42,13 +40,12 @@ define [
 
         @rotation.y = Math.PI * 0.5
 
-      update: () =>
+      update: (time_date) =>
         speed = 0.0072
         step_length = -13
         body_displace = -0.2
 
-        time = Date.now() + @time_offset
-        #@rotation.y = time * 0.0004 + @time_offset
+        time = (time_date * 100)
 
         @left_leg.a.y = @legs_height * 0.8 + Math.sin(time * speed) * body_displace
         @left_leg.b.y = Math.max(0, Math.sin(time * speed) * @step_height)
@@ -63,7 +60,6 @@ define [
         @torso.a.y = (@right_leg.a.y + @left_leg.a.y) / 2
         @torso.b.y = Math.cos(time * speed + Math.PI) * .5 + @legs_height + @torso_height - 10
         @torso.b.x = Math.sin(time * speed + Math.PI) * .5 + 5
-        #@torso.b.z = Math.sin(time * speed + Math.PI) * 0.3
         @torso.update()
 
         @left_arm.a.y = @torso.b.y - 2
