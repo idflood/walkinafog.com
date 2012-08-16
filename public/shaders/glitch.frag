@@ -127,13 +127,13 @@ void main(void)
   vec4 colorR = texture2D( tDiffuse, vec2(mod(uvDisp.x + offset_color.x * noiseOffset, 1.0), uvDisp.y) );
   vec4 colorG = texture2D( tDiffuse, vec2(mod((vUv.x + uvDisp.x) / 2.0 + offset_color.y * noiseOffset, 1.0), uvDisp.y) );
   vec4 colorB = texture2D( tDiffuse, vec2(mod(vUv.x + offset_color.z * noiseOffset, 1.0), uvDisp.y) );
-  
-  
+
+
   float darkDirtMult = 0.05;
   colorR = colorR - colorDirt * darkDirtMult;
   colorG = colorG - colorDirt * darkDirtMult;
   colorB = colorB - colorDirt * darkDirtMult;
-  
+
 	gl_FragColor = vec4(colorR.r, colorG.g, colorB.b, 1.0);
   //gl_FragColor = vec4(colorBlur.r, colorBlur.g, colorBlur.b, 1.0);
   //gl_FragColor = vec4(noiseOffset, noiseOffset, noiseOffset, 1.0);

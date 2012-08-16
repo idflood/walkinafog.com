@@ -71,6 +71,7 @@ define [
 
           @mainShader.material.uniforms.tLensDirt.texture = textureDirt
           @mainShader.material.uniforms.tGlitch.texture = textureGlitch
+          @mainShader.needsSwap = false
           @composer.addPass( @mainShader )
 
           @composer.addPass( @effectVignette )

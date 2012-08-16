@@ -63,13 +63,14 @@ define [
         @buildings.position.z = -8000 + 2000
         @scene.add(@buildings)
 
-        materialTree = new THREE.MeshBasicMaterial( { color: 0x333333, fog: true, doubleSided: true } )
-        materialTree = new THREE.MeshPhongMaterial( { color: 0x333333, fog: true, doubleSided: true } )
-        materialTree2 = new THREE.MeshBasicMaterial( { color: 0x555555, fog: true, doubleSided: true, wireframe: true } )
+        materialTree = new THREE.MeshBasicMaterial( { color: 0x333333, fog: true, side: THREE.DoubleSide } )
+
+        materialTree = new THREE.MeshPhongMaterial( { color: 0x333333, fog: true, side: THREE.DoubleSide } )
+        materialTree2 = new THREE.MeshBasicMaterial( { color: 0x555555, fog: true, side: THREE.DoubleSide, wireframe: true } )
         plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
 
-        materialTrail1 = new THREE.MeshBasicMaterial( { color: 0xff3333, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
-        materialTrail2 = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true,  blending: THREE.AdditiveBlending, transparent: true} )
+        materialTrail1 = new THREE.MeshBasicMaterial( { color: 0xff3333, fog: true,  blending: THREE.AdditiveBlending, transparent: true, side: THREE.DoubleSide} )
+        materialTrail2 = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true,  blending: THREE.AdditiveBlending, transparent: true, side: THREE.DoubleSide} )
 
         materialPlane = new THREE.MeshBasicMaterial( { color: window.userColor, fog: false,  blending: THREE.AdditiveBlending, transparent: true} )
 
@@ -133,6 +134,7 @@ define [
         @materialPlane = new THREE.MeshLambertMaterial( { color: 0x050505, fog: true } )
         @plane = new THREE.PlaneGeometry( 30000, 30000, 10, 10 )
         ground = new THREE.Mesh( @plane, @materialPlane )
+        ground.rotation.x = -Math.PI * 0.5
         @scene.add(ground)
 
         # Create a walker
@@ -163,7 +165,7 @@ define [
         @sky = new THREE.Mesh(skyPlane, @materialSky)
         @sky.position.z = -10900
         @sky.position.y = 5000
-        @sky.rotation.x = Math.PI * 0.5
+        #@sky.rotation.x = Math.PI * 0.5
         @sky.scale.set(10000,1,10000)
         @scene.add(@sky)
 

@@ -38,7 +38,7 @@ define [
       	# lots of planes
         for num in [0..leavesCount]
           leaf = new THREE.Mesh( @plane, @material2 )
-          leaf.scale.set(leafSizeMin + Math.random() * 7, 1, leafSizeMin + Math.random() * 7)
+          leaf.scale.set(leafSizeMin + Math.random() * 7, leafSizeMin + Math.random() * 7, 1)
           leaf.rotation.set(Math.random() * 10, Math.random() * 10, Math.random() * 10)
           leaf.position.set(-halfRadius + Math.random() * @leavesRadius, @trunkHeight - 5 + Math.random() * @leavesRadius, -halfRadius + Math.random() * @leavesRadius )
           THREE.GeometryUtils.merge(this, leaf)
