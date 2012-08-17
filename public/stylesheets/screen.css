@@ -486,6 +486,10 @@ a.twitter {
   width: 480px;
   font-size: 10px;
 }
+.finished .credits {
+  display: none;
+  visibility: hidden;
+}
 .finished a,
 .finished a:link,
 .finished a:visited {

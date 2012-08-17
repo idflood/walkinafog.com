@@ -81,8 +81,19 @@ define [
           @cameraSide1.lookAt(@target.position)
           @currentCamera = @cameraSide1
 
+        if realTime > 38.0 && realTime < 44.0
+          dz = -450 - (realTime - 36) * 8.0
+          @cameraSide1.position.z = dz
+          @cameraSide1.position.x = 135
+          @cameraSide1.lookAt(new THREE.Vector3(0, 10, dz))
+          @currentCamera = @cameraSide1
+
         if realTime > 41.0
-          @currentCamera = @cameraSide2
+          @currentCamera = @cameraIntro3
+          @cameraIntro3.position.z = 200.0 - realTime * 16.0 - 70.0
+        if realTime > 43.0 && realTime < 46.0
+          @cameraIntro2.position.z = @target.position.z
+          @currentCamera = @cameraIntro2
         if realTime > 45.0
           @currentCamera = @cameraSide1
           @cameraSide1.position.y = 1
