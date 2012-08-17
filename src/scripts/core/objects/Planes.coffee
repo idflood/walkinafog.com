@@ -30,15 +30,9 @@ define [
         if @children.length >= @maxLines then return
 
         mesh = new THREE.Mesh(@plane, @mat)
-        #mesh.scale.set(10 + @random.getRandom() * 29, 1, 90000)
         mesh.scale.set(0.001, 130000, 1)
         mesh.position.y = 2000
         mesh.position.x = @random.getRandom() * @rndSpacingX - @rndSpacingX * 0.5
-        #mesh.position.z = Math.random() * @rndSpacing - @rndSpacing * 0.5
-        #mesh.position.z = 300 + Math.random() * 100
-        #mesh.rotation.z = Math.PI / 2
-        #mesh.rotation.x = Math.PI * 0.5
-        #mesh.rotation.y = Math.random() * 1.5 - 0.75
         mesh.rotation.z = mesh.position.x * -0.00015
 
 
@@ -47,6 +41,4 @@ define [
           mesh.position.z -= 1200
           mesh.rotation.z *= -1
         @add(mesh)
-
-        #if Math.random() < 0.9
         @createMesh()

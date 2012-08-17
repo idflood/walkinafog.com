@@ -110,24 +110,12 @@ define [
         if realTime > 120.0 && realTime <= 133.0
           @currentCamera = @cameraCity2
           @cameraCity2.position.y += (120 - @cameraCity2.position.y) * 0.002
-          #@cameraCity2.lookAt(@thing.position)
           # position camera top for next frame
           @cameraCityTop1.position.z = -2180
 
         if realTime > 133.0
           @currentCamera = @camera
           cameraOffsetZ = -700.0
-        #if realTime > 133.0
-        #  @currentCamera = @cameraCityTop1
-        #  cameraTop_speedY += 0.5 + cameraTop_speedY
-        #  @cameraCityTop1.position.y += cameraTop_speedY
-        #  @cameraCityTop1.position.z -= 0.6
-
-        # little hack for last step to avoid camera in the middle of car line
-        #if realTime > 142.0 && realTime < 143.0
-        #  cameraOffsetZ = -700.0
-        #if realTime > 144.0
-        #  @currentCamera = @camera
 
         if @currentCamera == @camera && realTime < 169.0
           $("#container canvas").addClass("interactive")

@@ -11,7 +11,6 @@ define [
         super
         @time = 0
         @createGeometry()
-        # @mat = new THREE.MeshPhongMaterial( { color: 0xeeeeee } )
         @mat = new THREE.MeshBasicMaterial( { color: 0xffffff, emissive: 0x888888, side: THREE.DoubleSide } )
         @side1 = new THREE.Object3D()
         @add(@side1)

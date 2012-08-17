@@ -107,11 +107,8 @@ define [
         # calculate rms
         bins = [0, 0, 0, 0]
         waveforms = [@data.time, @data.filter.bass, @data.filter.mid, @data.filter.treble]
-        #console.log waveforms
-        #return
         for num in [0..3]
           bins[num] = @rms(waveforms[num])
-        #console.log bins
         @bass = bins[1]
         @mid = bins[2]
         @high = bins[3]
@@ -157,7 +154,6 @@ define [
         if @source.buffer
           #@source.noteOn(0)
           @source.noteGrainOn(0, @now, @buffer.duration - @now)
-        #if @source.buffer then @source.noteGrainOn(0, 110, 50)
         if @onLoadedCallback then @onLoadedCallback()
 
       rms: (data) =>

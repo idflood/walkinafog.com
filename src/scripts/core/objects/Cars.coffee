@@ -45,8 +45,6 @@ define [
 
       update: (delta) =>
         speed = delta * 2500
-        #childs = @children.slice(0, @children.length)
-        #console.log childs.length
         for k, obj of @children
           if obj.position.y > 0
             if @reverse == true
