@@ -63,8 +63,6 @@ define [
         @buildings.position.z = -8000 + 2000
         @scene.add(@buildings)
 
-        materialTree = new THREE.MeshBasicMaterial( { color: 0x333333, fog: true, side: THREE.DoubleSide } )
-
         materialTree = new THREE.MeshPhongMaterial( { color: 0x333333, fog: true, side: THREE.DoubleSide } )
         materialTree2 = new THREE.MeshBasicMaterial( { color: 0x555555, fog: true, side: THREE.DoubleSide, wireframe: true } )
         plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
@@ -104,7 +102,7 @@ define [
         treeGeometries = []
         # Create 10 different tree geometries
         for num in [0..10]
-          treeGeometries.push(new Next.objects.Tree(plane, materialTree, materialTree2))
+          treeGeometries.push(new Next.objects.Tree(plane, materialTree))
 
         # Create trees
         treeScale = 0.5
@@ -138,7 +136,6 @@ define [
         @scene.add(ground)
 
         # Create a walker
-        #materialSimple = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true } )
         materialSimple = new THREE.MeshLambertMaterial( { color: 0xffffff, fog: true } )
         materialWire = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true, wireframe: true } )
         @thing = new Next.shapes.Biped(this, materialSimple, materialWire)
@@ -160,13 +157,12 @@ define [
 
         # Create sunrise sky texture
         @textureRise = THREE.ImageUtils.loadTexture("textures/sunrise.png")
-        @materialSky = new THREE.MeshBasicMaterial( { map: @textureRise, fog: false, transparent: true, opacity: 0 } )
+        @materialSky = new THREE.MeshBasicMaterial( { map: @textureRise, fog: false, transparent: true, opacity: 0, side: THREE.DoubleSide } )
         skyPlane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
         @sky = new THREE.Mesh(skyPlane, @materialSky)
         @sky.position.z = -10900
         @sky.position.y = 5000
-        #@sky.rotation.x = Math.PI * 0.5
-        @sky.scale.set(10000,1,10000)
+        @sky.scale.set(10000, 10000, 1)
         @scene.add(@sky)
 
       onSoundLoaded: () =>

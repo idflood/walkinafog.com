@@ -19,14 +19,12 @@ define [
       buildTrunk: () =>
         # simply two planes forming a x
         trunk = new THREE.Mesh( @plane, @material2 )
-        trunk.scale.set(@trunkHeight, 1, @trunkWidth)
-        trunk.rotation.z = Math.PI * 0.5
+        trunk.scale.set(@trunkWidth, @trunkHeight, 1)
         trunk.position.y = @trunkHeight / 2
         THREE.GeometryUtils.merge(this, trunk)
 
         trunk2 = new THREE.Mesh( @plane, @material2 )
-        trunk2.scale.set(@trunkHeight, 1, @trunkWidth)
-        trunk2.rotation.z = Math.PI * 0.5
+        trunk2.scale.set(@trunkWidth, @trunkHeight, 1)
         trunk2.rotation.y = Math.PI * 0.5
         trunk2.position.y = @trunkHeight / 2
         THREE.GeometryUtils.merge(this, trunk2)

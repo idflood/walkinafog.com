@@ -22,23 +22,25 @@ define [
         # left
         @object2 = new THREE.Mesh( @plane, @mat )
         @object2.position.x = 35
-        @object2.rotation.x = Math.PI * 0.5
+        @object2.rotation.x = -Math.PI * 0.5
         @side1.add(@object2)
 
         @object = new THREE.Mesh( @tri, @mat )
         @object.position.x = 35
-        @object.position.z = -50
+        @object.position.y = 50
+        @object.rotation.x = Math.PI * 0.5
         @object2.add(@object)
 
         # right
         @object3 = new THREE.Mesh( @plane, @mat )
         @object3.position.x = -35
-        @object3.rotation.x = Math.PI * 0.5
+        @object3.rotation.x = -Math.PI * 0.5
         @side2.add(@object3)
 
         @object4 = new THREE.Mesh( @tri, @mat )
         @object4.position.x = -35
-        @object4.position.z = -50
+        @object4.position.y = 50
+        @object4.rotation.x = Math.PI * 0.5
         @object3.add(@object4)
 
       update: (delta) =>
