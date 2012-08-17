@@ -57,8 +57,10 @@ define [
         @tri.vertices.push(new THREE.Vector3(0,0,0))
         @tri.vertices.push(new THREE.Vector3(0,0,100))
         @tri.vertices.push(new THREE.Vector3(150,0,-42))
+        @tri.dynamic = false
 
         @tri.faces.push( new THREE.Face3( 0, 1, 2 ) )
         @tri.computeFaceNormals()
 
         @plane = new THREE.PlaneGeometry(70,100)
+        @plane.dynamic = false

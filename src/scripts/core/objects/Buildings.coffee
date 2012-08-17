@@ -48,6 +48,7 @@ define [
 
         @buildings = new THREE.Mesh(@buildingsGeom, @material)
         @add(@buildings)
+        @buildingsGeom.dynamic = false
 
         if @createReflections == true
           @reflections = new THREE.Mesh(@reflectionsGeom, @reflectionMaterial)
@@ -211,4 +212,7 @@ define [
         @texture = new THREE.Texture(@canvasCopy)
         @texture.wrapS = THREE.RepeatWrapping
         @texture.wrapT = THREE.RepeatWrapping
+        #@texture.generateMipmaps = false
+        #@texture.magFilter = THREE.LinearFilter
+        #@texture.minFilter = THREE.LinearFilter
         @texture.needsUpdate = true

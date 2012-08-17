@@ -53,8 +53,10 @@ define [
         @scene.add( @sunLight )
 
         sphere = new THREE.SphereGeometry(200, 20, 20)
+        sphere.dynamic = false
         sunMaterial = new THREE.MeshBasicMaterial({color: 0xfbf5d2, fog: false})
         @sun = new THREE.Mesh(sphere, sunMaterial)
+        @sun.dynamic = false
         @sun.position.set(0, -200, -8000)
         @scene.add(@sun)
         @lensFlare = new Next.utils.LensFlareContainer(@scene, @sunLight)
@@ -66,6 +68,7 @@ define [
         materialTree = new THREE.MeshPhongMaterial( { color: 0x333333, fog: true, side: THREE.DoubleSide } )
         materialTree2 = new THREE.MeshBasicMaterial( { color: 0x555555, fog: true, side: THREE.DoubleSide, wireframe: true } )
         plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
+        plane.dynamic = false
 
         materialTrail1 = new THREE.MeshBasicMaterial( { color: 0xff3333, fog: true,  blending: THREE.AdditiveBlending, transparent: true, side: THREE.DoubleSide} )
         materialTrail2 = new THREE.MeshBasicMaterial( { color: 0xffffff, fog: true,  blending: THREE.AdditiveBlending, transparent: true, side: THREE.DoubleSide} )
@@ -77,6 +80,7 @@ define [
         @scene.add(@planes1)
 
         cube2 = new THREE.CubeGeometry( 1, 1, 1 )
+        cube2.dynamic = false
         @cars1 = new Next.objects.Cars(materialTrail1, cube2)
         @cars1.position.x = 30
         @scene.add(@cars1)
@@ -123,6 +127,7 @@ define [
           tree.doubleSided = true
           THREE.GeometryUtils.merge(@trees, tree)
 
+        @trees.dynamic = false
         @treesMesh = new THREE.Mesh( @trees, materialTree )
         @treesMesh.doubleSided = true
         @treesMesh.position.z = 700
@@ -130,7 +135,8 @@ define [
 
         # Create a ground
         @materialPlane = new THREE.MeshLambertMaterial( { color: 0x050505, fog: true } )
-        @plane = new THREE.PlaneGeometry( 30000, 30000, 10, 10 )
+        @plane = new THREE.PlaneGeometry( 30000, 30000, 5, 5 )
+        @plane.dynamic = false
         ground = new THREE.Mesh( @plane, @materialPlane )
         ground.rotation.x = -Math.PI * 0.5
         @scene.add(ground)
@@ -159,6 +165,7 @@ define [
         @textureRise = THREE.ImageUtils.loadTexture("textures/sunrise.png")
         @materialSky = new THREE.MeshBasicMaterial( { map: @textureRise, fog: false, transparent: true, opacity: 0, side: THREE.DoubleSide } )
         skyPlane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
+        skyPlane.dynamic = false
         @sky = new THREE.Mesh(skyPlane, @materialSky)
         @sky.position.z = -10900
         @sky.position.y = 5000
