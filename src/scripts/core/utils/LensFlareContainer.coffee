@@ -36,7 +36,8 @@ define [
           flare.y = object.positionScreen.y + vecY * flare.distance
           flare.rotation = 0
           if f == 0
-            flare.scale = 0.15
+            #flare.scale = 0.15
+            flare.scale = @sunLight.position.y * 0.004
           else
             flare.scale = 0.7
         object.lensFlares[ 2 ].y += 0.025
