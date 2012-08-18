@@ -85,6 +85,7 @@ define [
     Skeleton2: class Skeleton2 extends Skeleton
       constructor: (@materialSimple, @materialWire, @a, @b, @count = 3, @radius = 2, @direction = new THREE.Vector3(1, 0, 0)) ->
         super
+        return
         dy = @spacing_length
         for ob, i in @objects
           max = 5
