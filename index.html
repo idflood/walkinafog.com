@@ -9,7 +9,7 @@
   <meta name="description" content="An interactive videoclip for &quot;Walk in a Fog&quot; by Soulsonic">
   <meta property="og:title" content="SoulSonic | Walk in a Fog">
   <meta property="og:description" content="An interactive videoclip for &quot;Walk in a Fog&quot; by SoulSonic">
-  <meta property="og:image" content="http://www.walkinafog.com/assets_website/walk_in_a_fog.jpg">
+  <meta property="og:image" content="http://www.walkinafog.com/assets_website/walk_in_a_fog_2.jpg">
   <script src="scripts/libs/jquery-1.7.2.js"></script>
   <script src="scripts/libs/jquery.transit.js"></script>
   <script src="scripts/libs/preloadjs-0.1.0.min.js"></script>
@@ -17,7 +17,7 @@
   <script src="scripts/libs/modernizr.js"></script>
   <script src="scripts/require-config.js"></script>
   <script>
-    var skip_preload = false;
+    var skip_preload = true;
     window.highQuality = false;
     window.userColor = 0x3366ff;
     
@@ -34,13 +34,20 @@
     var first_loader = new PreloadJS();
     
     var loadComplete = function() {
+      $(".line_progress").transition({opacity: 0}, 100);
       $("#preloader").stop().delay(120).transition({top: '290px', opacity: 0.0}, 150);
       window.setTimeout(function(){
         $("#start").delay(700).css("display", "block").transition({top: '296px', opacity: 1.0}, 200);
       }, 250);
     };
     
+    var onMainLoadProgress = function() {
+      // .line_progress max width = 67px
+      $(".line_progress").css("width", (loader.progress * 67) + "px");
+    };
+    
     var firstLoadComplete = function() {
+      $("#preloading").stop().remove();
       // good to go :)
       $("#loader_wrapper").delay(300).transition({opacity: 1.0}, 500);
       $("header").delay(900).transition({opacity: 1.0}, 500);
@@ -49,19 +56,20 @@
       $("footer").delay(1400).transition({opacity: 1.0}, 1000);
       
       // add the preloader
-      $("header").append('<div id="preloader"><div class="line"></div></div><a id="start">Start<span class="arrow"></span></a>');
+      $("header").append('<div id="preloader"><div class="line"></div><div class="line_progress"></div></div><a id="start">Start<span class="arrow"></span></a>');
       $("#start").hide();
       $("#preloader").delay(1220).transition({top: '300px', opacity: 1.0}, 200);
       
       $("#start").click(function(e){
         e.preventDefault();
-        //initApp();
         chooseColor();
       });
       
       // add files to preloader
       loader.onComplete = loadComplete;
-      loader.loadManifest(["audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection4.png", "textures/sunrise.png"]);
+      loader.onProgress = onMainLoadProgress;
+      
+      loader.loadManifest(["audio/walk_in_a_fog.mp3", "textures/glitch3.jpg", "textures/lens_dirt.jpg", "textures/building_road_reflection4.png", "textures/sunrise.png", "assets_website/restart_black.png"]);
       
       if (requestAnimationFrame) {
         requestAnimationFrame(animate_preloader);
@@ -165,10 +173,10 @@
           $("header, h1, h2, #loader_wrapper, footer").css("opacity", 1.0);
           $("body").addClass("error");
         } else {
+          $("body").append('<div id="preloading">please wait...</div>');
+          $("#preloading").delay(500).transition({opacity: 1.0}, 1400);
           first_loader.onComplete = firstLoadComplete;
-          first_loader.loadManifest(["assets_website/bg6.jpg", "assets_website/separator.png", "assets_website/soulsonic.png", "assets_website/walk.png", "assets_website/loading.png", "assets_website/preloader_line.png", "assets_website/start.png", "assets_website/start_arrow.png", "assets_website/ce.png", "assets_website/google.png", "assets_website/facebook.png", "assets_website/twitter.png", "assets_website/google2.png", "assets_website/facebook2.png", "assets_website/twitter2.png", "assets_website/restart_black.png"]);
-          
-          
+          first_loader.loadManifest(["assets_website/bg6.jpg", "assets_website/separator.png", "assets_website/soulsonic.png", "assets_website/walk.png", "assets_website/loading.png", "assets_website/preloader_line.png", "assets_website/start.png", "assets_website/start_arrow.png", "assets_website/ce.png", "assets_website/google.png", "assets_website/facebook.png", "assets_website/twitter.png", "assets_website/google2.png", "assets_website/facebook2.png", "assets_website/twitter2.png"]);
         }
       });
     }
@@ -197,7 +205,7 @@
       <div class="right">
         <p><a href="#" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'download album']);">Download the album</a> ♪ <a href="#" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'watch the video']);">Watch the non-interactive video</a></p>
         <p><a href="http://www.coldtear.com" title="cold tear records, Underground eletronic music label" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'go to coldtear records']);">cold tear records</a> ♪ An experiment created by <a href="http://www.stimul.ch" title="stimul.ch" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'go to stimul.ch']);">stimul.ch</a> ♫ 2012</p>
-        <p><a href="#" class="credits" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'open credits']);">Credits</a> ♪ <a href="https://github.com/idflood/walkinafog.com" title="Get the source code on github" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'get source code']);">Source</a> ♫ Share: <a href="https://plus.google.com/share?url=www.walkinafog.com" class="share google" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on google+']);">Share on google+</a> <a href="http://www.facebook.com/sharer.php?u=http://www.walkinafog.com" class="share facebook" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on facebook']);">Share on facebook</a> <a href="http://twitter.com/share?text=Check out SoulSonic's new interactive music experience, “Walk in a Fog” &amp;url=http://www.walkinafog.com" class="share twitter" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on twitter']);">Share on twitter</a></p>
+        <p><a href="#" class="credits" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'open credits']);">Credits</a> ♪ <a href="https://github.com/idflood/walkinafog.com" title="Get the source code on github" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'get source code']);">Source</a> ♫ Share: <a href="https://plus.google.com/share?url=www.walkinafog.com" class="share google" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on google+']);">Share on google+</a> <a href="http://www.facebook.com/sharer.php?u=http://www.walkinafog.com" class="share facebook" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on facebook']);">Share on facebook</a> <a href="http://twitter.com/share?text=Check out SoulSonic's new interactive music experience, “Walk in a Fog” &amp;url=http://www.walkinafog.com %23walkinafog" class="share twitter" target="_blank" onClick="_gaq.push(['_trackEvent', 'Links', 'Click', 'share on twitter']);">Share on twitter</a></p>
       </div>
     </footer>
     <script>
