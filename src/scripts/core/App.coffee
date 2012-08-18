@@ -66,7 +66,6 @@ define [
         @scene.add(@buildings)
 
         materialTree = new THREE.MeshPhongMaterial( { color: 0x333333, fog: true, side: THREE.DoubleSide } )
-        materialTree2 = new THREE.MeshBasicMaterial( { color: 0x555555, fog: true, side: THREE.DoubleSide, wireframe: true } )
         plane = new THREE.PlaneGeometry( 1, 1, 1, 1 )
         plane.dynamic = false
 
@@ -79,6 +78,7 @@ define [
         @planes1.position.z = -10400
         @scene.add(@planes1)
 
+        # Create cars
         cube2 = new THREE.CubeGeometry( 1, 1, 1 )
         cube2.dynamic = false
         @cars1 = new Next.objects.Cars(materialTrail1, cube2)
@@ -104,12 +104,11 @@ define [
         @scene.add(@cars4)
 
         treeGeometries = []
-        # Create 10 different tree geometries
+        # Create 11 different tree geometries
         for num in [0..10]
           treeGeometries.push(new Next.objects.Tree(plane, materialTree))
 
         # Create trees
-        treeScale = 0.5
         randomTrees = new Next.utils.Rc4Random("42z6drBPvsdfayBAJVT4kNHR")
         @trees = new THREE.Geometry()
         for num in [0..40]
@@ -117,19 +116,16 @@ define [
           tree = new THREE.Mesh(geom, materialTree)
           tree.position.x = 60
           tree.position.z = -9000 + num * 220 + randomTrees.getRandom() * 30
-          tree.doubleSided = true
           THREE.GeometryUtils.merge(@trees, tree)
 
           geom = treeGeometries[parseInt(randomTrees.getRandom() * 10)]
           tree = new THREE.Mesh(geom, materialTree)
           tree.position.x = -60
           tree.position.z = -9000 + num * 220 + 110 + randomTrees.getRandom() * 30
-          tree.doubleSided = true
           THREE.GeometryUtils.merge(@trees, tree)
 
         @trees.dynamic = false
         @treesMesh = new THREE.Mesh( @trees, materialTree )
-        @treesMesh.doubleSided = true
         @treesMesh.position.z = 700
         @scene.add(@treesMesh)
 

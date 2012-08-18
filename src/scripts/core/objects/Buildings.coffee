@@ -29,6 +29,7 @@ define [
           @reflectionsGeom = new THREE.Geometry()
 
         @cubeRoof = new THREE.CubeGeometry( 1, 1, 1, 1, 1, 1, @materials )
+        @cubeRoof.dynamic = false
         # all roof cube faces use the same material
         for face, i in @cubeRoof.faces
           face.materialIndex = 1

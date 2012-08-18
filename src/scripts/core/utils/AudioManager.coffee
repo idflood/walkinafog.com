@@ -113,7 +113,6 @@ define [
         @mid = bins[2]
         @high = bins[3]
 
-
         @now = @context.currentTime - @timeDelay
 
       load: (url) =>
@@ -136,7 +135,6 @@ define [
         src.connect(@analyser)
         _.each @filters, (filter) =>
           src.connect(filter.delayNode)
-        #@analyser.connect(@audioContext.destination)
         return src
 
       pause: () =>

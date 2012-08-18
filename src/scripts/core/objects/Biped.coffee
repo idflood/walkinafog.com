@@ -27,8 +27,8 @@ define [
 
         @head = new THREE.Object3D()
         c = new THREE.CubeGeometry( 5, 6.5, 5 )
+        c.dynamic = false
         ob = new THREE.Mesh( c, @material )
-        ob.doubleSided = true
         @head.add(ob)
         @add(@head)
 
