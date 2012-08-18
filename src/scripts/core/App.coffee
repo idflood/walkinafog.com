@@ -214,7 +214,7 @@ define [
 
         # Update city lights
         if realTime > 80.0
-          @planes1.update(@audio.high > 0.37 && Math.random() > 0.82)
+          @planes1.update(@audio.high > 0.36 && Math.random() > 0.82)
 
         # Offset walker position
         walkerOffsetZ = 0.0
@@ -255,16 +255,7 @@ define [
 
         # This is the end
         if realTime > 162.0 && @outro == false
-          @outro = true
-          $("body").css("background-color", "#fff")
-          _gaq.push(["_trackEvent", "Animation", "completed"])
-          $("#container canvas").fadeOut 7000, () =>
-            @finished = true
-            $("body").append('<a href="/" id="replay">Replay</a>')
-            $("#replay").hide().fadeIn(300)
-
-            $("footer .right").addClass("finished")
-            $("body").append($("footer .right"))
+          @displayOutro()
 
         # Update the 2 main cars lines
         cars_offset_z = 50
@@ -279,3 +270,15 @@ define [
         if @mainShader
           @mainShader.uniforms[ 'time' ].value = time / 10
           @mainShader.uniforms[ 'resolution' ].value = new THREE.Vector3(window.innerWidth, window.innerHeight, 0)
+
+      displayOutro: () =>
+        @outro = true
+        $("body").css("background-color", "#fff")
+        _gaq.push(["_trackEvent", "Animation", "completed"])
+        $("#container canvas").fadeOut 7000, () =>
+          @finished = true
+          $("body").append('<a href="/" id="replay">Replay</a>')
+          $("#replay").hide().fadeIn(300)
+
+          $("footer .right").addClass("finished")
+          $("body").append($("footer .right"))
