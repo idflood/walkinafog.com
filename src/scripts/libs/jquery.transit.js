@@ -7,7 +7,7 @@
  * http://github.com/rstacruz/jquery.transit
  */
 
-(function($) {
+(($ => {
   "use strict";
 
   $.transit = {
@@ -105,12 +105,12 @@
   //
   $.cssHooks.transform = {
     // The getter returns a `Transform` object.
-    get: function(elem) {
+    get(elem) {
       return $(elem).data('transform');
     },
 
     // The setter accepts a `Transform` object or a string.
-    set: function(elem, v) {
+    set(elem, v) {
       var value = v;
 
       if (!(value instanceof Transform)) {
@@ -139,10 +139,10 @@
   //     $("#hello").css({ transformOrigin: '0 0' });
   //
   $.cssHooks.transformOrigin = {
-    get: function(elem) {
+    get(elem) {
       return elem.style[support.transformOrigin];
     },
-    set: function(elem, value) {
+    set(elem, value) {
       elem.style[support.transformOrigin] = value;
     }
   };
@@ -153,10 +153,10 @@
   //     $("#hello").css({ transition: 'all 0 ease 0' }); 
   //
   $.cssHooks.transition = {
-    get: function(elem) {
+    get(elem) {
       return elem.style[support.transition];
     },
-    set: function(elem, value) {
+    set(elem, value) {
       elem.style[support.transition] = value;
     }
   };
@@ -210,7 +210,7 @@
     //     t.setFromString('scale', '2,4');
     //     // Same as set('scale', '2', '4');
     //
-    setFromString: function(prop, val) {
+    setFromString(prop, val) {
       var args =
         (typeof val === 'string')  ? val.split(',') :
         (val.constructor === Array) ? val :
@@ -226,7 +226,7 @@
     //
     //     t.set('scale', 2, 4);
     //
-    set: function(prop) {
+    set(prop) {
       var args = Array.prototype.slice.apply(arguments, [1]);
       if (this.setter[prop]) {
         this.setter[prop].apply(this, args);
@@ -235,7 +235,7 @@
       }
     },
 
-    get: function(prop) {
+    get(prop) {
       if (this.getter[prop]) {
         return this.getter[prop].apply(this);
       } else {
@@ -251,15 +251,15 @@
       //     .css({ rotate: "30deg" })
       //     .css({ rotate: "30deg" })
       //
-      rotate: function(theta) {
+      rotate(theta) {
         this.rotate = unit(theta, 'deg');
       },
 
-      rotateX: function(theta) {
+      rotateX(theta) {
         this.rotateX = unit(theta, 'deg');
       },
 
-      rotateY: function(theta) {
+      rotateY(theta) {
         this.rotateY = unit(theta, 'deg');
       },
 
@@ -268,22 +268,22 @@
       //     .css({ scale: 9 })      //=> "scale(9,9)"
       //     .css({ scale: '3,2' })  //=> "scale(3,2)"
       //
-      scale: function(x, y) {
+      scale(x, y) {
         if (y === undefined) { y = x; }
         this.scale = x + "," + y;
       },
 
       // ### skewX + skewY
-      skewX: function(x) {
+      skewX(x) {
         this.skewX = unit(x, 'deg');
       },
 
-      skewY: function(y) {
+      skewY(y) {
         this.skewY = unit(y, 'deg');
       },
 
       // ### perspectvie
-      perspective: function(dist) {
+      perspective(dist) {
         this.perspective = unit(dist, 'px');
       },
 
@@ -293,11 +293,11 @@
       //     .css({ x: 4 })       //=> "translate(4px, 0)"
       //     .css({ y: 10 })      //=> "translate(4px, 10px)"
       //
-      x: function(x) {
+      x(x) {
         this.set('translate', x, null);
       },
 
-      y: function(y) {
+      y(y) {
         this.set('translate', null, y);
       },
 
@@ -306,7 +306,7 @@
       //
       //     .css({ translate: '2, 5' })    //=> "translate(2px, 5px)"
       //
-      translate: function(x, y) {
+      translate(x, y) {
         if (this._translateX === undefined) { this._translateX = 0; }
         if (this._translateY === undefined) { this._translateY = 0; }
 
@@ -318,15 +318,15 @@
     },
 
     getter: {
-      x: function() {
+      x() {
         return this._translateX || 0;
       },
 
-      y: function() {
+      y() {
         return this._translateY || 0;
       },
 
-      scale: function() {
+      scale() {
         var s = (this.scale || "1,1").split(',');
         if (s[0]) { s[0] = parseFloat(s[0]); }
         if (s[1]) { s[1] = parseFloat(s[1]); }
@@ -336,7 +336,7 @@
         return (s[0] === s[1]) ? s[0] : s;
       },
 
-      rotate3d: function() {
+      rotate3d() {
         var s = (this.rotate3d || "0,0,0,0deg").split(',');
         for (var i=0; i<=3; ++i) {
           if (s[i]) { s[i] = parseFloat(s[i]); }
@@ -349,9 +349,9 @@
 
     // ### parse()
     // Parses from a string. Called on constructor.
-    parse: function(str) {
+    parse(str) {
       var self = this;
-      str.replace(/([a-zA-Z0-9]+)\((.*?)\)/g, function(x, prop, val) {
+      str.replace(/([a-zA-Z0-9]+)\((.*?)\)/g, (x, prop, val) => {
         self.setFromString(prop, val);
       });
     },
@@ -359,7 +359,7 @@
     // ### toString()
     // Converts to a `transition` CSS property string. If `use3d` is given,
     // it converts to a `-webkit-transition` CSS property string instead.
-    toString: function(use3d) {
+    toString(use3d) {
       var re = [];
 
       for (var i in this) {
@@ -403,7 +403,7 @@
   function getProperties(props) {
     var re = [];
 
-    $.each(props, function(key) {
+    $.each(props, key => {
       key = $.camelCase(key); // Convert "text-align" => "textAlign"
       key = $.transit.propertyMap[key] || key;
       key = uncamel(key); // Convert back to dasherized
@@ -436,7 +436,7 @@
     // For more properties, add them this way:
     // "margin 200ms ease, padding 200ms ease, ..."
     var transitions = [];
-    $.each(props, function(i, name) {
+    $.each(props, (i, name) => {
       transitions.push(name + ' ' + attribs);
     });
 
@@ -528,7 +528,7 @@
 
     // If there's nothing to do...
     if (i === 0) {
-      var fn = function(next) {
+      var fn = next => {
         self.css(properties);
         if (callback) { callback.apply(self); }
         if (next) { next(); }
@@ -541,11 +541,11 @@
     // Save the old transitions of each element so we can restore it later.
     var oldTransitions = {};
 
-    var run = function(nextCall) {
+    var run = nextCall => {
       var bound = false;
 
       // Prepare the callback.
-      var cb = function() {
+      var cb = () => {
         if (bound) { self.unbind(transitionEnd, cb); }
 
         if (i > 0) {
@@ -578,14 +578,14 @@
 
     // Defer running. This allows the browser to paint any pending CSS it hasn't
     // painted yet before doing the transitions.
-    var deferredRun = function(next) {
+    var deferredRun = next => {
       var i = 0;
 
       // Durations that are too slow will get transitions mixed up.
       // (Tested on Mac/FF 7.0.1)
       if ((support.transition === 'MozTransition') && (i < 25)) { i = 25; }
 
-      window.setTimeout(function() { run(next); }, i);
+      window.setTimeout(() => { run(next); }, i);
     };
 
     // Use jQuery's fx queue.
@@ -602,12 +602,12 @@
     $.transit.propertyMap[prop] = support.transform;
 
     $.cssHooks[prop] = {
-      get: function(elem) {
+      get(elem) {
         var t = $(elem).css('transform') || new Transform();
         return t.get(prop);
       },
 
-      set: function(elem, value) {
+      set(elem, value) {
         var t = $(elem).css('transform') || new Transform();
         t.setFromString(prop, value);
 
@@ -620,7 +620,7 @@
   // Converts a camelcase string to a dasherized string.
   // (`marginLeft` => `margin-left`)
   function uncamel(str) {
-    return str.replace(/([A-Z])/g, function(letter) { return '-' + letter.toLowerCase(); });
+    return str.replace(/([A-Z])/g, letter => '-' + letter.toLowerCase());
   }
 
   // ### unit(number, unit)
@@ -655,4 +655,4 @@
 
   // Export some functions for testable-ness.
   $.transit.getTransitionValue = getTransition;
-})(jQuery);
+}))(jQuery);

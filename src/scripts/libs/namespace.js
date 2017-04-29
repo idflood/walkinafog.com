@@ -3,10 +3,17 @@
  * Copyright (c) 2011 CodeCatalyst, LLC.
  * Open source under the MIT License.
  */
-(function() {
+((() => {
   var namespace;
-  namespace = function(name, values) {
-    var key, subpackage, target, value, _i, _len, _ref, _results;
+  namespace = (name, values) => {
+    var key;
+    var subpackage;
+    var target;
+    var value;
+    var _i;
+    var _len;
+    var _ref;
+    var _results;
     target = typeof exports !== "undefined" && exports !== null ? exports : window;
     if (name.length > 0) {
       _ref = name.split('.');
@@ -23,6 +30,6 @@
     return _results;
   };
   namespace("", {
-    namespace: namespace
+    namespace
   });
-}).call(this);
+})).call(this);

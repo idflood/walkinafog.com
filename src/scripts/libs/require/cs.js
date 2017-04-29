@@ -8,28 +8,34 @@
 /*global define, window, XMLHttpRequest, importScripts, Packages, java,
   ActiveXObject, process, require */
 
-define(['coffee-script'], function (CoffeeScript) {
+define(['coffee-script'], CoffeeScript => {
     'use strict';
-    var fs, getXhr,
-        progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
-        fetchText = function () {
-            throw new Error('Environment unsupported.');
-        },
-        buildMap = {};
+    var fs;
+    var getXhr;
+    var progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'];
+
+    var fetchText = () => {
+        throw new Error('Environment unsupported.');
+    };
+
+    var buildMap = {};
 
     if (typeof process !== "undefined" &&
                process.versions &&
                !!process.versions.node) {
         //Using special require.nodeRequire, something added by r.js.
         fs = require.nodeRequire('fs');
-        fetchText = function (path, callback) {
+        fetchText = (path, callback) => {
             callback(fs.readFileSync(path, 'utf8'));
         };
     } else if ((typeof window !== "undefined" && window.navigator && window.document) || typeof importScripts !== "undefined") {
         // Browser action
-        getXhr = function () {
+        getXhr = () => {
             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
-            var xhr, i, progId;
+            var xhr;
+
+            var i;
+            var progId;
             if (typeof XMLHttpRequest !== "undefined") {
                 return new XMLHttpRequest();
             } else {
@@ -53,10 +59,10 @@ define(['coffee-script'], function (CoffeeScript) {
             return xhr;
         };
 
-        fetchText = function (url, callback) {
+        fetchText = (url, callback) => {
             var xhr = getXhr();
             xhr.open('GET', url, true);
-            xhr.onreadystatechange = function (evt) {
+            xhr.onreadystatechange = evt => {
                 //Do not explicitly handle errors, those should be
                 //visible via console output in the browser.
                 if (xhr.readyState === 4) {
@@ -68,13 +74,14 @@ define(['coffee-script'], function (CoffeeScript) {
         // end browser.js adapters
     } else if (typeof Packages !== 'undefined') {
         //Why Java, why is this so awkward?
-        fetchText = function (path, callback) {
-            var encoding = "utf-8",
-                file = new java.io.File(path),
-                lineSeparator = java.lang.System.getProperty("line.separator"),
-                input = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(file), encoding)),
-                stringBuffer, line,
-                content = '';
+        fetchText = (path, callback) => {
+            var encoding = "utf-8";
+            var file = new java.io.File(path);
+            var lineSeparator = java.lang.System.getProperty("line.separator");
+            var input = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(file), encoding));
+            var stringBuffer;
+            var line;
+            var content = '';
             try {
                 stringBuffer = new java.lang.StringBuffer();
                 line = input.readLine();
@@ -107,11 +114,11 @@ define(['coffee-script'], function (CoffeeScript) {
     }
 
     return {
-        get: function () {
+        get() {
             return CoffeeScript;
         },
 
-        write: function (pluginName, name, write) {
+        write(pluginName, name, write) {
             if (buildMap.hasOwnProperty(name)) {
                 var text = buildMap[name];
                 write.asModule(pluginName + "!" + name, text);
@@ -120,9 +127,9 @@ define(['coffee-script'], function (CoffeeScript) {
 
         version: '0.4.2',
 
-        load: function (name, parentRequire, load, config) {
+        load(name, parentRequire, load, config) {
             var path = parentRequire.toUrl(name + '.coffee');
-            fetchText(path, function (text) {
+            fetchText(path, text => {
 
                 //Do CoffeeScript transform.
                 try {
@@ -151,7 +158,7 @@ define(['coffee-script'], function (CoffeeScript) {
                 //Give result to load. Need to wait until the module
                 //is fully parse, which will happen after this
                 //execution.
-                parentRequire([name], function (value) {
+                parentRequire([name], value => {
                     load(value);
                 });
             });
