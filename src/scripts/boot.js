@@ -7,6 +7,6 @@ require.config({
   }
 });
 
-require(['cs!core/App'], function () {
+require(['cs!core/App'], () => {
   new Next.App();
 });

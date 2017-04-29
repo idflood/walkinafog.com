@@ -6,7 +6,7 @@
  * MIT Licensed
  */
 
-(function (exports, global) {
+(((exports, global) => {
 
   /**
    * IO namespace.
@@ -64,10 +64,10 @@
    * @api public
    */
 
-  io.connect = function (host, details) {
-    var uri = io.util.parseUri(host)
-      , uuri
-      , socket;
+  io.connect = (host, details) => {
+    var uri = io.util.parseUri(host);
+    var uuri;
+    var socket;
 
     if (global && global.location) {
       uri.protocol = uri.protocol || global.location.protocol.slice(0, -1);
@@ -101,14 +101,14 @@
     return socket.of(uri.path.length > 1 ? uri.path : '');
   };
 
-})('object' === typeof module ? module.exports : (this.io = {}), this);
+}))('object' === typeof module ? module.exports : (this.io = {}), this);
 /**
  * socket.io
  * Copyright(c) 2011 LearnBoost <dev@learnboost.com>
  * MIT Licensed
  */
 
-(function (exports, global) {
+(((exports, global) => {
 
   /**
    * Utilities namespace.
@@ -131,10 +131,10 @@
                'host', 'port', 'relative', 'path', 'directory', 'file', 'query',
                'anchor'];
 
-  util.parseUri = function (str) {
-    var m = re.exec(str || '')
-      , uri = {}
-      , i = 14;
+  util.parseUri = str => {
+    var m = re.exec(str || '');
+    var uri = {};
+    var i = 14;
 
     while (i--) {
       uri[parts[i]] = m[i] || '';
@@ -150,10 +150,10 @@
    * @api public
    */
 
-  util.uniqueUri = function (uri) {
-    var protocol = uri.protocol
-      , host = uri.host
-      , port = uri.port;
+  util.uniqueUri = uri => {
+    var protocol = uri.protocol;
+    var host = uri.host;
+    var port = uri.port;
 
     if ('document' in global) {
       host = host || document.domain;
@@ -178,9 +178,9 @@
    * @api public
    */
 
-  util.query = function (base, addition) {
-    var query = util.chunkQuery(base || '')
-      , components = [];
+  util.query = (base, addition) => {
+    var query = util.chunkQuery(base || '');
+    var components = [];
 
     util.merge(query, util.chunkQuery(addition || ''));
     for (var part in query) {
@@ -199,12 +199,12 @@
    * @api public
    */
 
-  util.chunkQuery = function (qs) {
-    var query = {}
-      , params = qs.split('&')
-      , i = 0
-      , l = params.length
-      , kv;
+  util.chunkQuery = qs => {
+    var query = {};
+    var params = qs.split('&');
+    var i = 0;
+    var l = params.length;
+    var kv;
 
     for (; i < l; ++i) {
       kv = params[i].split('=');
@@ -227,7 +227,7 @@
 
   var pageLoaded = false;
 
-  util.load = function (fn) {
+  util.load = fn => {
     if ('document' in global && document.readyState === 'complete' || pageLoaded) {
       return fn();
     }
@@ -241,7 +241,7 @@
    * @api private
    */
 
-  util.on = function (element, event, fn, capture) {
+  util.on = (element, event, fn, capture) => {
     if (element.attachEvent) {
       element.attachEvent('on' + event, fn);
     } else if (element.addEventListener) {
@@ -257,7 +257,7 @@
    * @api private
    */
 
-  util.request = function (xdomain) {
+  util.request = xdomain => {
 
     if (xdomain && 'undefined' != typeof XDomainRequest) {
       return new XDomainRequest();
@@ -269,7 +269,7 @@
 
     if (!xdomain) {
       try {
-        return new window[(['Active'].concat('Object').join('X'))]('Microsoft.XMLHTTP');
+        return new (window[['Active'].concat('Object').join('X')])('Microsoft.XMLHTTP');
       } catch(e) { }
     }
 
@@ -288,7 +288,7 @@
    */
 
   if ('undefined' != typeof window) {
-    util.load(function () {
+    util.load(() => {
       pageLoaded = true;
     });
   }
@@ -300,12 +300,12 @@
    * @api public
    */
 
-  util.defer = function (fn) {
+  util.defer = fn => {
     if (!util.ua.webkit || 'undefined' != typeof importScripts) {
       return fn();
     }
 
-    util.load(function () {
+    util.load(() => {
       setTimeout(fn, 100);
     });
   };
@@ -317,9 +317,9 @@
    */
   
   util.merge = function merge (target, additional, deep, lastseen) {
-    var seen = lastseen || []
-      , depth = typeof deep == 'undefined' ? 2 : deep
-      , prop;
+    var seen = lastseen || [];
+    var depth = typeof deep == 'undefined' ? 2 : deep;
+    var prop;
 
     for (prop in additional) {
       if (additional.hasOwnProperty(prop) && util.indexOf(seen, prop) < 0) {
@@ -341,7 +341,7 @@
    * @api public
    */
   
-  util.mixin = function (ctor, ctor2) {
+  util.mixin = (ctor, ctor2) => {
     util.merge(ctor.prototype, ctor2.prototype);
   };
 
@@ -351,7 +351,7 @@
    * @api private
    */
 
-  util.inherit = function (ctor, ctor2) {
+  util.inherit = (ctor, ctor2) => {
     function f() {};
     f.prototype = ctor2.prototype;
     ctor.prototype = new f;
@@ -367,9 +367,7 @@
    * @api public
    */
 
-  util.isArray = Array.isArray || function (obj) {
-    return Object.prototype.toString.call(obj) === '[object Array]';
-  };
+  util.isArray = Array.isArray || (obj => Object.prototype.toString.call(obj) === '[object Array]');
 
   /**
    * Intersects values of two arrays into a third
@@ -377,10 +375,10 @@
    * @api public
    */
 
-  util.intersect = function (arr, arr2) {
-    var ret = []
-      , longest = arr.length > arr2.length ? arr : arr2
-      , shortest = arr.length > arr2.length ? arr2 : arr;
+  util.intersect = (arr, arr2) => {
+    var ret = [];
+    var longest = arr.length > arr2.length ? arr : arr2;
+    var shortest = arr.length > arr2.length ? arr2 : arr;
 
     for (var i = 0, l = shortest.length; i < l; i++) {
       if (~util.indexOf(longest, shortest[i]))
@@ -397,7 +395,7 @@
    * @api public
    */
 
-  util.indexOf = function (arr, o, i) {
+  util.indexOf = (arr, o, i) => {
     
     for (var j = arr.length, i = i < 0 ? i + j < 0 ? 0 : i + j : i || 0; 
          i < j && arr[i] !== o; i++) {}
@@ -411,7 +409,7 @@
    * @api public
    */
 
-  util.toArray = function (enu) {
+  util.toArray = enu => {
     var arr = [];
 
     for (var i = 0, l = enu.length; i < l; i++)
@@ -434,7 +432,7 @@
    * @api public
    */
 
-  util.ua.hasCORS = 'undefined' != typeof XMLHttpRequest && (function () {
+  util.ua.hasCORS = 'undefined' != typeof XMLHttpRequest && ((() => {
     try {
       var a = new XMLHttpRequest();
     } catch (e) {
@@ -442,7 +440,7 @@
     }
 
     return a.withCredentials != undefined;
-  })();
+  }))();
 
   /**
    * Detect webkit.
@@ -453,7 +451,7 @@
   util.ua.webkit = 'undefined' != typeof navigator
     && /webkit/i.test(navigator.userAgent);
 
-})('undefined' != typeof io ? io : module.exports, this);
+}))('undefined' != typeof io ? io : module.exports, this);
 
 /**
  * socket.io
@@ -461,7 +459,7 @@
  * MIT Licensed
  */
 
-(function (exports, io) {
+(((exports, io) => {
 
   /**
    * Expose constructor.
@@ -510,9 +508,9 @@
   EventEmitter.prototype.once = function (name, fn) {
     var self = this;
 
-    function on () {
+    function on(...args) {
       self.removeListener(name, on);
-      fn.apply(this, arguments);
+      fn.apply(this, args);
     };
 
     on.listener = fn;
@@ -634,7 +632,7 @@
     return true;
   };
 
-})(
+}))(
     'undefined' != typeof io ? io : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
 );
@@ -649,7 +647,7 @@
  * Based on JSON2 (http://www.JSON.org/js.html).
  */
 
-(function (exports, nativeJSON) {
+(((exports, nativeJSON) => {
   "use strict";
 
   // use native JSON if it's available
@@ -675,22 +673,23 @@
         f(d.getUTCHours())     + ':' +
         f(d.getUTCMinutes())   + ':' +
         f(d.getUTCSeconds())   + 'Z' : null;
+  }
+  var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+  var escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+  var gap;
+  var indent;
+
+  var meta = {    // table of character substitutions
+      '\b': '\\b',
+      '\t': '\\t',
+      '\n': '\\n',
+      '\f': '\\f',
+      '\r': '\\r',
+      '"' : '\\"',
+      '\\': '\\\\'
   };
 
-  var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
-      escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
-      gap,
-      indent,
-      meta = {    // table of character substitutions
-          '\b': '\\b',
-          '\t': '\\t',
-          '\n': '\\n',
-          '\f': '\\f',
-          '\r': '\\r',
-          '"' : '\\"',
-          '\\': '\\\\'
-      },
-      rep;
+  var rep;
 
 
   function quote(string) {
@@ -701,7 +700,7 @@
 // sequences.
 
       escapable.lastIndex = 0;
-      return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
+      return escapable.test(string) ? '"' + string.replace(escapable, a => {
           var c = meta[a];
           return typeof c === 'string' ? c :
               '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
@@ -710,131 +709,136 @@
 
 
   function str(key, holder) {
+    // Produce a string from holder[key].
 
-// Produce a string from holder[key].
+    var // The loop counter.
+    i;
 
-      var i,          // The loop counter.
-          k,          // The member key.
-          v,          // The member value.
-          length,
-          mind = gap,
-          partial,
-          value = holder[key];
+    var // The member key.
+    k;
 
-// If the value has a toJSON method, call it to obtain a replacement value.
+    var // The member value.
+    v;
 
-      if (value instanceof Date) {
-          value = date(key);
-      }
+    var length;
+    var mind = gap;
+    var partial;
+    var value = holder[key];
 
-// If we were called with a replacer function, then call the replacer to
-// obtain a replacement value.
+    // If the value has a toJSON method, call it to obtain a replacement value.
 
-      if (typeof rep === 'function') {
-          value = rep.call(holder, key, value);
-      }
+    if (value instanceof Date) {
+        value = date(key);
+    }
 
-// What happens next depends on the value's type.
+    // If we were called with a replacer function, then call the replacer to
+    // obtain a replacement value.
 
-      switch (typeof value) {
-      case 'string':
-          return quote(value);
+    if (typeof rep === 'function') {
+        value = rep.call(holder, key, value);
+    }
 
-      case 'number':
+    // What happens next depends on the value's type.
+
+    switch (typeof value) {
+    case 'string':
+        return quote(value);
+
+    case 'number':
 
 // JSON numbers must be finite. Encode non-finite numbers as null.
 
-          return isFinite(value) ? String(value) : 'null';
+        return isFinite(value) ? String(value) : 'null';
 
-      case 'boolean':
-      case 'null':
+    case 'boolean':
+    case 'null':
 
 // If the value is a boolean or null, convert it to a string. Note:
 // typeof null does not produce 'null'. The case is included here in
 // the remote chance that this gets fixed someday.
 
-          return String(value);
+        return String(value);
 
 // If the type is 'object', we might be dealing with an object or an array or
 // null.
 
-      case 'object':
+    case 'object':
 
 // Due to a specification blunder in ECMAScript, typeof null is 'object',
 // so watch out for that case.
 
-          if (!value) {
-              return 'null';
-          }
+        if (!value) {
+            return 'null';
+        }
 
 // Make an array to hold the partial results of stringifying this object value.
 
-          gap += indent;
-          partial = [];
+        gap += indent;
+        partial = [];
 
 // Is the value an array?
 
-          if (Object.prototype.toString.apply(value) === '[object Array]') {
+        if (Object.prototype.toString.apply(value) === '[object Array]') {
 
 // The value is an array. Stringify every element. Use null as a placeholder
 // for non-JSON values.
 
-              length = value.length;
-              for (i = 0; i < length; i += 1) {
-                  partial[i] = str(i, value) || 'null';
-              }
+            length = value.length;
+            for (i = 0; i < length; i += 1) {
+                partial[i] = str(i, value) || 'null';
+            }
 
 // Join all of the elements together, separated with commas, and wrap them in
 // brackets.
 
-              v = partial.length === 0 ? '[]' : gap ?
-                  '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' :
-                  '[' + partial.join(',') + ']';
-              gap = mind;
-              return v;
-          }
+            v = partial.length === 0 ? '[]' : gap ?
+                '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' :
+                '[' + partial.join(',') + ']';
+            gap = mind;
+            return v;
+        }
 
 // If the replacer is an array, use it to select the members to be stringified.
 
-          if (rep && typeof rep === 'object') {
-              length = rep.length;
-              for (i = 0; i < length; i += 1) {
-                  if (typeof rep[i] === 'string') {
-                      k = rep[i];
-                      v = str(k, value);
-                      if (v) {
-                          partial.push(quote(k) + (gap ? ': ' : ':') + v);
-                      }
-                  }
-              }
-          } else {
+        if (rep && typeof rep === 'object') {
+            length = rep.length;
+            for (i = 0; i < length; i += 1) {
+                if (typeof rep[i] === 'string') {
+                    k = rep[i];
+                    v = str(k, value);
+                    if (v) {
+                        partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                    }
+                }
+            }
+        } else {
 
 // Otherwise, iterate through all of the keys in the object.
 
-              for (k in value) {
-                  if (Object.prototype.hasOwnProperty.call(value, k)) {
-                      v = str(k, value);
-                      if (v) {
-                          partial.push(quote(k) + (gap ? ': ' : ':') + v);
-                      }
-                  }
-              }
-          }
+            for (k in value) {
+                if (Object.prototype.hasOwnProperty.call(value, k)) {
+                    v = str(k, value);
+                    if (v) {
+                        partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                    }
+                }
+            }
+        }
 
 // Join all of the member texts together, separated with commas,
 // and wrap them in braces.
 
-          v = partial.length === 0 ? '{}' : gap ?
-              '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' :
-              '{' + partial.join(',') + '}';
-          gap = mind;
-          return v;
-      }
+        v = partial.length === 0 ? '{}' : gap ?
+            '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' :
+            '{' + partial.join(',') + '}';
+        gap = mind;
+        return v;
+    }
   }
 
-// If the JSON object does not yet have a stringify method, give it one.
+  // If the JSON object does not yet have a stringify method, give it one.
 
-  JSON.stringify = function (value, replacer, space) {
+  JSON.stringify = (value, replacer, space) => {
 
 // The stringify method takes a value and an optional replacer, and an optional
 // space parameter, and returns a JSON text. The replacer can be a function
@@ -876,33 +880,35 @@
       return str('', {'': value});
   };
 
-// If the JSON object does not yet have a parse method, give it one.
+  // If the JSON object does not yet have a parse method, give it one.
 
-  JSON.parse = function (text, reviver) {
+  JSON.parse = (text, reviver) => {
   // The parse method takes a text and an optional reviver function, and returns
   // a JavaScript value if the text is a valid JSON text.
 
       var j;
 
       function walk(holder, key) {
+        // The walk method is used to recursively walk the resulting structure so
+        // that modifications can be made.
 
-  // The walk method is used to recursively walk the resulting structure so
-  // that modifications can be made.
+        var k;
 
-          var k, v, value = holder[key];
-          if (value && typeof value === 'object') {
-              for (k in value) {
-                  if (Object.prototype.hasOwnProperty.call(value, k)) {
-                      v = walk(value, k);
-                      if (v !== undefined) {
-                          value[k] = v;
-                      } else {
-                          delete value[k];
-                      }
-                  }
-              }
-          }
-          return reviver.call(holder, key, value);
+        var v;
+        var value = holder[key];
+        if (value && typeof value === 'object') {
+            for (k in value) {
+                if (Object.prototype.hasOwnProperty.call(value, k)) {
+                    v = walk(value, k);
+                    if (v !== undefined) {
+                        value[k] = v;
+                    } else {
+                        delete value[k];
+                    }
+                }
+            }
+        }
+        return reviver.call(holder, key, value);
       }
 
 
@@ -913,10 +919,8 @@
       text = String(text);
       cx.lastIndex = 0;
       if (cx.test(text)) {
-          text = text.replace(cx, function (a) {
-              return '\\u' +
-                  ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-          });
+          text = text.replace(cx, a => '\\u' +
+              ('0000' + a.charCodeAt(0).toString(16)).slice(-4));
       }
 
   // In the second stage, we run the text against regular expressions that look
@@ -955,8 +959,7 @@
 
       throw new SyntaxError('JSON.parse');
   };
-
-})(
+}))(
     'undefined' != typeof io ? io : module.exports
   , typeof JSON !== 'undefined' ? JSON : undefined
 );
@@ -967,8 +970,7 @@
  * MIT Licensed
  */
 
-(function (exports, io) {
-
+(((exports, io) => {
   /**
    * Parser namespace.
    *
@@ -1015,8 +1017,9 @@
    * Shortcuts.
    */
 
-  var JSON = io.JSON
-    , indexOf = io.util.indexOf;
+  var JSON = io.JSON;
+
+  var indexOf = io.util.indexOf;
 
   /**
    * Encodes a packet.
@@ -1024,17 +1027,17 @@
    * @api private
    */
 
-  parser.encodePacket = function (packet) {
-    var type = indexOf(packets, packet.type)
-      , id = packet.id || ''
-      , endpoint = packet.endpoint || ''
-      , ack = packet.ack
-      , data = null;
+  parser.encodePacket = packet => {
+    var type = indexOf(packets, packet.type);
+    var id = packet.id || '';
+    var endpoint = packet.endpoint || '';
+    var ack = packet.ack;
+    var data = null;
 
     switch (packet.type) {
       case 'error':
-        var reason = packet.reason ? indexOf(reasons, packet.reason) : ''
-          , adv = packet.advice ? indexOf(advice, packet.advice) : '';
+        var reason = packet.reason ? indexOf(reasons, packet.reason) : '';
+        var adv = packet.advice ? indexOf(advice, packet.advice) : '';
 
         if (reason !== '' || adv !== '')
           data = reason + (adv !== '' ? ('+' + adv) : '');
@@ -1093,7 +1096,7 @@
    * @api private
    */
 
-  parser.encodePayload = function (packets) {
+  parser.encodePayload = packets => {
     var decoded = '';
 
     if (packets.length == 1)
@@ -1115,14 +1118,15 @@
 
   var regexp = /([^:]+):([0-9]+)?(\+)?:([^:]+)?:?([\s\S]*)?/;
 
-  parser.decodePacket = function (data) {
+  parser.decodePacket = data => {
     var pieces = data.match(regexp);
 
     if (!pieces) return {};
 
-    var id = pieces[2] || ''
-      , data = pieces[5] || ''
-      , packet = {
+    var id = pieces[2] || '';
+    var data = pieces[5] || '';
+
+    var packet = {
             type: packets[pieces[1]]
           , endpoint: pieces[4] || ''
         };
@@ -1185,7 +1189,7 @@
       case 'disconnect':
       case 'heartbeat':
         break;
-    };
+    }
 
     return packet;
   };
@@ -1197,7 +1201,7 @@
    * @api public
    */
 
-  parser.decodePayload = function (data) {
+  parser.decodePayload = data => {
     // IE doesn't like data[i] for unicode chars, charAt works fine
     if (data.charAt(0) == '\ufffd') {
       var ret = [];
@@ -1217,8 +1221,7 @@
       return [parser.decodePacket(data)];
     }
   };
-
-})(
+}))(
     'undefined' != typeof io ? io : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
 );
@@ -1228,7 +1231,7 @@
  * MIT Licensed
  */
 
-(function (exports, io) {
+(((exports, io) => {
 
   /**
    * Expose constructor.
@@ -1323,7 +1326,7 @@
     if (!this.closeTimeout) {
       var self = this;
 
-      this.closeTimeout = setTimeout(function () {
+      this.closeTimeout = setTimeout(() => {
         self.onDisconnect();
       }, this.socket.closeTimeout);
     }
@@ -1463,7 +1466,7 @@
   Transport.prototype.ready = function (socket, fn) {
     fn.call(this);
   };
-})(
+}))(
     'undefined' != typeof io ? io : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
 );
@@ -1473,7 +1476,7 @@
  * MIT Licensed
  */
 
-(function (exports, io, global) {
+(((exports, io, global) => {
 
   /**
    * Expose constructor.
@@ -1521,7 +1524,7 @@
         (!this.isXDomain() || io.util.ua.hasCORS)) {
       var self = this;
 
-      io.util.on(global, 'unload', function () {
+      io.util.on(global, 'unload', () => {
         self.disconnectSync();
       }, false);
     }
@@ -1561,15 +1564,15 @@
    * @api private
    */
 
-  Socket.prototype.publish = function () {
-    this.emit.apply(this, arguments);
+  Socket.prototype.publish = function(...args) {
+    this.emit(...args);
 
     var nsp;
 
     for (var i in this.namespaces) {
       if (this.namespaces.hasOwnProperty(i)) {
         nsp = this.of(i);
-        nsp.$emit.apply(nsp, arguments);
+        nsp.$emit(...args);
       }
     }
   };
@@ -1583,16 +1586,16 @@
   function empty () { };
 
   Socket.prototype.handshake = function (fn) {
-    var self = this
-      , options = this.options;
+    var self = this;
+    var options = this.options;
 
     function complete (data) {
       if (data instanceof Error) {
         self.onError(data.message);
       } else {
-        fn.apply(null, data.split(':'));
+        fn(...data.split(':'));
       }
-    };
+    }
 
     var url = [
           'http' + (options.secure ? 's' : '') + ':/'
@@ -1603,13 +1606,13 @@
       ].join('/');
 
     if (this.isXDomain() && !io.util.ua.hasCORS) {
-      var insertAt = document.getElementsByTagName('script')[0]
-        , script = document.createElement('script');
+      var insertAt = document.getElementsByTagName('script')[0];
+      var script = document.createElement('script');
 
       script.src = url + '&jsonp=' + io.j.length;
       insertAt.parentNode.insertBefore(script, insertAt);
 
-      io.j.push(function (data) {
+      io.j.push(data => {
         complete(data);
         script.parentNode.removeChild(script);
       });
@@ -1618,7 +1621,7 @@
 
       xhr.open('GET', url, true);
       xhr.withCredentials = true;
-      xhr.onreadystatechange = function () {
+      xhr.onreadystatechange = () => {
         if (xhr.readyState == 4) {
           xhr.onreadystatechange = empty;
 
@@ -1640,7 +1643,8 @@
    */
 
   Socket.prototype.getTransport = function (override) {
-    var transports = override || this.transports, match;
+    var transports = override || this.transports;
+    var match;
 
     for (var i = 0, transport; transport = transports[i]; i++) {
       if (io.Transport[transport]
@@ -1669,7 +1673,7 @@
     var self = this;
     self.connecting = true;
 
-    this.handshake(function (sid, heartbeat, close, transports) {
+    this.handshake((sid, heartbeat, close, transports) => {
       self.sessionid = sid;
       self.closeTimeout = close * 1000;
       self.heartbeatTimeout = heartbeat * 1000;
@@ -1687,13 +1691,13 @@
         if (!self.transport) return self.publish('connect_failed');
 
         // once the transport is ready
-        self.transport.ready(self, function () {
+        self.transport.ready(self, () => {
           self.connecting = true;
           self.publish('connecting', self.transport.name);
           self.transport.open();
 
           if (self.options['connect timeout']) {
-            self.connectTimeoutTimer = setTimeout(function () {
+            self.connectTimeoutTimer = setTimeout(() => {
               if (!self.connected) {
                 self.connecting = false;
 
@@ -1721,7 +1725,7 @@
 
       connect(self.transports);
 
-      self.once('connect', function (){
+      self.once('connect', () => {
         clearTimeout(self.connectTimeoutTimer);
 
         fn && typeof fn == 'function' && fn();
@@ -1742,7 +1746,7 @@
     clearTimeout(this.heartbeatTimeoutTimer);
 
     var self = this;
-    this.heartbeatTimeoutTimer = setTimeout(function () {
+    this.heartbeatTimeoutTimer = setTimeout(() => {
       self.transport.onClose();
     }, this.heartbeatTimeout);
   };
@@ -1808,8 +1812,9 @@
 
   Socket.prototype.disconnectSync = function () {
     // ensure disconnection
-    var xhr = io.util.request()
-      , uri = this.resource + '/' + io.protocol + '/' + this.sessionid;
+    var xhr = io.util.request();
+
+    var uri = this.resource + '/' + io.protocol + '/' + this.sessionid;
 
     xhr.open('GET', uri, true);
 
@@ -1909,8 +1914,8 @@
    */
 
   Socket.prototype.onDisconnect = function (reason) {
-    var wasConnected = this.connected
-      , wasConnecting = this.connecting;
+    var wasConnected = this.connected;
+    var wasConnecting = this.connecting;
 
     this.connected = false;
     this.connecting = false;
@@ -1940,10 +1945,10 @@
     this.reconnectionAttempts = 0;
     this.reconnectionDelay = this.options['reconnection delay'];
 
-    var self = this
-      , maxAttempts = this.options['max reconnection attempts']
-      , tryMultiple = this.options['try multiple transports']
-      , limit = this.options['reconnection limit'];
+    var self = this;
+    var maxAttempts = this.options['max reconnection attempts'];
+    var tryMultiple = this.options['try multiple transports'];
+    var limit = this.options['reconnection limit'];
 
     function reset () {
       if (self.connected) {
@@ -1968,7 +1973,7 @@
       delete self.redoTransports;
 
       self.options['try multiple transports'] = tryMultiple;
-    };
+    }
 
     function maybeReconnect () {
       if (!self.reconnecting) {
@@ -2003,7 +2008,7 @@
         self.publish('reconnecting', self.reconnectionDelay, self.reconnectionAttempts);
         self.reconnectionTimer = setTimeout(maybeReconnect, self.reconnectionDelay);
       }
-    };
+    }
 
     this.options['try multiple transports'] = false;
     this.reconnectionTimer = setTimeout(maybeReconnect, this.reconnectionDelay);
@@ -2011,7 +2016,7 @@
     this.on('connect', maybeReconnect);
   };
 
-})(
+}))(
     'undefined' != typeof io ? io : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
   , this
@@ -2022,7 +2027,7 @@
  * MIT Licensed
  */
 
-(function (exports, io) {
+(((exports, io) => {
 
   /**
    * Expose constructor.
@@ -2067,8 +2072,8 @@
    * @api public
    */
 
-  SocketNamespace.prototype.of = function () {
-    return this.socket.of.apply(this.socket, arguments);
+  SocketNamespace.prototype.of = function(...args) {
+    return this.socket.of(...args);
   };
 
   /**
@@ -2093,7 +2098,7 @@
   SocketNamespace.prototype.send = function (data, fn) {
     var packet = {
         type: this.flags.json ? 'json' : 'message'
-      , data: data
+      , data
     };
 
     if ('function' == typeof fn) {
@@ -2112,11 +2117,12 @@
    */
   
   SocketNamespace.prototype.emit = function (name) {
-    var args = Array.prototype.slice.call(arguments, 1)
-      , lastArg = args[args.length - 1]
-      , packet = {
+    var args = Array.prototype.slice.call(arguments, 1);
+    var lastArg = args[args.length - 1];
+
+    var packet = {
             type: 'event'
-          , name: name
+          , name
         };
 
     if ('function' == typeof lastArg) {
@@ -2157,10 +2163,10 @@
   SocketNamespace.prototype.onPacket = function (packet) {
     var self = this;
 
-    function ack () {
+    function ack(...args) {
       self.packet({
           type: 'ack'
-        , args: io.util.toArray(arguments)
+        , args: io.util.toArray(args)
         , ackId: packet.id
       });
     };
@@ -2188,7 +2194,7 @@
           this.packet({ type: 'ack', ackId: packet.id });
         }
 
-        this.$emit.apply(this, params);
+        this.$emit(...params);
         break;
 
       case 'event':
@@ -2197,7 +2203,7 @@
         if (packet.ack == 'data')
           params.push(ack);
 
-        this.$emit.apply(this, params);
+        this.$emit(...params);
         break;
 
       case 'ack':
@@ -2238,9 +2244,9 @@
    * @api public
    */
 
-  Flag.prototype.send = function () {
+  Flag.prototype.send = function(...args) {
     this.namespace.flags[this.name] = true;
-    this.namespace.send.apply(this.namespace, arguments);
+    this.namespace.send(...args);
   };
 
   /**
@@ -2249,12 +2255,12 @@
    * @api public
    */
 
-  Flag.prototype.emit = function () {
+  Flag.prototype.emit = function(...args) {
     this.namespace.flags[this.name] = true;
-    this.namespace.emit.apply(this.namespace, arguments);
+    this.namespace.emit(...args);
   };
 
-})(
+}))(
     'undefined' != typeof io ? io : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
 );
@@ -2265,7 +2271,7 @@
  * MIT Licensed
  */
 
-(function (exports, io, global) {
+(((exports, io, global) => {
 
   /**
    * Expose constructor.
@@ -2311,9 +2317,9 @@
    */
 
   WS.prototype.open = function () {
-    var query = io.util.query(this.socket.options.query)
-      , self = this
-      , Socket
+    var query = io.util.query(this.socket.options.query);
+    var self = this;
+    var Socket;
 
 
     if (!Socket) {
@@ -2322,18 +2328,18 @@
 
     this.websocket = new Socket(this.prepareUrl() + query);
 
-    this.websocket.onopen = function () {
+    this.websocket.onopen = () => {
       self.onOpen();
       self.socket.setBuffer(false);
     };
-    this.websocket.onmessage = function (ev) {
+    this.websocket.onmessage = ev => {
       self.onData(ev.data);
     };
-    this.websocket.onclose = function () {
+    this.websocket.onclose = () => {
       self.onClose();
       self.socket.setBuffer(true);
     };
-    this.websocket.onerror = function (e) {
+    this.websocket.onerror = e => {
       self.onError(e);
     };
 
@@ -2407,10 +2413,8 @@
    * @api public
    */
 
-  WS.check = function () {
-    return ('WebSocket' in global && !('__addTask' in WebSocket))
-          || 'MozWebSocket' in global;
-  };
+  WS.check = () => ('WebSocket' in global && !('__addTask' in WebSocket))
+        || 'MozWebSocket' in global;
 
   /**
    * Check if the `WebSocket` transport support cross domain communications.
@@ -2419,9 +2423,7 @@
    * @api public
    */
 
-  WS.xdomainCheck = function () {
-    return true;
-  };
+  WS.xdomainCheck = () => true;
 
   /**
    * Add the transport to your public io.transports array.
@@ -2431,7 +2433,7 @@
 
   io.transports.push('websocket');
 
-})(
+}))(
     'undefined' != typeof io ? io.Transport : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
   , this
@@ -2443,7 +2445,7 @@
  * MIT Licensed
  */
 
-(function (exports, io) {
+(((exports, io) => {
 
   /**
    * Expose constructor.
@@ -2463,8 +2465,8 @@
    * @api public
    */
 
-  function Flashsocket () {
-    io.Transport.websocket.apply(this, arguments);
+  function Flashsocket(...args) {
+    io.Transport.websocket.apply(this, args);
   };
 
   /**
@@ -2491,10 +2493,10 @@
    */
 
   Flashsocket.prototype.open = function () {
-    var self = this
-      , args = arguments;
+    var self = this;
+    var args = arguments;
 
-    WebSocket.__addTask(function () {
+    WebSocket.__addTask(() => {
       io.Transport.websocket.prototype.open.apply(self, args);
     });
     return this;
@@ -2510,8 +2512,9 @@
    */
 
   Flashsocket.prototype.send = function () {
-    var self = this, args = arguments;
-    WebSocket.__addTask(function () {
+    var self = this;
+    var args = arguments;
+    WebSocket.__addTask(() => {
       io.Transport.websocket.prototype.send.apply(self, args);
     });
     return this;
@@ -2542,9 +2545,10 @@
 
   Flashsocket.prototype.ready = function (socket, fn) {
     function init () {
-      var options = socket.options
-        , port = options['flash policy port']
-        , path = [
+      var options = socket.options;
+      var port = options['flash policy port'];
+
+      var path = [
               'http' + (options.secure ? 's' : '') + ':/'
             , options.host + ':' + options.port
             , options.resource
@@ -2586,7 +2590,7 @@
    * @api public
    */
 
-  Flashsocket.check = function () {
+  Flashsocket.check = () => {
     if (
         typeof WebSocket == 'undefined'
       || !('__initialize' in WebSocket) || !swfobject
@@ -2604,9 +2608,7 @@
    * @api public
    */
 
-  Flashsocket.xdomainCheck = function () {
-    return true;
-  };
+  Flashsocket.xdomainCheck = () => true;
 
   /**
    * Disable AUTO_INITIALIZATION
@@ -2623,7 +2625,7 @@
    */
 
   io.transports.push('flashsocket');
-})(
+}))(
     'undefined' != typeof io ? io.Transport : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
 );
@@ -2631,20 +2633,61 @@
 	is released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
 */
 if ('undefined' != typeof window) {
-var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="ShockwaveFlash.ShockwaveFlash",q="application/x-shockwave-flash",R="SWFObjectExprInst",x="onreadystatechange",O=window,j=document,t=navigator,T=false,U=[h],o=[],N=[],I=[],l,Q,E,B,J=false,a=false,n,G,m=true,M=function(){var aa=typeof j.getElementById!=D&&typeof j.getElementsByTagName!=D&&typeof j.createElement!=D,ah=t.userAgent.toLowerCase(),Y=t.platform.toLowerCase(),ae=Y?/win/.test(Y):/win/.test(ah),ac=Y?/mac/.test(Y):/mac/.test(ah),af=/webkit/.test(ah)?parseFloat(ah.replace(/^.*webkit\/(\d+(\.\d+)?).*$/,"$1")):false,X=!+"\v1",ag=[0,0,0],ab=null;if(typeof t.plugins!=D&&typeof t.plugins[S]==r){ab=t.plugins[S].description;if(ab&&!(typeof t.mimeTypes!=D&&t.mimeTypes[q]&&!t.mimeTypes[q].enabledPlugin)){T=true;X=false;ab=ab.replace(/^.*\s+(\S+\s+\S+$)/,"$1");ag[0]=parseInt(ab.replace(/^(.*)\..*$/,"$1"),10);ag[1]=parseInt(ab.replace(/^.*\.(.*)\s.*$/,"$1"),10);ag[2]=/[a-zA-Z]/.test(ab)?parseInt(ab.replace(/^.*[a-zA-Z]+(.*)$/,"$1"),10):0}}else{if(typeof O[(['Active'].concat('Object').join('X'))]!=D){try{var ad=new window[(['Active'].concat('Object').join('X'))](W);if(ad){ab=ad.GetVariable("$version");if(ab){X=true;ab=ab.split(" ")[1].split(",");ag=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}}catch(Z){}}}return{w3:aa,pv:ag,wk:af,ie:X,win:ae,mac:ac}}(),k=function(){if(!M.w3){return}if((typeof j.readyState!=D&&j.readyState=="complete")||(typeof j.readyState==D&&(j.getElementsByTagName("body")[0]||j.body))){f()}if(!J){if(typeof j.addEventListener!=D){j.addEventListener("DOMContentLoaded",f,false)}if(M.ie&&M.win){j.attachEvent(x,function(){if(j.readyState=="complete"){j.detachEvent(x,arguments.callee);f()}});if(O==top){(function(){if(J){return}try{j.documentElement.doScroll("left")}catch(X){setTimeout(arguments.callee,0);return}f()})()}}if(M.wk){(function(){if(J){return}if(!/loaded|complete/.test(j.readyState)){setTimeout(arguments.callee,0);return}f()})()}s(f)}}();function f(){if(J){return}try{var Z=j.getElementsByTagName("body")[0].appendChild(C("span"));Z.parentNode.removeChild(Z)}catch(aa){return}J=true;var X=U.length;for(var Y=0;Y<X;Y++){U[Y]()}}function K(X){if(J){X()}else{U[U.length]=X}}function s(Y){if(typeof O.addEventListener!=D){O.addEventListener("load",Y,false)}else{if(typeof j.addEventListener!=D){j.addEventListener("load",Y,false)}else{if(typeof O.attachEvent!=D){i(O,"onload",Y)}else{if(typeof O.onload=="function"){var X=O.onload;O.onload=function(){X();Y()}}else{O.onload=Y}}}}}function h(){if(T){V()}else{H()}}function V(){var X=j.getElementsByTagName("body")[0];var aa=C(r);aa.setAttribute("type",q);var Z=X.appendChild(aa);if(Z){var Y=0;(function(){if(typeof Z.GetVariable!=D){var ab=Z.GetVariable("$version");if(ab){ab=ab.split(" ")[1].split(",");M.pv=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}else{if(Y<10){Y++;setTimeout(arguments.callee,10);return}}X.removeChild(aa);Z=null;H()})()}else{H()}}function H(){var ag=o.length;if(ag>0){for(var af=0;af<ag;af++){var Y=o[af].id;var ab=o[af].callbackFn;var aa={success:false,id:Y};if(M.pv[0]>0){var ae=c(Y);if(ae){if(F(o[af].swfVersion)&&!(M.wk&&M.wk<312)){w(Y,true);if(ab){aa.success=true;aa.ref=z(Y);ab(aa)}}else{if(o[af].expressInstall&&A()){var ai={};ai.data=o[af].expressInstall;ai.width=ae.getAttribute("width")||"0";ai.height=ae.getAttribute("height")||"0";if(ae.getAttribute("class")){ai.styleclass=ae.getAttribute("class")}if(ae.getAttribute("align")){ai.align=ae.getAttribute("align")}var ah={};var X=ae.getElementsByTagName("param");var ac=X.length;for(var ad=0;ad<ac;ad++){if(X[ad].getAttribute("name").toLowerCase()!="movie"){ah[X[ad].getAttribute("name")]=X[ad].getAttribute("value")}}P(ai,ah,Y,ab)}else{p(ae);if(ab){ab(aa)}}}}}else{w(Y,true);if(ab){var Z=z(Y);if(Z&&typeof Z.SetVariable!=D){aa.success=true;aa.ref=Z}ab(aa)}}}}}function z(aa){var X=null;var Y=c(aa);if(Y&&Y.nodeName=="OBJECT"){if(typeof Y.SetVariable!=D){X=Y}else{var Z=Y.getElementsByTagName(r)[0];if(Z){X=Z}}}return X}function A(){return !a&&F("6.0.65")&&(M.win||M.mac)&&!(M.wk&&M.wk<312)}function P(aa,ab,X,Z){a=true;E=Z||null;B={success:false,id:X};var ae=c(X);if(ae){if(ae.nodeName=="OBJECT"){l=g(ae);Q=null}else{l=ae;Q=X}aa.id=R;if(typeof aa.width==D||(!/%$/.test(aa.width)&&parseInt(aa.width,10)<310)){aa.width="310"}if(typeof aa.height==D||(!/%$/.test(aa.height)&&parseInt(aa.height,10)<137)){aa.height="137"}j.title=j.title.slice(0,47)+" - Flash Player Installation";var ad=M.ie&&M.win?(['Active'].concat('').join('X')):"PlugIn",ac="MMredirectURL="+O.location.toString().replace(/&/g,"%26")+"&MMplayerType="+ad+"&MMdoctitle="+j.title;if(typeof ab.flashvars!=D){ab.flashvars+="&"+ac}else{ab.flashvars=ac}if(M.ie&&M.win&&ae.readyState!=4){var Y=C("div");X+="SWFObjectNew";Y.setAttribute("id",X);ae.parentNode.insertBefore(Y,ae);ae.style.display="none";(function(){if(ae.readyState==4){ae.parentNode.removeChild(ae)}else{setTimeout(arguments.callee,10)}})()}u(aa,ab,X)}}function p(Y){if(M.ie&&M.win&&Y.readyState!=4){var X=C("div");Y.parentNode.insertBefore(X,Y);X.parentNode.replaceChild(g(Y),X);Y.style.display="none";(function(){if(Y.readyState==4){Y.parentNode.removeChild(Y)}else{setTimeout(arguments.callee,10)}})()}else{Y.parentNode.replaceChild(g(Y),Y)}}function g(ab){var aa=C("div");if(M.win&&M.ie){aa.innerHTML=ab.innerHTML}else{var Y=ab.getElementsByTagName(r)[0];if(Y){var ad=Y.childNodes;if(ad){var X=ad.length;for(var Z=0;Z<X;Z++){if(!(ad[Z].nodeType==1&&ad[Z].nodeName=="PARAM")&&!(ad[Z].nodeType==8)){aa.appendChild(ad[Z].cloneNode(true))}}}}}return aa}function u(ai,ag,Y){var X,aa=c(Y);if(M.wk&&M.wk<312){return X}if(aa){if(typeof ai.id==D){ai.id=Y}if(M.ie&&M.win){var ah="";for(var ae in ai){if(ai[ae]!=Object.prototype[ae]){if(ae.toLowerCase()=="data"){ag.movie=ai[ae]}else{if(ae.toLowerCase()=="styleclass"){ah+=' class="'+ai[ae]+'"'}else{if(ae.toLowerCase()!="classid"){ah+=" "+ae+'="'+ai[ae]+'"'}}}}}var af="";for(var ad in ag){if(ag[ad]!=Object.prototype[ad]){af+='<param name="'+ad+'" value="'+ag[ad]+'" />'}}aa.outerHTML='<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"'+ah+">"+af+"</object>";N[N.length]=ai.id;X=c(ai.id)}else{var Z=C(r);Z.setAttribute("type",q);for(var ac in ai){if(ai[ac]!=Object.prototype[ac]){if(ac.toLowerCase()=="styleclass"){Z.setAttribute("class",ai[ac])}else{if(ac.toLowerCase()!="classid"){Z.setAttribute(ac,ai[ac])}}}}for(var ab in ag){if(ag[ab]!=Object.prototype[ab]&&ab.toLowerCase()!="movie"){e(Z,ab,ag[ab])}}aa.parentNode.replaceChild(Z,aa);X=Z}}return X}function e(Z,X,Y){var aa=C("param");aa.setAttribute("name",X);aa.setAttribute("value",Y);Z.appendChild(aa)}function y(Y){var X=c(Y);if(X&&X.nodeName=="OBJECT"){if(M.ie&&M.win){X.style.display="none";(function(){if(X.readyState==4){b(Y)}else{setTimeout(arguments.callee,10)}})()}else{X.parentNode.removeChild(X)}}}function b(Z){var Y=c(Z);if(Y){for(var X in Y){if(typeof Y[X]=="function"){Y[X]=null}}Y.parentNode.removeChild(Y)}}function c(Z){var X=null;try{X=j.getElementById(Z)}catch(Y){}return X}function C(X){return j.createElement(X)}function i(Z,X,Y){Z.attachEvent(X,Y);I[I.length]=[Z,X,Y]}function F(Z){var Y=M.pv,X=Z.split(".");X[0]=parseInt(X[0],10);X[1]=parseInt(X[1],10)||0;X[2]=parseInt(X[2],10)||0;return(Y[0]>X[0]||(Y[0]==X[0]&&Y[1]>X[1])||(Y[0]==X[0]&&Y[1]==X[1]&&Y[2]>=X[2]))?true:false}function v(ac,Y,ad,ab){if(M.ie&&M.mac){return}var aa=j.getElementsByTagName("head")[0];if(!aa){return}var X=(ad&&typeof ad=="string")?ad:"screen";if(ab){n=null;G=null}if(!n||G!=X){var Z=C("style");Z.setAttribute("type","text/css");Z.setAttribute("media",X);n=aa.appendChild(Z);if(M.ie&&M.win&&typeof j.styleSheets!=D&&j.styleSheets.length>0){n=j.styleSheets[j.styleSheets.length-1]}G=X}if(M.ie&&M.win){if(n&&typeof n.addRule==r){n.addRule(ac,Y)}}else{if(n&&typeof j.createTextNode!=D){n.appendChild(j.createTextNode(ac+" {"+Y+"}"))}}}function w(Z,X){if(!m){return}var Y=X?"visible":"hidden";if(J&&c(Z)){c(Z).style.visibility=Y}else{v("#"+Z,"visibility:"+Y)}}function L(Y){var Z=/[\\\"<>\.;]/;var X=Z.exec(Y)!=null;return X&&typeof encodeURIComponent!=D?encodeURIComponent(Y):Y}var d=function(){if(M.ie&&M.win){window.attachEvent("onunload",function(){var ac=I.length;for(var ab=0;ab<ac;ab++){I[ab][0].detachEvent(I[ab][1],I[ab][2])}var Z=N.length;for(var aa=0;aa<Z;aa++){y(N[aa])}for(var Y in M){M[Y]=null}M=null;for(var X in swfobject){swfobject[X]=null}swfobject=null})}}();return{registerObject:function(ab,X,aa,Z){if(M.w3&&ab&&X){var Y={};Y.id=ab;Y.swfVersion=X;Y.expressInstall=aa;Y.callbackFn=Z;o[o.length]=Y;w(ab,false)}else{if(Z){Z({success:false,id:ab})}}},getObjectById:function(X){if(M.w3){return z(X)}},embedSWF:function(ab,ah,ae,ag,Y,aa,Z,ad,af,ac){var X={success:false,id:ah};if(M.w3&&!(M.wk&&M.wk<312)&&ab&&ah&&ae&&ag&&Y){w(ah,false);K(function(){ae+="";ag+="";var aj={};if(af&&typeof af===r){for(var al in af){aj[al]=af[al]}}aj.data=ab;aj.width=ae;aj.height=ag;var am={};if(ad&&typeof ad===r){for(var ak in ad){am[ak]=ad[ak]}}if(Z&&typeof Z===r){for(var ai in Z){if(typeof am.flashvars!=D){am.flashvars+="&"+ai+"="+Z[ai]}else{am.flashvars=ai+"="+Z[ai]}}}if(F(Y)){var an=u(aj,am,ah);if(aj.id==ah){w(ah,true)}X.success=true;X.ref=an}else{if(aa&&A()){aj.data=aa;P(aj,am,ah,ac);return}else{w(ah,true)}}if(ac){ac(X)}})}else{if(ac){ac(X)}}},switchOffAutoHideShow:function(){m=false},ua:M,getFlashPlayerVersion:function(){return{major:M.pv[0],minor:M.pv[1],release:M.pv[2]}},hasFlashPlayerVersion:F,createSWF:function(Z,Y,X){if(M.w3){return u(Z,Y,X)}else{return undefined}},showExpressInstall:function(Z,aa,X,Y){if(M.w3&&A()){P(Z,aa,X,Y)}},removeSWF:function(X){if(M.w3){y(X)}},createCSS:function(aa,Z,Y,X){if(M.w3){v(aa,Z,Y,X)}},addDomLoadEvent:K,addLoadEvent:s,getQueryParamValue:function(aa){var Z=j.location.search||j.location.hash;if(Z){if(/\?/.test(Z)){Z=Z.split("?")[1]}if(aa==null){return L(Z)}var Y=Z.split("&");for(var X=0;X<Y.length;X++){if(Y[X].substring(0,Y[X].indexOf("="))==aa){return L(Y[X].substring((Y[X].indexOf("=")+1)))}}}return""},expressInstallCallback:function(){if(a){var X=c(R);if(X&&l){X.parentNode.replaceChild(l,X);if(Q){w(Q,true);if(M.ie&&M.win){l.style.display="block"}}if(E){E(B)}}a=false}}}}();
+var swfobject=(() => {
+  var D="undefined";
+  var r="object";
+  var S="Shockwave Flash";
+  var W="ShockwaveFlash.ShockwaveFlash";
+  var q="application/x-shockwave-flash";
+  var R="SWFObjectExprInst";
+  var x="onreadystatechange";
+  var O=window;
+  var j=document;
+  var t=navigator;
+  var T=false;
+  var U=[h];
+  var o=[];
+  var N=[];
+  var I=[];
+  var l;
+  var Q;
+  var E;
+  var B;
+  var J=false;
+  var a=false;
+  var n;
+  var G;
+  var m=true;
+  var M=(() => {var aa=typeof j.getElementById!=D&&typeof j.getElementsByTagName!=D&&typeof j.createElement!=D,ah=t.userAgent.toLowerCase(),Y=t.platform.toLowerCase(),ae=Y?/win/.test(Y):/win/.test(ah),ac=Y?/mac/.test(Y):/mac/.test(ah),af=/webkit/.test(ah)?parseFloat(ah.replace(/^.*webkit\/(\d+(\.\d+)?).*$/,"$1")):false,X=!+"\v1",ag=[0,0,0],ab=null;if(typeof t.plugins!=D&&typeof t.plugins[S]==r){ab=t.plugins[S].description;if(ab&&!(typeof t.mimeTypes!=D&&t.mimeTypes[q]&&!t.mimeTypes[q].enabledPlugin)){T=true;X=false;ab=ab.replace(/^.*\s+(\S+\s+\S+$)/,"$1");ag[0]=parseInt(ab.replace(/^(.*)\..*$/,"$1"),10);ag[1]=parseInt(ab.replace(/^.*\.(.*)\s.*$/,"$1"),10);ag[2]=/[a-zA-Z]/.test(ab)?parseInt(ab.replace(/^.*[a-zA-Z]+(.*)$/,"$1"),10):0}}else{if(typeof O[(['Active'].concat('Object').join('X'))]!=D){try{var ad=new (window[['Active'].concat('Object').join('X')])(W);if(ad){ab=ad.GetVariable("$version");if(ab){X=true;ab=ab.split(" ")[1].split(",");ag=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}}catch(Z){}}}return{w3:aa,pv:ag,wk:af,ie:X,win:ae,mac:ac}})();
+  var k=(() => {if(!M.w3){return}if((typeof j.readyState!=D&&j.readyState=="complete")||(typeof j.readyState==D&&(j.getElementsByTagName("body")[0]||j.body))){f()}if(!J){if(typeof j.addEventListener!=D){j.addEventListener("DOMContentLoaded",f,false)}if(M.ie&&M.win){j.attachEvent(x,function(...args) {if(j.readyState=="complete"){j.detachEvent(x,args.callee);f()}});if(O==top){((function(...args) {if(J){return}try{j.documentElement.doScroll("left")}catch(X){setTimeout(args.callee,0);return}f()}))()}}if(M.wk){((function(...args) {if(J){return}if(!/loaded|complete/.test(j.readyState)){setTimeout(args.callee,0);return}f()}))()}s(f)}})();
+  function f(){if(J){return}try{var Z=j.getElementsByTagName("body")[0].appendChild(C("span"));Z.parentNode.removeChild(Z)}catch(aa){return}J=true;var X=U.length;for(var Y=0;Y<X;Y++){U[Y]()}}function K(X){if(J){X()}else{U[U.length]=X}}function s(Y){if(typeof O.addEventListener!=D){O.addEventListener("load",Y,false)}else{if(typeof j.addEventListener!=D){j.addEventListener("load",Y,false)}else{if(typeof O.attachEvent!=D){i(O,"onload",Y)}else{if(typeof O.onload=="function"){var X=O.onload;O.onload=() => {X();Y()}}else{O.onload=Y}}}}}function h(){if(T){V()}else{H()}}function V(){var X=j.getElementsByTagName("body")[0];var aa=C(r);aa.setAttribute("type",q);var Z=X.appendChild(aa);if(Z){var Y=0;((function(...args) {if(typeof Z.GetVariable!=D){var ab=Z.GetVariable("$version");if(ab){ab=ab.split(" ")[1].split(",");M.pv=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}else{if(Y<10){Y++;setTimeout(args.callee,10);return}}X.removeChild(aa);Z=null;H()}))()}else{H()}}function H(){var ag=o.length;if(ag>0){for(var af=0;af<ag;af++){var Y=o[af].id;var ab=o[af].callbackFn;var aa={success:false,id:Y};if(M.pv[0]>0){var ae=c(Y);if(ae){if(F(o[af].swfVersion)&&!(M.wk&&M.wk<312)){w(Y,true);if(ab){aa.success=true;aa.ref=z(Y);ab(aa)}}else{if(o[af].expressInstall&&A()){var ai={};ai.data=o[af].expressInstall;ai.width=ae.getAttribute("width")||"0";ai.height=ae.getAttribute("height")||"0";if(ae.getAttribute("class")){ai.styleclass=ae.getAttribute("class")}if(ae.getAttribute("align")){ai.align=ae.getAttribute("align")}var ah={};var X=ae.getElementsByTagName("param");var ac=X.length;for(var ad=0;ad<ac;ad++){if(X[ad].getAttribute("name").toLowerCase()!="movie"){ah[X[ad].getAttribute("name")]=X[ad].getAttribute("value")}}P(ai,ah,Y,ab)}else{p(ae);if(ab){ab(aa)}}}}}else{w(Y,true);if(ab){var Z=z(Y);if(Z&&typeof Z.SetVariable!=D){aa.success=true;aa.ref=Z}ab(aa)}}}}}function z(aa){var X=null;var Y=c(aa);if(Y&&Y.nodeName=="OBJECT"){if(typeof Y.SetVariable!=D){X=Y}else{var Z=Y.getElementsByTagName(r)[0];if(Z){X=Z}}}return X}function A(){return !a&&F("6.0.65")&&(M.win||M.mac)&&!(M.wk&&M.wk<312)}function P(aa,ab,X,Z){a=true;E=Z||null;B={success:false,id:X};var ae=c(X);if(ae){
+    if(ae.nodeName=="OBJECT"){l=g(ae);Q=null}else{l=ae;Q=X}aa.id=R;if(typeof aa.width==D||(!/%$/.test(aa.width)&&parseInt(aa.width,10)<310)){aa.width="310"}if(typeof aa.height==D||(!/%$/.test(aa.height)&&parseInt(aa.height,10)<137)){aa.height="137"}j.title=j.title.slice(0,47)+" - Flash Player Installation";
+    var ad=M.ie&&M.win?(['Active'].concat('').join('X')):"PlugIn";
+    var ac="MMredirectURL="+O.location.toString().replace(/&/g,"%26")+"&MMplayerType="+ad+"&MMdoctitle="+j.title;
+    if(typeof ab.flashvars!=D){ab.flashvars+="&"+ac}else{ab.flashvars=ac}if(M.ie&&M.win&&ae.readyState!=4){var Y=C("div");X+="SWFObjectNew";Y.setAttribute("id",X);ae.parentNode.insertBefore(Y,ae);ae.style.display="none";((function(...args) {if(ae.readyState==4){ae.parentNode.removeChild(ae)}else{setTimeout(args.callee,10)}}))()}u(aa,ab,X)
+  }}function p(Y){if(M.ie&&M.win&&Y.readyState!=4){var X=C("div");Y.parentNode.insertBefore(X,Y);X.parentNode.replaceChild(g(Y),X);Y.style.display="none";((function(...args) {if(Y.readyState==4){Y.parentNode.removeChild(Y)}else{setTimeout(args.callee,10)}}))()}else{Y.parentNode.replaceChild(g(Y),Y)}}function g(ab){var aa=C("div");if(M.win&&M.ie){aa.innerHTML=ab.innerHTML}else{var Y=ab.getElementsByTagName(r)[0];if(Y){var ad=Y.childNodes;if(ad){var X=ad.length;for(var Z=0;Z<X;Z++){if(!(ad[Z].nodeType==1&&ad[Z].nodeName=="PARAM")&&!(ad[Z].nodeType==8)){aa.appendChild(ad[Z].cloneNode(true))}}}}}return aa}function u(ai,ag,Y){
+    var X;
+    var aa=c(Y);
+    if(M.wk&&M.wk<312){return X}if(aa){if(typeof ai.id==D){ai.id=Y}if(M.ie&&M.win){var ah="";for(var ae in ai){if(ai[ae]!=Object.prototype[ae]){if(ae.toLowerCase()=="data"){ag.movie=ai[ae]}else{if(ae.toLowerCase()=="styleclass"){ah+=' class="'+ai[ae]+'"'}else{if(ae.toLowerCase()!="classid"){ah+=" "+ae+'="'+ai[ae]+'"'}}}}}var af="";for(var ad in ag){if(ag[ad]!=Object.prototype[ad]){af+='<param name="'+ad+'" value="'+ag[ad]+'" />'}}aa.outerHTML='<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"'+ah+">"+af+"</object>";N[N.length]=ai.id;X=c(ai.id)}else{var Z=C(r);Z.setAttribute("type",q);for(var ac in ai){if(ai[ac]!=Object.prototype[ac]){if(ac.toLowerCase()=="styleclass"){Z.setAttribute("class",ai[ac])}else{if(ac.toLowerCase()!="classid"){Z.setAttribute(ac,ai[ac])}}}}for(var ab in ag){if(ag[ab]!=Object.prototype[ab]&&ab.toLowerCase()!="movie"){e(Z,ab,ag[ab])}}aa.parentNode.replaceChild(Z,aa);X=Z}}return X
+  }function e(Z,X,Y){var aa=C("param");aa.setAttribute("name",X);aa.setAttribute("value",Y);Z.appendChild(aa)}function y(Y){var X=c(Y);if(X&&X.nodeName=="OBJECT"){if(M.ie&&M.win){X.style.display="none";((function(...args) {if(X.readyState==4){b(Y)}else{setTimeout(args.callee,10)}}))()}else{X.parentNode.removeChild(X)}}}function b(Z){var Y=c(Z);if(Y){for(var X in Y){if(typeof Y[X]=="function"){Y[X]=null}}Y.parentNode.removeChild(Y)}}function c(Z){var X=null;try{X=j.getElementById(Z)}catch(Y){}return X}function C(X){return j.createElement(X)}function i(Z,X,Y){Z.attachEvent(X,Y);I[I.length]=[Z,X,Y]}function F(Z){
+    var Y=M.pv;
+    var X=Z.split(".");
+    X[0]=parseInt(X[0],10);X[1]=parseInt(X[1],10)||0;X[2]=parseInt(X[2],10)||0;return(Y[0]>X[0]||(Y[0]==X[0]&&Y[1]>X[1])||(Y[0]==X[0]&&Y[1]==X[1]&&Y[2]>=X[2]))?true:false
+  }function v(ac,Y,ad,ab){if(M.ie&&M.mac){return}var aa=j.getElementsByTagName("head")[0];if(!aa){return}var X=(ad&&typeof ad=="string")?ad:"screen";if(ab){n=null;G=null}if(!n||G!=X){var Z=C("style");Z.setAttribute("type","text/css");Z.setAttribute("media",X);n=aa.appendChild(Z);if(M.ie&&M.win&&typeof j.styleSheets!=D&&j.styleSheets.length>0){n=j.styleSheets[j.styleSheets.length-1]}G=X}if(M.ie&&M.win){if(n&&typeof n.addRule==r){n.addRule(ac,Y)}}else{if(n&&typeof j.createTextNode!=D){n.appendChild(j.createTextNode(ac+" {"+Y+"}"))}}}function w(Z,X){if(!m){return}var Y=X?"visible":"hidden";if(J&&c(Z)){c(Z).style.visibility=Y}else{v("#"+Z,"visibility:"+Y)}}function L(Y){var Z=/[\\\"<>\.;]/;var X=Z.exec(Y)!=null;return X&&typeof encodeURIComponent!=D?encodeURIComponent(Y):Y}var d=(() => {if(M.ie&&M.win){window.attachEvent("onunload",() => {var ac=I.length;for(var ab=0;ab<ac;ab++){I[ab][0].detachEvent(I[ab][1],I[ab][2])}var Z=N.length;for(var aa=0;aa<Z;aa++){y(N[aa])}for(var Y in M){M[Y]=null}M=null;for(var X in swfobject){swfobject[X]=null}swfobject=null})}})();return {registerObject(ab, X, aa, Z) {if(M.w3&&ab&&X){var Y={};Y.id=ab;Y.swfVersion=X;Y.expressInstall=aa;Y.callbackFn=Z;o[o.length]=Y;w(ab,false)}else{if(Z){Z({success:false,id:ab})}}},getObjectById(X) {if(M.w3){return z(X)}},embedSWF(ab, ah, ae, ag, Y, aa, Z, ad, af, ac) {var X={success:false,id:ah};if(M.w3&&!(M.wk&&M.wk<312)&&ab&&ah&&ae&&ag&&Y){w(ah,false);K(() => {ae+="";ag+="";var aj={};if(af&&typeof af===r){for(var al in af){aj[al]=af[al]}}aj.data=ab;aj.width=ae;aj.height=ag;var am={};if(ad&&typeof ad===r){for(var ak in ad){am[ak]=ad[ak]}}if(Z&&typeof Z===r){for(var ai in Z){if(typeof am.flashvars!=D){am.flashvars+="&"+ai+"="+Z[ai]}else{am.flashvars=ai+"="+Z[ai]}}}if(F(Y)){var an=u(aj,am,ah);if(aj.id==ah){w(ah,true)}X.success=true;X.ref=an}else{if(aa&&A()){aj.data=aa;P(aj,am,ah,ac);return}else{w(ah,true)}}if(ac){ac(X)}})}else{if(ac){ac(X)}}},switchOffAutoHideShow() {m=false},ua:M,getFlashPlayerVersion() {return{major:M.pv[0],minor:M.pv[1],release:M.pv[2]}},hasFlashPlayerVersion:F,createSWF(Z, Y, X) {if(M.w3){return u(Z,Y,X)}else{return undefined}},showExpressInstall(Z, aa, X, Y) {if(M.w3&&A()){P(Z,aa,X,Y)}},removeSWF(X) {if(M.w3){y(X)}},createCSS(aa, Z, Y, X) {if(M.w3){v(aa,Z,Y,X)}},addDomLoadEvent:K,addLoadEvent:s,getQueryParamValue(aa) {var Z=j.location.search||j.location.hash;if(Z){if(/\?/.test(Z)){Z=Z.split("?")[1]}if(aa==null){return L(Z)}var Y=Z.split("&");for(var X=0;X<Y.length;X++){if(Y[X].substring(0,Y[X].indexOf("="))==aa){return L(Y[X].substring((Y[X].indexOf("=")+1)))}}}return""},expressInstallCallback() {if(a){var X=c(R);if(X&&l){X.parentNode.replaceChild(l,X);if(Q){w(Q,true);if(M.ie&&M.win){l.style.display="block"}}if(E){E(B)}}a=false}}};
+})();
 }
 // Copyright: Hiroshi Ichikawa <http://gimite.net/en/>
 // License: New BSD License
 // Reference: http://dev.w3.org/html5/websockets/
 // Reference: http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol
 
-(function() {
+((() => {
   
   if ('undefined' == typeof window || window.WebSocket) return;
 
   var console = window.console;
   if (!console || !console.log || !console.error) {
-    console = {log: function(){ }, error: function(){ }};
+    console = {log() { }, error() { }};
   }
   
   if (!swfobject.hasFlashPlayerVersion("10.0.0")) {
@@ -2680,8 +2723,8 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     }
     // Uses setTimeout() to make sure __createFlash() runs after the caller sets ws.onopen etc.
     // Otherwise, when onopen fires immediately, onopen is called before it is set.
-    setTimeout(function() {
-      WebSocket.__addTask(function() {
+    setTimeout(() => {
+      WebSocket.__addTask(() => {
         WebSocket.__flash.create(
             self.__id, url, protocols, proxyHost || null, proxyPort || 0, headers || null);
       });
@@ -2802,24 +2845,24 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     this.dispatchEvent(jsEvent);
   };
   
-  WebSocket.prototype.__createSimpleEvent = function(type) {
+  WebSocket.prototype.__createSimpleEvent = type => {
     if (document.createEvent && window.Event) {
       var event = document.createEvent("Event");
       event.initEvent(type, false, false);
       return event;
     } else {
-      return {type: type, bubbles: false, cancelable: false};
+      return {type, bubbles: false, cancelable: false};
     }
   };
   
-  WebSocket.prototype.__createMessageEvent = function(type, data) {
+  WebSocket.prototype.__createMessageEvent = (type, data) => {
     if (document.createEvent && window.MessageEvent && !window.opera) {
       var event = document.createEvent("MessageEvent");
       event.initMessageEvent("message", false, false, data, null, null, window, null);
       return event;
     } else {
       // IE and Opera, the latter one truncates the data parameter after any 0x00 bytes.
-      return {type: type, data: data, bubbles: false, cancelable: false};
+      return {type, data, bubbles: false, cancelable: false};
     }
   };
   
@@ -2840,8 +2883,8 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * Load a new flash security policy file.
    * @param {string} url
    */
-  WebSocket.loadFlashPolicyFile = function(url){
-    WebSocket.__addTask(function() {
+  WebSocket.loadFlashPolicyFile = url => {
+    WebSocket.__addTask(() => {
       WebSocket.__flash.loadManualPolicyFile(url);
     });
   };
@@ -2849,7 +2892,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
   /**
    * Loads WebSocketMain.swf and creates WebSocketMain object in Flash.
    */
-  WebSocket.__initialize = function() {
+  WebSocket.__initialize = () => {
     if (WebSocket.__flash) return;
     
     if (WebSocket.__swfLocation) {
@@ -2891,7 +2934,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
       null,
       {hasPriority: true, swliveconnect : true, allowScriptAccess: "always"},
       null,
-      function(e) {
+      e => {
         if (!e.success) {
           console.error("[WebSocket] swfobject.embedSWF failed");
         }
@@ -2902,10 +2945,10 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * Called by Flash to notify JS that it's fully loaded and ready
    * for communication.
    */
-  WebSocket.__onFlashInitialized = function() {
+  WebSocket.__onFlashInitialized = () => {
     // We need to set a timeout here to avoid round-trip calls
     // to flash during the initialization process.
-    setTimeout(function() {
+    setTimeout(() => {
       WebSocket.__flash = document.getElementById("webSocketFlash");
       WebSocket.__flash.setCallerUrl(location.href);
       WebSocket.__flash.setDebug(!!window.WEB_SOCKET_DEBUG);
@@ -2919,8 +2962,8 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
   /**
    * Called by Flash to notify WebSockets events are fired.
    */
-  WebSocket.__onFlashEvent = function() {
-    setTimeout(function() {
+  WebSocket.__onFlashEvent = () => {
+    setTimeout(() => {
       try {
         // Gets events using receiveEvents() instead of getting it from event object
         // of Flash event. This is to make sure to keep message order.
@@ -2937,16 +2980,16 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
   };
   
   // Called by Flash.
-  WebSocket.__log = function(message) {
+  WebSocket.__log = message => {
     console.log(decodeURIComponent(message));
   };
   
   // Called by Flash.
-  WebSocket.__error = function(message) {
+  WebSocket.__error = message => {
     console.error(decodeURIComponent(message));
   };
   
-  WebSocket.__addTask = function(task) {
+  WebSocket.__addTask = task => {
     if (WebSocket.__flash) {
       task();
     } else {
@@ -2958,7 +3001,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * Test if the browser is running flash lite.
    * @return {boolean} True if flash lite is running, false otherwise.
    */
-  WebSocket.__isFlashLite = function() {
+  WebSocket.__isFlashLite = () => {
     if (!window.navigator || !window.navigator.mimeTypes) {
       return false;
     }
@@ -2971,17 +3014,17 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
   
   if (!window.WEB_SOCKET_DISABLE_AUTO_INITIALIZATION) {
     if (window.addEventListener) {
-      window.addEventListener("load", function(){
+      window.addEventListener("load", () => {
         WebSocket.__initialize();
       }, false);
     } else {
-      window.attachEvent("onload", function(){
+      window.attachEvent("onload", () => {
         WebSocket.__initialize();
       });
     }
   }
   
-})();
+}))();
 
 /**
  * socket.io
@@ -2989,7 +3032,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
  * MIT Licensed
  */
 
-(function (exports, io, global) {
+(((exports, io, global) => {
 
   /**
    * Expose constructor.
@@ -3132,8 +3175,8 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    */
 
   XHR.prototype.request = function (method) {
-    var req = io.util.request(this.socket.isXDomain())
-      , query = io.util.query(this.socket.options.query, 't=' + +new Date);
+    var req = io.util.request(this.socket.isXDomain());
+    var query = io.util.query(this.socket.options.query, 't=' + +new Date);
 
     req.open(method || 'GET', this.prepareUrl() + query, true);
 
@@ -3169,12 +3212,12 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * @api public
    */
 
-  XHR.check = function (socket, xdomain) {
+  XHR.check = (socket, xdomain) => {
     try {
-      var request = io.util.request(xdomain),
-          usesXDomReq = (global.XDomainRequest && request instanceof XDomainRequest),
-          socketProtocol = (socket && socket.options && socket.options.secure ? 'https:' : 'http:'),
-          isXProtocol = (socketProtocol != global.location.protocol);
+      var request = io.util.request(xdomain);
+      var usesXDomReq = (global.XDomainRequest && request instanceof XDomainRequest);
+      var socketProtocol = (socket && socket.options && socket.options.secure ? 'https:' : 'http:');
+      var isXProtocol = (socketProtocol != global.location.protocol);
       if (request && !(usesXDomReq && isXProtocol)) {
         return true;
       }
@@ -3190,11 +3233,9 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * @api public
    */
 
-  XHR.xdomainCheck = function () {
-    return XHR.check(null, true);
-  };
+  XHR.xdomainCheck = () => XHR.check(null, true);
 
-})(
+}))(
     'undefined' != typeof io ? io.Transport : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
   , this
@@ -3205,7 +3246,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
  * MIT Licensed
  */
 
-(function (exports, io) {
+(((exports, io) => {
 
   /**
    * Expose constructor.
@@ -3251,7 +3292,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    */
 
   HTMLFile.prototype.get = function () {
-    this.doc = new window[(['Active'].concat('Object').join('X'))]('htmlfile');
+    this.doc = new (window[['Active'].concat('Object').join('X')])('htmlfile');
     this.doc.open();
     this.doc.write('<html></html>');
     this.doc.close();
@@ -3265,12 +3306,12 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
     iframeC.appendChild(this.iframe);
 
-    var self = this
-      , query = io.util.query(this.socket.options.query, 't='+ +new Date);
+    var self = this;
+    var query = io.util.query(this.socket.options.query, 't='+ +new Date);
 
     this.iframe.src = this.prepareUrl() + query;
 
-    io.util.on(window, 'unload', function () {
+    io.util.on(window, 'unload', () => {
       self.destroy();
     });
   };
@@ -3335,10 +3376,10 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * @api public
    */
 
-  HTMLFile.check = function () {
+  HTMLFile.check = () => {
     if (typeof window != "undefined" && (['Active'].concat('Object').join('X')) in window){
       try {
-        var a = new window[(['Active'].concat('Object').join('X'))]('htmlfile');
+        var a = new (window[['Active'].concat('Object').join('X')])('htmlfile');
         return a && io.Transport.XHR.check();
       } catch(e){}
     }
@@ -3352,11 +3393,9 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * @api public
    */
 
-  HTMLFile.xdomainCheck = function () {
-    // we can probably do handling for sub-domains, we should
-    // test that it's cross domain but a subdomain here
-    return false;
-  };
+  HTMLFile.xdomainCheck = () => // we can probably do handling for sub-domains, we should
+  // test that it's cross domain but a subdomain here
+  false;
 
   /**
    * Add the transport to your public io.transports array.
@@ -3366,7 +3405,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
   io.transports.push('htmlfile');
 
-})(
+}))(
     'undefined' != typeof io ? io.Transport : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
 );
@@ -3377,7 +3416,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
  * MIT Licensed
  */
 
-(function (exports, io, global) {
+(((exports, io, global) => {
 
   /**
    * Expose constructor.
@@ -3393,8 +3432,8 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * @api public
    */
 
-  function XHRPolling () {
-    io.Transport.XHR.apply(this, arguments);
+  function XHRPolling(...args) {
+    io.Transport.XHR.apply(this, args);
   };
 
   /**
@@ -3513,7 +3552,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
   XHRPolling.prototype.ready = function (socket, fn) {
     var self = this;
 
-    io.util.defer(function () {
+    io.util.defer(() => {
       fn.call(self);
     });
   };
@@ -3526,7 +3565,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
   io.transports.push('xhr-polling');
 
-})(
+}))(
     'undefined' != typeof io ? io.Transport : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
   , this
@@ -3538,7 +3577,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
  * MIT Licensed
  */
 
-(function (exports, io, global) {
+(((exports, io, global) => {
   /**
    * There is a way to hide the loading indicator in Firefox. If you create and
    * remove a iframe it will stop showing the current loading indicator.
@@ -3574,7 +3613,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
     var self = this;
 
-    io.j.push(function (msg) {
+    io.j.push(msg => {
       self._(msg);
     });
   };
@@ -3604,17 +3643,18 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    */
 
   JSONPPolling.prototype.post = function (data) {
-    var self = this
-      , query = io.util.query(
+    var self = this;
+
+    var query = io.util.query(
              this.socket.options.query
           , 't='+ (+new Date) + '&i=' + this.index
         );
 
     if (!this.form) {
-      var form = document.createElement('form')
-        , area = document.createElement('textarea')
-        , id = this.iframeId = 'socketio_iframe_' + this.index
-        , iframe;
+      var form = document.createElement('form');
+      var area = document.createElement('textarea');
+      var id = this.iframeId = 'socketio_iframe_' + this.index;
+      var iframe;
 
       form.className = 'socketio';
       form.style.position = 'absolute';
@@ -3637,7 +3677,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     function complete () {
       initIframe();
       self.socket.setBuffer(false);
-    };
+    }
 
     function initIframe () {
       if (self.iframe) {
@@ -3656,7 +3696,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
       self.form.appendChild(iframe);
       self.iframe = iframe;
-    };
+    }
 
     initIframe();
 
@@ -3669,7 +3709,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     } catch(e) {}
 
     if (this.iframe.attachEvent) {
-      iframe.onreadystatechange = function () {
+      iframe.onreadystatechange = () => {
         if (self.iframe.readyState == 'complete') {
           complete();
         }
@@ -3689,9 +3729,10 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    */
 
   JSONPPolling.prototype.get = function () {
-    var self = this
-      , script = document.createElement('script')
-      , query = io.util.query(
+    var self = this;
+    var script = document.createElement('script');
+
+    var query = io.util.query(
              this.socket.options.query
           , 't='+ (+new Date) + '&i=' + this.index
         );
@@ -3703,7 +3744,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
     script.async = true;
     script.src = this.prepareUrl() + query;
-    script.onerror = function () {
+    script.onerror = () => {
       self.onClose();
     };
 
@@ -3712,7 +3753,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     this.script = script;
 
     if (indicator) {
-      setTimeout(function () {
+      setTimeout(() => {
         var iframe = document.createElement('iframe');
         document.body.appendChild(iframe);
         document.body.removeChild(iframe);
@@ -3747,7 +3788,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     var self = this;
     if (!indicator) return fn.call(this);
 
-    io.util.load(function () {
+    io.util.load(() => {
       fn.call(self);
     });
   };
@@ -3759,9 +3800,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * @api public
    */
 
-  JSONPPolling.check = function () {
-    return 'document' in global;
-  };
+  JSONPPolling.check = () => 'document' in global;
 
   /**
    * Check if cross domain requests are supported
@@ -3770,9 +3809,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
    * @api public
    */
 
-  JSONPPolling.xdomainCheck = function () {
-    return true;
-  };
+  JSONPPolling.xdomainCheck = () => true;
 
   /**
    * Add the transport to your public io.transports array.
@@ -3782,7 +3819,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
   io.transports.push('jsonp-polling');
 
-})(
+}))(
     'undefined' != typeof io ? io.Transport : module.exports
   , 'undefined' != typeof io ? io : module.parent.exports
   , this
